@@ -3,53 +3,71 @@
 */
  
 int[] yvals;
-int Overhead = 50;
-int Profit   = 175;
+int Overhead = 25;
+int Profit   = 50;
 
 void setup() 
 {
-  size(640, 100);
+  size(500, 360);
   //noSmooth();
   yvals = new int[width];
-}
+  
+  }
 
 int arrayindex = 0;
 
 void draw()
 {
-  background(0);
+  background(128);
   
-  for(int i = 1; i < width; i++) 
+  int graphWidth = width;
+  int graphHeight = 100;
+  int graphXoffset = 0;
+  int graphYoffset = 50;
+  
+
+  for(int i = 1; i < graphWidth; i++) 
   { 
     yvals[i-1] = yvals[i];
   } 
   
   // Add the new values to the end of the array 
-  yvals[width-1] -= Overhead;  // the costs are always applied
+  yvals[graphWidth-1] -= Overhead;  // the costs are always applied
   if(mousePressed)
   {
-    yvals[width-1] += Profit;  // profit is applied when the machines are running
+    yvals[graphWidth-1] += Profit;  // profit is applied when the machines are running
   }
      
   fill(0,0,0);
   noStroke();
 
-  rect(0, height, width, height);
+  rect(graphXoffset, graphYoffset, graphWidth, graphHeight);
 
-  for(int i=1; i<width; i++) 
+  // Draw the scrolling bar graph
+  for(int i=1; i<graphWidth; i++) 
   {
     if(yvals[i] > 0)
     {
       stroke(0,255,0);
-      line(i, ((height*.5)-yvals[i]/1000), i, height/2);
+      line(graphXoffset+i,
+           graphYoffset+((graphHeight*.5)-yvals[i]/1000),
+           graphXoffset+i,
+           graphYoffset+(graphHeight/2));
     }
     else
     {
       stroke(255,0,0);
-      line(i, ((height*.5)-yvals[i]/1000), i, height/2);
+      line(graphXoffset+i,
+           graphYoffset+((graphHeight*.5)-yvals[i]/1000),
+           graphXoffset+i,
+           graphYoffset+(graphHeight/2));
     }
   }
+  // Draw the center reference line
   stroke(255);
-  line(0, height/2, width, height/2);
+  line(graphXoffset, 
+       graphYoffset+(graphHeight/2),
+       graphXoffset+graphWidth,
+       graphYoffset+(graphHeight/2));
   
 }
