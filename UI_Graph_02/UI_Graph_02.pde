@@ -11,6 +11,8 @@ int graphXoffset = 0;
 int graphYoffset = 600;
   
 Movie movie;
+float movieTime = -1;
+
 
 void setup() 
 {
@@ -20,15 +22,33 @@ void setup()
   
   yvals = new int[width];
 
-  movie = new Movie(this, "lmp.mp4");
+  movie = new Movie(this, "camera.mp4");
   movie.play();
   movie.speed(1);
+  
   graphWidth=width;
+  
+  initEventTable();
 }
 void draw() 
 {
-  image(movie, 0, 0, 800, 600);
-  displayBarGraph();
+  if(movie.available())
+  {
+    
+    // The end of movie detection sucks and doesn't execute the else and blank the screen - figure out a better way
+    
+    if(movieTime < movie.time())
+    {
+    movie.read();
+    movieTime = movie.time();      //record the last time so we know when the movie is done
+    image(movie, 0, 0, 800, 600);
+    displayBarGraph();
+    }
+    else  // The movie is done
+    {
+      rect(0,0,800,600);
+    }
+  }
 }
 
 void displayBarGraph()
@@ -76,9 +96,4 @@ void displayBarGraph()
        graphYoffset+(graphHeight/2),
        graphXoffset+graphWidth,
        graphYoffset+(graphHeight/2));
-}
-
-void movieEvent(Movie m) 
-{
-  m.read();
 }
