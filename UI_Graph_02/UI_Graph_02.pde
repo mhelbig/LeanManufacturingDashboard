@@ -1,22 +1,11 @@
 import processing.video.*;
 
-int[] yvals;
-int Overhead = 25;
-int Profit   = 50;
-
-int arrayindex = 0;
-int graphWidth;
-int graphHeight = 100;
-int graphXoffset = 0;
-int graphYoffset = 600;
-  
 Movie video;
 float videoFrameRate = 30;
 float videoDuration;
 float videoSpeed = 10;  //playback speed multiplier
 float videoStep;
 float videoPosition = 0;
-
 
 void setup() 
 {
@@ -44,65 +33,23 @@ void draw()
   
   if(videoPosition <= videoDuration)
   {
-    while(!video.available());  // Wait until the video frame is available
-    video.read();
     image(video, 0, 0, 800, 600);
     
     videoPosition += videoStep;
     video.jump(videoPosition);
    
     displayBarGraph();
+    println(frameRate);
   }
   else  // The movie is done
   {
     video.stop();
     rect(0,0,800,600);
+//    exit();
   }
 }
 
-void displayBarGraph()
+void movieEvent(Movie video)
 {
-  for(int i = 1; i < graphWidth; i++) 
-  { 
-    yvals[i-1] = yvals[i];
-  } 
-  
-  // Add the new values to the end of the array 
-  yvals[graphWidth-1] -= Overhead;  // the costs are always applied
-  if(mousePressed)
-  {
-    yvals[graphWidth-1] += Profit;  // profit is applied when the machines are running
-  }
-     
-  fill(0,0,0);
-  noStroke();
-
-  rect(graphXoffset, graphYoffset, graphWidth, graphHeight);
-
-  // Draw the scrolling bar graph
-  for(int i=1; i<graphWidth; i++) 
-  {
-    if(yvals[i] > 0)
-    {
-      stroke(0,255,0);
-      line(graphXoffset+i,
-           graphYoffset+((graphHeight*.5)-yvals[i]/1000),
-           graphXoffset+i,
-           graphYoffset+(graphHeight/2));
-    }
-    else
-    {
-      stroke(255,0,0);
-      line(graphXoffset+i,
-           graphYoffset+((graphHeight*.5)-yvals[i]/1000),
-           graphXoffset+i,
-           graphYoffset+(graphHeight/2));
-    }
-  }
-  // Draw the center reference line
-  stroke(255);
-  line(graphXoffset, 
-       graphYoffset+(graphHeight/2),
-       graphXoffset+graphWidth,
-       graphYoffset+(graphHeight/2));
+  video.read();
 }
