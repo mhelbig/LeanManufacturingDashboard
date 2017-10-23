@@ -10,21 +10,26 @@ int graphHeight = 100;
 int graphXoffset = 0;
 int graphYoffset = 600;
   
-Movie movie;
-float movieTime = -1;
+Movie video;
+float videoFrameRate = 30;
+float videoDuration;
+float videoSpeed = 10;  //playback speed multiplier
+float videoStep;
+float videoPosition = 0;
 
 
 void setup() 
 {
   size(1024, 768);
-  frameRate(30);
+  //frameRate(videoFrameRate);
   background(0);
   
   yvals = new int[width];
 
-  movie = new Movie(this, "camera.mp4");
-  movie.play();
-  movie.speed(1);
+  video = new Movie(this, "camera.mp4");
+  video.play();
+  videoDuration = video.duration();
+  videoStep = videoSpeed/videoFrameRate;
   
   graphWidth=width;
   
@@ -32,22 +37,26 @@ void setup()
 }
 void draw() 
 {
-  if(movie.available())
+  
+  // This just runs really slow.  Need to figure out how to speed it up, or maybe
+  // we'll just have to speed the video up in a video editor and process it here in
+  // real time.
+  
+  if(videoPosition <= videoDuration)
   {
+    while(!video.available());  // Wait until the video frame is available
+    video.read();
+    image(video, 0, 0, 800, 600);
     
-    // The end of movie detection sucks and doesn't execute the else and blank the screen - figure out a better way
-    
-    if(movieTime < movie.time())
-    {
-    movie.read();
-    movieTime = movie.time();      //record the last time so we know when the movie is done
-    image(movie, 0, 0, 800, 600);
+    videoPosition += videoStep;
+    video.jump(videoPosition);
+   
     displayBarGraph();
-    }
-    else  // The movie is done
-    {
-      rect(0,0,800,600);
-    }
+  }
+  else  // The movie is done
+  {
+    video.stop();
+    rect(0,0,800,600);
   }
 }
 
