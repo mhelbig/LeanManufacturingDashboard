@@ -1,39 +1,40 @@
 import processing.video.*;
 
-Movie video;
+Movie camera;
 float videoDuration;
 float videoTime = 0;
+int videoWidth =  800;
+int videoHeight = 600;
 
 void setup() 
 {
   size(1024,768);
-  //frameRate(videoFrameRate);
+  frameRate(15);
   background(0);
   
   yvals = new int[width];
 
-  video = new Movie(this, "camera.mp4");
-  video.play();
-  videoDuration = video.duration();
-  
-  graphWidth=width;
+  camera = new Movie(this, "camera.mp4");
+  camera.play();
+  videoDuration = camera.duration();
   
   initEventTable();
 }
 void draw() 
 {
-  videoTime = video.time();
+  videoTime = camera.time();
   if(videoTime < videoDuration)
   {
-    image(video, 0, 0, 800, 600);
-    
+    image(camera, 0, 0, videoWidth, videoHeight);
+    displayFramerate();
+    displayMachineState();
     displayBarGraph();
-//    println(frameRate,",",videoTime,",",videoDuration);
+    
+    println(videoTime,",",videoDuration);
   }
   else  // The video is done
   {
-    video.stop();
-    rect(0,0,800,600);
+    camera.stop();
     saveEvents();
     exit();
   }

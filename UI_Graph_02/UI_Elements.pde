@@ -3,7 +3,7 @@ int Overhead = 125;
 int Profit   = 250;
 
 int arrayindex = 0;
-int graphWidth;
+int graphWidth = 800;
 int graphHeight = 100;
 int graphXoffset = 0;
 int graphYoffset = 600;
@@ -53,4 +53,28 @@ void displayBarGraph()
        graphYoffset+(graphHeight/2),
        graphXoffset+graphWidth,
        graphYoffset+(graphHeight/2));
+}
+
+int machineStateIndicatorX = 20;
+int machineStateIndicatorY = 50;
+void displayMachineState()
+{
+  if(machineActive)
+  {
+    fill(0,255,0);
+    ellipse(machineStateIndicatorX,machineStateIndicatorY,20,20);
+  }
+  else
+  {
+    fill(255,0,0);
+    ellipse(machineStateIndicatorX,machineStateIndicatorY,20,20);
+  }
+}
+
+void displayFramerate()
+{
+    fill(255);
+    rect(10,10,25,20);
+    fill(0);
+    text(round(frameRate),15,25);
 }
