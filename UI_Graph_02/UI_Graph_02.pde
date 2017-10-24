@@ -12,7 +12,7 @@ void setup()
   frameRate(15);
   background(0);
   
-  yvals = new int[width];
+  netProfit = new int[width];
 
   camera = new Movie(this, "camera.mp4");
   camera.play();
@@ -27,6 +27,7 @@ void draw()
   {
     image(camera, 0, 0, videoWidth, videoHeight);
     displayFramerate();
+    displayProfit();
     displayMachineState();
     displayBarGraph();
     

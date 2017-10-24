@@ -1,25 +1,28 @@
-int[] yvals;
-int Overhead = 125;
-int Profit   = 250;
+int[] netProfit;
+int Overhead = 500;
+int Profit   = 1000;
 
 int arrayindex = 0;
 int graphWidth = 800;
 int graphHeight = 100;
 int graphXoffset = 0;
 int graphYoffset = 600;
+  
+// Refactor these UI elements to use pushmatrix, translate, popmatrix for positioning
 
 void displayBarGraph()
 {
+
   for(int i = 1; i < graphWidth; i++) 
   { 
-    yvals[i-1] = yvals[i];
+    netProfit[i-1] = netProfit[i];
   } 
   
   // Add the new values to the end of the array 
-  yvals[graphWidth-1] -= Overhead;  // the costs are always applied
+  netProfit[graphWidth-1] -= Overhead;  // the costs are always applied
   if(machineActive)
   {
-    yvals[graphWidth-1] += Profit;  // profit is applied when the machines are running
+    netProfit[graphWidth-1] += Profit;  // profit is applied when the machines are running
   }
      
   fill(0,0,0);
@@ -30,19 +33,19 @@ void displayBarGraph()
   // Draw the scrolling bar graph
   for(int i=1; i<graphWidth; i++) 
   {
-    if(yvals[i] > 0)
+    if(netProfit[i] > 0)  // We're profitable, show in green
     {
       stroke(0,255,0);
       line(graphXoffset+i,
-           graphYoffset+((graphHeight*.5)-yvals[i]/1000),
+           graphYoffset+max(((graphHeight*.5)-netProfit[i]/1000),graphHeight/2),
            graphXoffset+i,
            graphYoffset+(graphHeight/2));
     }
     else
     {
-      stroke(255,0,0);
+      stroke(255,0,0); // We're losing money, show in red
       line(graphXoffset+i,
-           graphYoffset+((graphHeight*.5)-yvals[i]/1000),
+           graphYoffset+min(((graphHeight*.5)-netProfit[i]/1000),(graphHeight/2)*-1),
            graphXoffset+i,
            graphYoffset+(graphHeight/2));
     }
@@ -56,7 +59,7 @@ void displayBarGraph()
 }
 
 int machineStateIndicatorX = 20;
-int machineStateIndicatorY = 50;
+int machineStateIndicatorY = 100;
 void displayMachineState()
 {
   if(machineActive)
@@ -77,4 +80,12 @@ void displayFramerate()
     rect(10,10,25,20);
     fill(0);
     text(round(frameRate),15,25);
+}
+
+void displayProfit()
+{
+    fill(255);
+    rect(10,40,70,20);
+    fill(0);
+    text(netProfit[graphWidth-1],15,55);
 }
