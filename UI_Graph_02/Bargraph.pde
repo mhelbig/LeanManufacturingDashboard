@@ -1,6 +1,6 @@
 int[] yvals;
-int Overhead = 25;
-int Profit   = 50;
+int Overhead = 125;
+int Profit   = 250;
 
 int arrayindex = 0;
 int graphWidth;
@@ -17,7 +17,7 @@ void displayBarGraph()
   
   // Add the new values to the end of the array 
   yvals[graphWidth-1] -= Overhead;  // the costs are always applied
-  if(mousePressed)
+  if(machineActive)
   {
     yvals[graphWidth-1] += Profit;  // profit is applied when the machines are running
   }
