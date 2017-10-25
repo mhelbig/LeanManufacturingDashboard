@@ -1,61 +1,54 @@
-int[] netProfit;
-int Overhead = 500;
-int Profit   = 1000;
 
+float netProfit = 0;
 int arrayindex = 0;
-int graphWidth = 800;
-int graphHeight = 100;
 int graphXoffset = 0;
 int graphYoffset = 600;
+int graphWidth = videoWidth;
+int graphHeight = 100;
+float [] barGraphArray = new float[videoWidth];
+
+//graphRangeInDollars  
   
 // Refactor these UI elements to use pushmatrix, translate, popmatrix for positioning
 
 void displayBarGraph()
 {
 
-  for(int i = 1; i < graphWidth; i++) 
+  for(int i = 1; i < graphWidth; i++)      // shift all the values left 
   { 
-    netProfit[i-1] = netProfit[i];
+    barGraphArray[i-1] = barGraphArray[i];
   } 
-  
-  // Add the new values to the end of the array 
-  netProfit[graphWidth-1] -= Overhead;  // the costs are always applied
-  if(machineActive)
-  {
-    netProfit[graphWidth-1] += Profit;  // profit is applied when the machines are running
-  }
+  barGraphArray[graphWidth-1] = netProfit; // Add the new values to the end
+  if (barGraphArray[graphWidth-1] > graphRangeInDollars)    graphRangeInDollars++;
+  if (barGraphArray[graphWidth-1] < (-graphRangeInDollars)) graphRangeInDollars++;
      
+  print(graphRangeInDollars, ",");
+  
+  translate(graphXoffset, graphYoffset);
+  pushMatrix();
+  
   fill(0,0,0);
   noStroke();
+  rect(0, 0, graphWidth, graphHeight);
 
-  rect(graphXoffset, graphYoffset, graphWidth, graphHeight);
-
-  // Draw the scrolling bar graph
-  for(int i=1; i<graphWidth; i++) 
+  for(int i=1; i<graphWidth; i++)  // Draw the scrolling bar graph 
   {
-    if(netProfit[i] > 0)  // We're profitable, show in green
+    if(barGraphArray[i] > 0) // We're profitable, show in green
     {
       stroke(0,255,0);
-      line(graphXoffset+i,
-           graphYoffset+max(((graphHeight*.5)-netProfit[i]/1000),graphHeight/2),
-           graphXoffset+i,
-           graphYoffset+(graphHeight/2));
     }
     else
     {
       stroke(255,0,0); // We're losing money, show in red
-      line(graphXoffset+i,
-           graphYoffset+min(((graphHeight*.5)-netProfit[i]/1000),(graphHeight/2)*-1),
-           graphXoffset+i,
-           graphYoffset+(graphHeight/2));
     }
+    line(i, map(barGraphArray[i],graphRangeInDollars,-graphRangeInDollars,0,graphHeight), i, graphHeight/2);
+    
   }
   // Draw the center reference line
   stroke(255);
-  line(graphXoffset, 
-       graphYoffset+(graphHeight/2),
-       graphXoffset+graphWidth,
-       graphYoffset+(graphHeight/2));
+  line(0, graphHeight/2, graphWidth, graphHeight/2);
+  
+  popMatrix();
 }
 
 int machineStateIndicatorX = 20;
@@ -87,5 +80,5 @@ void displayProfit()
     fill(255);
     rect(10,40,70,20);
     fill(0);
-    text(netProfit[graphWidth-1],15,55);
+    text(netProfit,15,55);
 }
