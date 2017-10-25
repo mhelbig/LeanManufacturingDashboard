@@ -1,15 +1,10 @@
-
-float netProfit = 0;
 int arrayindex = 0;
 int graphXoffset = 0;
 int graphYoffset = 600;
 int graphWidth = videoWidth;
 int graphHeight = 100;
+float graphRangeInDollars = 1;
 float [] barGraphArray = new float[videoWidth];
-
-//graphRangeInDollars  
-  
-// Refactor these UI elements to use pushmatrix, translate, popmatrix for positioning
 
 void displayBarGraph()
 {
@@ -53,7 +48,7 @@ void displayBarGraph()
 
 int machineStateIndicatorX = 20;
 int machineStateIndicatorY = 100;
-void displayMachineState()
+void displayActivityState()
 {
   if(machineActive)
   {

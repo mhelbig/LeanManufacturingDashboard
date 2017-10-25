@@ -1,20 +1,24 @@
 import processing.video.*;
 
-// Business operating parameters:
+// Business operating constants:
 float overheadRatePerHour = 125;
 float revenueRatePerHour  = 375;
-float graphRangeInDollars = 1;
 
-Movie camera;
-float videoDuration;
-float videoTime = 0;
+// Video playback constants:
 int videoWidth =  800;
 int videoHeight = 600;
 int playbackFrameRate = 15;
 
-// calculated constants:
+// runtime variables:
+char  runMode = 'R';
 float overheadRatePerFrame;
 float revenueRatePerFrame;
+float videoDuration;
+float playbackTime = 0;
+float netProfit = 0;
+boolean  startFlag = false;
+
+Movie playback;
 
 void setup() 
 {
@@ -22,40 +26,86 @@ void setup()
   frameRate(playbackFrameRate);
   background(0);
   
-  camera = new Movie(this, "camera.mp4");
-  camera.play();
-  videoDuration = camera.duration();
-  
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / playbackFrameRate;
   revenueRatePerFrame  = revenueRatePerHour  / 3600 / playbackFrameRate;
+
+  playback = new Movie(this, "camera.mp4");
+  playback.play();
+  videoDuration = playback.duration();
+  playback.stop();
 }
-void draw() 
+
+void draw()
 {
-  videoTime = camera.time();
-  if(videoTime < videoDuration)
+  switch(runMode)
   {
-    image(camera, 0, 0, videoWidth, videoHeight);
-    displayFramerate();
-    displayProfit();
-    displayMachineState();
-    displayBarGraph();
-    
-    if(machineActive)
-    {
-      netProfit += revenueRatePerFrame;
-    }
-    netProfit -= overheadRatePerFrame;
-    
-    print(videoTime,",",videoDuration,",");
-    println();
+    case 'R':
+      recordActivity();
+      break;
+    case 'A':
+      analyseActivity();
+      break;
+    case 'E':
+      endProgram();
   }
-  else  // The video is done
+}
+
+
+// Started moving things around to create a record and analyse mode.  It's broken. 
+
+
+void recordActivity()
+{
+
+  playbackTime = playback.time();
+  calculateNetProfit();
+
+  image(playback, 0, 0, videoWidth, videoHeight);
+  displayFramerate();
+  displayProfit();
+  displayActivityState();
+  
+  print(playbackTime,",",videoDuration,",");
+  println();
+  
+  if(playbackTime >= videoDuration)
   {
-    camera.stop();
+    runMode = 'E';
+    playback.stop();
+    startFlag = false;
     saveEvents();
+  }
+
+}
+
+void analyseActivity()
+{
+  if (startFlag == false)
+  {
+    playback.play();
+    startFlag = true;
+  }
+  image(playback, 0, 0, videoWidth, videoHeight);
+  displayFramerate();
+  displayProfit();
+  displayActivityState();
+
+  displayBarGraph();
+}
+
+void endProgram()
+  {
     exit();
   }
+
+void calculateNetProfit()
+{
+  if(machineActive)
+  {
+    netProfit += revenueRatePerFrame;
+  }
+  netProfit -= overheadRatePerFrame;
 }
 
 void movieEvent(Movie video)
