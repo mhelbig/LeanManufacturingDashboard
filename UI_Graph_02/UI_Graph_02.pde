@@ -1,22 +1,21 @@
 import processing.video.*;
 
-// Business operating constants:
-float overheadRatePerHour = 125;
-float revenueRatePerHour  = 375;
-
 // Video playback constants:
 int videoWidth =  800;
 int videoHeight = 600;
 int playbackFrameRate = 15;
 
+// Business operating constants:
+float overheadRatePerHour = 125;
+float revenueRatePerHour  = 375;
+
 // runtime variables:
-char  runMode = 'R';
+int   runMode = 1;
 float overheadRatePerFrame;
 float revenueRatePerFrame;
 float videoDuration;
 float playbackTime = 0;
 float netProfit = 0;
-boolean  startFlag = false;
 
 Movie playback;
 
@@ -38,66 +37,39 @@ void setup()
 
 void draw()
 {
-  switch(runMode)
+  switch(runMode) //Note: the video playback function increments runMode when the video ends
   {
-    case 'R':
+    case 1:
       recordActivity();
       break;
-    case 'A':
+    case 2:
       analyseActivity();
       break;
-    case 'E':
+    case 3:
       endProgram();
   }
+  println();
+
 }
-
-
-// Started moving things around to create a record and analyse mode.  It's broken. 
-
 
 void recordActivity()
 {
-
-  playbackTime = playback.time();
-  calculateNetProfit();
-
-  image(playback, 0, 0, videoWidth, videoHeight);
-  displayFramerate();
-  displayProfit();
+  displayVideoFrame();
   displayActivityState();
-  
-  print(playbackTime,",",videoDuration,",");
-  println();
-  
-  if(playbackTime >= videoDuration)
-  {
-    runMode = 'E';
-    playback.stop();
-    startFlag = false;
-    saveEvents();
-  }
-
 }
 
 void analyseActivity()
 {
-  if (startFlag == false)
-  {
-    playback.play();
-    startFlag = true;
-  }
-  image(playback, 0, 0, videoWidth, videoHeight);
-  displayFramerate();
+  displayVideoFrame();
   displayProfit();
   displayActivityState();
-
   displayBarGraph();
 }
 
 void endProgram()
-  {
-    exit();
-  }
+{
+  exit();
+}
 
 void calculateNetProfit()
 {
@@ -106,9 +78,4 @@ void calculateNetProfit()
     netProfit += revenueRatePerFrame;
   }
   netProfit -= overheadRatePerFrame;
-}
-
-void movieEvent(Movie video)
-{
-  video.read();
 }
