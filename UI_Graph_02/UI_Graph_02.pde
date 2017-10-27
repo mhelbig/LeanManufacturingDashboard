@@ -16,6 +16,7 @@ float revenueRatePerFrame;
 float videoDuration;
 float playbackTime = 0;
 float netProfit = 0;
+boolean machineActive = false;
 
 Movie playback;
 
@@ -41,6 +42,7 @@ void draw()
   {
     case 1:
       recordActivity();
+      saveEvents();
       break;
     case 2:
       analyseActivity();
@@ -61,6 +63,7 @@ void recordActivity()
 void analyseActivity()
 {
   displayVideoFrame();
+  
   displayProfit();
   displayActivityState();
   displayBarGraph();

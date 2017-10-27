@@ -16,6 +16,8 @@ void addEvent(float time, int state)
   newRow.setInt("state",state);
 }
 
+
+
 void saveEvents()
 {
  saveTable(events, "data/events.csv");

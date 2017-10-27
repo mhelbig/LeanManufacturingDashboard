@@ -1,5 +1,3 @@
-boolean machineActive = false;
-
 void keyPressed() {
   if(key == 'r' || key == 'R') {
     machineActive = !machineActive;
