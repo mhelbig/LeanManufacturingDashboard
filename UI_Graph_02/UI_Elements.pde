@@ -46,26 +46,20 @@ void displayBarGraph()
   popMatrix();
 }
 
-int machineStateIndicatorX = 20;
-int machineStateIndicatorY = 100;
+int machineStateIndicatorX = 30;
+int machineStateIndicatorY = videoHeight-65;
+int machiineStateIndicatorR = 30;
 void displayActivityState()
 {
-  if(machineActive)
-  {
-    fill(0,255,0);
-    ellipse(machineStateIndicatorX,machineStateIndicatorY,20,20);
-  }
-  else
-  {
-    fill(255,0,0);
-    ellipse(machineStateIndicatorX,machineStateIndicatorY,20,20);
-  }
+  if(machineActive) fill(0,255,0,100);
+  else              fill(255,0,0,100);
+  ellipse(machineStateIndicatorX,machineStateIndicatorY,machiineStateIndicatorR,machiineStateIndicatorR);
 }
 
 void displayFramerate()
 {
     fill(255);
-    rect(10,10,25,20);
+    rect(10,10,25,20,10);
     fill(0);
     text(round(frameRate),15,25);
 }
