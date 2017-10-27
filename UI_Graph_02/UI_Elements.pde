@@ -8,7 +8,7 @@ float [] barGraphArray = new float[videoWidth];
 
 void displayBarGraph()
 {
-
+  strokeWeight(1);
   for(int i = 1; i < graphWidth; i++)      // shift all the values left 
   { 
     barGraphArray[i-1] = barGraphArray[i];
@@ -17,7 +17,7 @@ void displayBarGraph()
   if (barGraphArray[graphWidth-1] > graphRangeInDollars)    graphRangeInDollars++;
   if (barGraphArray[graphWidth-1] < (-graphRangeInDollars)) graphRangeInDollars++;
      
-  print(graphRangeInDollars, ",");
+//  print(graphRangeInDollars, ",");
   
   translate(graphXoffset, graphYoffset);
   pushMatrix();
@@ -51,6 +51,7 @@ int machineStateIndicatorY = videoHeight-65;
 int machiineStateIndicatorR = 30;
 void displayActivityState()
 {
+  strokeWeight(progressBarStroke);
   if(machineActive) fill(0,255,0,100);
   else              fill(255,0,0,100);
   ellipse(machineStateIndicatorX,machineStateIndicatorY,machiineStateIndicatorR,machiineStateIndicatorR);

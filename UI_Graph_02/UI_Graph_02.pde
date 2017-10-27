@@ -3,14 +3,14 @@ import processing.video.*;
 // Video playback constants:
 int videoWidth =  800;
 int videoHeight = 600;
-int playbackFrameRate = 15;
+int playbackFrameRate = 5;
 
 // Business operating constants:
 float overheadRatePerHour = 125;
 float revenueRatePerHour  = 375;
 
 // runtime variables:
-int   runMode = 1;
+int   runMode = 2;
 float overheadRatePerFrame;
 float revenueRatePerFrame;
 float videoDuration;
@@ -45,12 +45,15 @@ void draw()
       saveEvents();
       break;
     case 2:
+      openEventTable();
+      runMode++;
+    case 3:
       analyseActivity();
       break;
-    case 3:
+    case 4:
       endProgram();
   }
-  println();
+//  println();
 
 }
 
@@ -63,9 +66,10 @@ void recordActivity()
 void analyseActivity()
 {
   displayVideoFrame();
-  
-  displayProfit();
+  getMachineActiveState();
   displayActivityState();
+  calculateNetProfit();
+  displayProfit();
   displayBarGraph();
 }
 
