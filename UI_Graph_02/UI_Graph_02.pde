@@ -1,9 +1,11 @@
 import processing.video.*;
+import com.hamoid.*;
 
 // Video playback constants:
 int videoWidth =  800;
 int videoHeight = 600;
-int playbackFrameRate = 5;
+int analyseFrameRate = 5;
+int outputFrameRate  = 30;
 
 // Business operating constants:
 float overheadRatePerHour = 125;
@@ -18,22 +20,26 @@ float playbackTime = 0;
 float netProfit = 0;
 boolean machineActive = false;
 
-Movie playback;
+Movie       playback;
+VideoExport videoExport;
 
 void setup() 
 {
   size(1024,768);
-  frameRate(playbackFrameRate);
+  frameRate(analyseFrameRate);
   background(0);
   
   initEventTable();
-  overheadRatePerFrame = overheadRatePerHour / 3600 / playbackFrameRate;
-  revenueRatePerFrame  = revenueRatePerHour  / 3600 / playbackFrameRate;
+  overheadRatePerFrame = overheadRatePerHour / 3600 / analyseFrameRate;
+  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyseFrameRate;
 
   playback = new Movie(this, "camera.mp4");
   playback.play();
   videoDuration = playback.duration();
   playback.stop();
+  
+  videoExport = new VideoExport(this,"data/output.mp4");
+  videoExport.setFrameRate(outputFrameRate);
 }
 
 void draw()
@@ -46,11 +52,14 @@ void draw()
       break;
     case 2:
       openEventTable();
+      videoExport.startMovie();
       runMode++;
     case 3:
       analyseActivity();
+      videoExport.saveFrame();
       break;
     case 4:
+      videoExport.endMovie();
       endProgram();
   }
 //  println();

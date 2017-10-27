@@ -62,13 +62,16 @@ void displayFramerate()
     fill(255);
     rect(10,10,25,20,10);
     fill(0);
-    text(round(frameRate),15,25);
+    textAlign(CENTER);
+    text(round(frameRate),23,25);
 }
 
 void displayProfit()
 {
     fill(255);
-    rect(10,40,70,20);
+    rect(10,40,70,20,10);
     fill(0);
-    text(netProfit,15,55);
+    textAlign(RIGHT);
+    text("$", 25, 55);
+    text( round(netProfit*100) / 100.0, 75, 55);
 }
