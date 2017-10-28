@@ -4,7 +4,7 @@ import com.hamoid.*;
 // Video playback constants:
 int videoWidth =  800;
 int videoHeight = 600;
-int analyseFrameRate = 5;
+int analyseFrameRate = 30;
 int outputFrameRate  = 30;
 
 // Business operating constants:
@@ -12,7 +12,7 @@ float overheadRatePerHour = 125;
 float revenueRatePerHour  = 375;
 
 // runtime variables:
-int   runMode = 2;
+int   runMode = 1;
 float overheadRatePerFrame;
 float revenueRatePerFrame;
 float videoDuration;
@@ -48,9 +48,10 @@ void draw()
   {
     case 1:
       recordActivity();
-      saveEvents();
       break;
     case 2:
+      addEvent(videoDuration,0);                //add one more record
+      saveEvents();
       openEventTable();
       videoExport.startMovie();
       runMode++;

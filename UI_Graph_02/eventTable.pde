@@ -46,5 +46,5 @@ void getMachineActiveState()
 
 void saveEvents()
 {
- saveTable(events, "data/events.csv");
+  saveTable(events, "data/events.csv");
 }
