@@ -1,3 +1,4 @@
+import gab.opencv.*;
 import processing.video.*;
 import com.hamoid.*;
 
@@ -6,6 +7,10 @@ int videoWidth =  800;
 int videoHeight = 600;
 int analyseFrameRate = 30;
 int outputFrameRate  = 30;
+
+// Image recognition
+int roiWidth = 50;
+int roiHeight = 50;
 
 // Business operating constants:
 float overheadRatePerHour = 125;
@@ -22,6 +27,8 @@ boolean machineActive = false;
 
 Movie       playback;
 VideoExport videoExport;
+PImage      imageRecognition;
+OpenCV      opencv;
 
 void setup() 
 {
@@ -34,9 +41,12 @@ void setup()
   revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyseFrameRate;
 
   playback = new Movie(this, "camera.mp4");
+  imageRecognition = playback;
   playback.play();
   videoDuration = playback.duration();
   playback.stop();
+  
+  opencv = new OpenCV(this, playback);
   
   videoExport = new VideoExport(this,"data/output.mp4");
   videoExport.setFrameRate(outputFrameRate);
@@ -70,6 +80,7 @@ void draw()
 void recordActivity()
 {
   displayVideoFrame();
+  detectMachineActiveState();
   displayActivityState();
 }
 
