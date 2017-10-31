@@ -25,7 +25,7 @@ void openEventTable()
   events = loadTable("data/events.csv", "header");
 }
 
-void getMachineActiveState()
+void readMachineActiveStateTable()
 {
   int state;
   

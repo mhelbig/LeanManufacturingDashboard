@@ -44,6 +44,13 @@ void displayProgressBar()
        progressBarHeight-progressBarStroke,
        progressBarHeight/2);
 }
+
+void restartVideo()
+{
+  startFlag = false;
+  playback.stop();
+  events.clearRows();
+}
   
 void movieEvent(Movie video)
 {
