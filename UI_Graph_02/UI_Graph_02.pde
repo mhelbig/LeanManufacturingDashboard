@@ -54,20 +54,19 @@ void draw()
     case 1:
       setupRecordingParameters();  // Future
       break;
-    case 2:
-      recordActivity();
+    case 2:                        // first pass: analyse video for activity
+      analyzeVideo();
       break;
-    case 3:
-      addEvent(videoDuration,0);                //add one more record to the table
-      saveEvents();
+    case 3:                        // Save analysis data & prepare to generate output video
+      closeEventTable();
       openEventTable();
       videoExport.startMovie();
       runMode++;
-    case 4:
-      analyseActivity();
+    case 4:                        // second pass: create output video from analysis data
+      generateOutputVideo();
       videoExport.saveFrame();
       break;
-    case 5:
+    case 5:                        // gracefully end the program
       videoExport.endMovie();
       endProgram();
   }
@@ -80,13 +79,13 @@ void setupRecordingParameters()
   runMode++;
 }
 
-void recordActivity()
+void analyzeVideo()
 {
   displayVideoFrame();
   displayActivityState();
 }
 
-void analyseActivity()
+void generateOutputVideo()
 {
   displayVideoFrame();
   readMachineActiveStateTable();

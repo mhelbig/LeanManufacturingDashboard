@@ -20,7 +20,6 @@ void keyPressed()
   
   if (key == 'q' || key == 'Q') // Quit
   {
-//    videoExport.endMovie();
-    exit();
+  runMode = 5;
   }
 }
