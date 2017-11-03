@@ -19,6 +19,6 @@ void keyPressed()
   
   if (key == 'q' || key == 'Q') // Quit
   {
-  runMode = 5;
+  runMode = 100;
   }
 }

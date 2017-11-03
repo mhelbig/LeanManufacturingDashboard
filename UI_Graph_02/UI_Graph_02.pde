@@ -36,7 +36,7 @@ void setup()
   playback = new Movie(this, "camera.mpg");
   playback.play();
   videoDuration = playback.duration();
-  playback.stop();
+  playback.stop();                      // we need to do this to get a valid duration
   
   videoExport = new VideoExport(this,"data/output.mp4");
   videoExport.setFrameRate(outputFrameRate);
@@ -56,14 +56,13 @@ void draw()
       analyzeVideo();
       if(setDetectRegion) setActivityDetectRegion();
       break;
-    case 3:                        // Save analysis data & prepare to generate output video
+    case 3:                        // Save analysis data
       addEvent(videoDuration,0);
+      runMode=100;
+    case 100:                      // gracefully end the program
       closeEventTable();
-      openEventTable();
-      runMode=5;
-    case 5:                        // gracefully end the program
       videoExport.endMovie();
-      endProgram();
+      exit();
   }
 }
 
@@ -88,11 +87,6 @@ void generateOutputVideo()
   displayVideoFrame();
   readMachineActiveStateTable();
   displayActivityState();
-}
-
-void endProgram()
-{
-  exit();
 }
 
 void calculateNetProfit()
