@@ -48,13 +48,17 @@ void displayBarGraph()
 
 int machineStateIndicatorX = 30;
 int machineStateIndicatorY = videoHeight-65;
-int machiineStateIndicatorR = 30;
+int machineStateIndicatorR = 30;
 void displayActivityState()
 {
   strokeWeight(progressBarStroke);
+  stroke(0);
   if(machineActive) fill(0,255,0,100);
   else              fill(255,0,0,100);
-  ellipse(machineStateIndicatorX,machineStateIndicatorY,machiineStateIndicatorR,machiineStateIndicatorR);
+  ellipse(detectRegionX + machineStateIndicatorR + 10,
+          detectRegionY,
+          machineStateIndicatorR,
+          machineStateIndicatorR);
 }
 
 void displayFramerate()
@@ -74,4 +78,26 @@ void displayProfit()
     textAlign(RIGHT);
     text("$", 25, 55);
     text( round(netProfit*100) / 100.0, 75, 55);
+}
+
+void displayKeyboardControls()
+{
+ int textXposition = videoWidth + 20;
+ int textYposition = 20;
+ int textSpacing   = 15;
+ 
+ text("Keyboard controls:",textXposition, textYposition);
+ textYposition += textSpacing;
+ 
+ text("R = Restart Video from beginning",textXposition, textYposition);
+ textYposition += textSpacing;
+ 
+ text("M = Manually set Machine Active/Inactive",textXposition, textYposition);
+ textYposition += textSpacing;
+ 
+ text("S = Set machine active sensor position",textXposition, textYposition);
+ textYposition += textSpacing;
+ 
+ text("Q = Quit",textXposition, textYposition);
+ textYposition += textSpacing;
 }

@@ -46,6 +46,5 @@ void readMachineActiveStateTable()
 
 void closeEventTable()
 {
-  addEvent(videoDuration,0);     //add one more record to the table
   saveTable(events, "data/events.csv");
 }

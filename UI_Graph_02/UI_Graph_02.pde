@@ -20,11 +20,6 @@ float playbackTime = 0;
 float netProfit = 0;
 boolean machineActive = false;
 
-// image detection:
-boolean setDetectRegion = false;
-int detectRegionX = videoWidth/2;
-int detectRegionY = videoHeight/2;
-
 Movie       playback;
 VideoExport videoExport;
 
@@ -45,6 +40,8 @@ void setup()
   
   videoExport = new VideoExport(this,"data/output.mp4");
   videoExport.setFrameRate(outputFrameRate);
+  
+  displayKeyboardControls();
 }
 
 void draw()
@@ -58,6 +55,7 @@ void draw()
       analyzeVideo();
       break;
     case 3:                        // Save analysis data & prepare to generate output video
+      addEvent(videoDuration,0);
       closeEventTable();
       openEventTable();
       videoExport.startMovie();
@@ -82,6 +80,8 @@ void setupRecordingParameters()
 void analyzeVideo()
 {
   displayVideoFrame();
+  if(setDetectRegion) setActivityDetectRegion();
+  opticallyDetectMachineState();
   displayActivityState();
 }
 

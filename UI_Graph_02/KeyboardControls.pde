@@ -9,8 +9,7 @@ void keyPressed()
   
   if(key == 's' || key == 'S')  // Toggle mode for setting image detection region position with mouse
   {
-    setDetectRegion = !setDetectRegion;
-    println("SetDetectRegion = " + (setDetectRegion ? "true" : "false"));
+    setDetectRegion = true;
   }
  
   if(key == 'r' || key == 'R')  // Restart the video playback from the beginning
