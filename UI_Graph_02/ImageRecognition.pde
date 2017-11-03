@@ -1,7 +1,7 @@
 // image detection:
 boolean setDetectRegion = false;
-int detectRegionX = videoWidth/2;
-int detectRegionY = videoHeight/2;
+int detectRegionX = 265;
+int detectRegionY = 179;
 int detectRegionSizeX = 10;
 int detectRegionSizeY = 10;
 
@@ -9,6 +9,7 @@ void setActivityDetectRegion()
 {
   detectRegionX = mouseX - detectRegionSizeX;
   detectRegionY = mouseY - detectRegionSizeY;
+  println(detectRegionX, detectRegionY);
   if(mousePressed) setDetectRegion = false;
 }
 

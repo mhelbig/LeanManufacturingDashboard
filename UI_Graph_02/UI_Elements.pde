@@ -55,8 +55,8 @@ void displayActivityState()
   stroke(0);
   if(machineActive) fill(0,255,0,100);
   else              fill(255,0,0,100);
-  ellipse(detectRegionX + machineStateIndicatorR + 10,
-          detectRegionY,
+  ellipse(machineStateIndicatorX,
+          machineStateIndicatorY,
           machineStateIndicatorR,
           machineStateIndicatorR);
 }

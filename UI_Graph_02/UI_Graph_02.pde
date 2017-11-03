@@ -50,26 +50,21 @@ void draw()
   {
     case 1:
       setupRecordingParameters();  // Future
+      videoExport.startMovie();
       break;
     case 2:                        // first pass: analyse video for activity
       analyzeVideo();
+      if(setDetectRegion) setActivityDetectRegion();
       break;
     case 3:                        // Save analysis data & prepare to generate output video
       addEvent(videoDuration,0);
       closeEventTable();
       openEventTable();
-      videoExport.startMovie();
-      runMode++;
-    case 4:                        // second pass: create output video from analysis data
-      generateOutputVideo();
-      videoExport.saveFrame();
-      break;
+      runMode=5;
     case 5:                        // gracefully end the program
       videoExport.endMovie();
       endProgram();
   }
-//  println();
-
 }
 
 void setupRecordingParameters()
@@ -80,9 +75,12 @@ void setupRecordingParameters()
 void analyzeVideo()
 {
   displayVideoFrame();
-  if(setDetectRegion) setActivityDetectRegion();
   opticallyDetectMachineState();
   displayActivityState();
+  calculateNetProfit();
+  displayProfit();
+  displayBarGraph();
+  videoExport.saveFrame();
 }
 
 void generateOutputVideo()
@@ -90,9 +88,6 @@ void generateOutputVideo()
   displayVideoFrame();
   readMachineActiveStateTable();
   displayActivityState();
-  calculateNetProfit();
-  displayProfit();
-  displayBarGraph();
 }
 
 void endProgram()

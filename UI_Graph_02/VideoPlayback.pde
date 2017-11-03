@@ -49,6 +49,13 @@ void restartVideo()
 {
   startFlag = false;
   playback.stop();
+  videoExport.endMovie();
+  videoExport.startMovie();
+  netProfit = 0;
+  for(int i = 1; i < graphWidth; i++) 
+  { 
+    barGraphArray[i-1] = 0;
+  } 
   events.clearRows();
 }
   
