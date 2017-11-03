@@ -8,8 +8,21 @@ float opticalBrightnessThreshold = 175;  // range = 0 - 255
 
 void setActivityDetectRegion()
 {
-  detectRegionX = mouseX - detectMarkerSizeX;
-  detectRegionY = mouseY - detectMarkerSizeY;
+  PImage magnifier;
+
+  detectRegionX = mouseX - detectMarkerSizeX * 4;
+  detectRegionY = mouseY - detectMarkerSizeY * 4;
+  
+  magnifier = get(detectRegionX - detectMarkerSizeX,
+                  detectRegionY - detectMarkerSizeY,
+                  (detectMarkerSizeX * 2) + 2,
+                  (detectMarkerSizeY * 2) + 2);
+  image(magnifier, 
+        detectRegionX - detectMarkerSizeX * 4,
+        detectRegionY - detectMarkerSizeY * 4,
+        detectMarkerSizeX * 8,
+        detectMarkerSizeY * 8);
+  
   println(detectRegionX, detectRegionY);
   if(mousePressed) setDetectRegion = false;
 }

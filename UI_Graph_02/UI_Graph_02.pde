@@ -54,7 +54,6 @@ void draw()
       break;
     case 2:                        // first pass: analyse video for activity
       analyzeVideo();
-      if(setDetectRegion) setActivityDetectRegion();
       break;
     case 3:                        // Save analysis data
       addEvent(videoDuration,0);
@@ -77,16 +76,10 @@ void analyzeVideo()
   opticallyDetectMachineState();
   displayActivityState();
   calculateNetProfit();
-  displayProfit();
+  if(setDetectRegion) setActivityDetectRegion();
   displayBarGraph();
+  displayProfit();
   videoExport.saveFrame();
-}
-
-void generateOutputVideo()
-{
-  displayVideoFrame();
-  readMachineActiveStateTable();
-  displayActivityState();
 }
 
 void calculateNetProfit()
