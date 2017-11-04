@@ -15,6 +15,7 @@ float revenueRatePerHour;
 int   runMode = 1;
 float overheadRatePerFrame;
 float revenueRatePerFrame;
+float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
 boolean machineActive = false;
@@ -26,15 +27,23 @@ Preference programPreferences = new Preference();
 
 void setup() 
 {
-  programPreferences.loadPref();
+  if(!programPreferences.loadPref())
+  {
+    ResetSystemDefaultParameters();
+    println("Preferences file missing.  Default settings loaded.");
+  }
+  else
+  {
+    loadSystemParameters();
+  }
 
   size(1024,768);
   frameRate(analyseFrameRate);
   background(0);
   
   initEventTable();
-  overheadRatePerFrame = overheadRatePerHour / 3600 / analyseFrameRate;
-  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyseFrameRate;
+  overheadRatePerFrame = overheadRatePerHour / 3600 / analyseFrameRate * sourceVideoSpeedMultiplier; //<>//
+  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyseFrameRate * sourceVideoSpeedMultiplier;
 
   playback = new Movie(this, "camera.mpg");
   playback.play();
@@ -54,6 +63,7 @@ void draw()
     case 1:
       loadSystemParameters();      // Read settings from file (future)
       videoExport.startMovie();
+      runMode++;
       break;
     case 2:                        // Analyse video for activity
       analyzeVideo();

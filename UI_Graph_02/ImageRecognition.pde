@@ -34,7 +34,7 @@ void opticallyDetectMachineState()
   boolean active = false;
   
 //Draw the optical detection marker  
-  stroke(0,255,0);
+  stroke(0,0,255);
   strokeWeight(1);
   noFill();
   line(detectRegionX -1, detectRegionY,     detectRegionX - detectMarkerSizeX, detectRegionY);

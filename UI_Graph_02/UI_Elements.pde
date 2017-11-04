@@ -1,9 +1,9 @@
 int arrayindex = 0;
 int graphXoffset = 0;
-int graphYoffset = 600;
+int graphYoffset = videoHeight;
 int graphWidth = videoWidth;
-int graphHeight = 100;
-float graphRangeInDollars = 2;
+int graphHeight = 150;
+float graphRangeInDollars = 100;
 float [] barGraphArray = new float[videoWidth];
 
 void displayBarGraph()

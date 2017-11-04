@@ -1,9 +1,10 @@
 void ResetSystemDefaultParameters()
 {
-  detectRegionX = 265;
-  detectRegionY = 179;
-  overheadRatePerHour = 125;
-  revenueRatePerHour  = 375;
+  detectRegionX              = 265;
+  detectRegionY              = 179;
+  overheadRatePerHour        = 125;
+  revenueRatePerHour         = 375;
+  sourceVideoSpeedMultiplier = 60;
 
   saveSystemParameters();
 }
@@ -14,8 +15,7 @@ void loadSystemParameters()
   detectRegionY = int(programPreferences.getFloat("detectRegionY"));
   overheadRatePerHour = programPreferences.getFloat("overheadRatePerHour");
   revenueRatePerHour  = programPreferences.getFloat("revenueRatePerHour");
-
-  runMode++;
+  sourceVideoSpeedMultiplier = programPreferences.getFloat("sourceVideoSpeedMultiplier");
 }
 
 void saveSystemParameters()
@@ -24,6 +24,7 @@ void saveSystemParameters()
   programPreferences.setNumber("detectRegionY",detectRegionY,false);
   programPreferences.setNumber("overheadRatePerHour",overheadRatePerHour,false);
   programPreferences.setNumber("revenueRatePerHour",revenueRatePerHour,false);
+  programPreferences.setNumber("sourceVideoSpeedMultiplier",sourceVideoSpeedMultiplier,false);
   programPreferences.savePref();
 }
 
@@ -83,9 +84,11 @@ class Preference
     return int(PreferencesDict.get(_key));                                          //return a value for a key as an integer
   }
   
-  void loadPref()
+  boolean loadPref()
   {
-    String lines[] = loadStrings(preferencesFileName);                              //Load all prefferences lines in textfile from disk
+    String lines[] = loadStrings(preferencesFileName);                              //Load all prefferences lines in text file from disk
+    
+    if(lines == null) return false;                                                 //Returns false if there is a problem opening the file
 
     for (int i = 1 ; i < lines.length; i++)
     {                                       //Loop thru all lines - but not the header
@@ -97,19 +100,20 @@ class Preference
     }
     
     println(PreferencesDict);                                                        //Print content (for debugging)
+    return(true);                                                                    //Returns true if things look good
   }
   
   void savePref()
   {
-    String[] preferencesFileContent = {"Preferences:"};                              //Make contenfile and add headder text
+    String[] preferencesFileContent = {"Preferences:"};                              //Make content file and add header text
     
     for (String k : PreferencesDict.keys())
     {                                        //Loop thru all variable
       String appendString = k + "=" + PreferencesDict.get(k);                        //Put variable and value in a line
-      preferencesFileContent = append(preferencesFileContent, appendString);         //add the line to contenfile
+      preferencesFileContent = append(preferencesFileContent, appendString);         //add the line to content file
     }
     
-    saveStrings(preferencesFileName, preferencesFileContent);                        //Save contenfile to disk;
+    saveStrings(preferencesFileName, preferencesFileContent);                        //Save content file to disk;
     
     println(PreferencesDict);                                                        //Print content (for debugging)
   }
