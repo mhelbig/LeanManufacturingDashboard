@@ -8,8 +8,8 @@ int analyseFrameRate = 30;
 int outputFrameRate  = 30;
 
 // Business operating constants:
-float overheadRatePerHour = 125;
-float revenueRatePerHour  = 375;
+float overheadRatePerHour;
+float revenueRatePerHour;
 
 // runtime variables:
 int   runMode = 1;
@@ -17,14 +17,17 @@ float overheadRatePerFrame;
 float revenueRatePerFrame;
 float videoDuration;
 float playbackTime = 0;
-float netProfit = 0;
 boolean machineActive = false;
 
 Movie       playback;
 VideoExport videoExport;
 
+Preference programPreferences = new Preference();
+
 void setup() 
 {
+  programPreferences.loadPref();
+
   size(1024,768);
   frameRate(analyseFrameRate);
   background(0);
@@ -49,10 +52,10 @@ void draw()
   switch(runMode) //Note: the video playback function increments runMode when the video ends
   { //<>//
     case 1:
-      setupRecordingParameters();  // Future
+      loadSystemParameters();      // Read settings from file (future)
       videoExport.startMovie();
       break;
-    case 2:                        // first pass: analyse video for activity
+    case 2:                        // Analyse video for activity
       analyzeVideo();
       break;
     case 3:                        // Save analysis data
@@ -61,14 +64,10 @@ void draw()
       break;
     case 100:                      // gracefully end the program
       closeEventTable();
+      saveSystemParameters();
       videoExport.endMovie();
       exit();
   }
-}
-
-void setupRecordingParameters()
-{
-  runMode++;
 }
 
 void analyzeVideo()
@@ -81,13 +80,4 @@ void analyzeVideo()
   displayBarGraph();
   displayProfit();
   videoExport.saveFrame();
-}
-
-void calculateNetProfit()
-{
-  if(machineActive)
-  {
-    netProfit += revenueRatePerFrame;
-  }
-  netProfit -= overheadRatePerFrame;
 }

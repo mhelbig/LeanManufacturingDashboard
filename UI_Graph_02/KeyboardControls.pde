@@ -16,6 +16,11 @@ void keyPressed()
   {
     restartVideo();
   }
+
+  if (key == 'i' || key == 'I') // Initialize preferences
+  {
+    ResetSystemDefaultParameters();
+  }
   
   if (key == 'q' || key == 'Q') // Quit
   {

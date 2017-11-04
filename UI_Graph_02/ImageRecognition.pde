@@ -1,7 +1,7 @@
 // image detection:
 boolean setDetectRegion = false;
-int detectRegionX = 265;           //These are hardcoded for now
-int detectRegionY = 179;
+int detectRegionX;
+int detectRegionY;
 int detectMarkerSizeX = 10;
 int detectMarkerSizeY = 10;
 float opticalBrightnessThreshold = 175;  // range = 0 - 255
@@ -23,7 +23,7 @@ void setActivityDetectRegion()
         detectMarkerSizeX * 8,
         detectMarkerSizeY * 8);
   
-  println(detectRegionX, detectRegionY);
+//  println(detectRegionX, detectRegionY);
   if(mousePressed) setDetectRegion = false;
 }
 

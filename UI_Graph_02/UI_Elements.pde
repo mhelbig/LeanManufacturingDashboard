@@ -3,7 +3,7 @@ int graphXoffset = 0;
 int graphYoffset = 600;
 int graphWidth = videoWidth;
 int graphHeight = 100;
-float graphRangeInDollars = 1;
+float graphRangeInDollars = 2;
 float [] barGraphArray = new float[videoWidth];
 
 void displayBarGraph()

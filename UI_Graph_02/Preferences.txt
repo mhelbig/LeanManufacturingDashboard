@@ -1,0 +1,5 @@
+Preferences:
+detectRegionX=265.0
+detectRegionY=179.0
+overheadRatePerHour=125
+revenueRatePerHour=375
