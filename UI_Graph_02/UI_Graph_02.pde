@@ -12,7 +12,7 @@ float overheadRatePerHour = 125;
 float revenueRatePerHour  = 375;
 
 // runtime variables:
-int   runMode = 2;
+int   runMode = 1;
 float overheadRatePerFrame;
 float revenueRatePerFrame;
 float videoDuration;
@@ -47,7 +47,7 @@ void setup()
 void draw()
 {
   switch(runMode) //Note: the video playback function increments runMode when the video ends
-  {
+  { //<>//
     case 1:
       setupRecordingParameters();  // Future
       videoExport.startMovie();
@@ -58,6 +58,7 @@ void draw()
     case 3:                        // Save analysis data
       addEvent(videoDuration,0);
       runMode=100;
+      break;
     case 100:                      // gracefully end the program
       closeEventTable();
       videoExport.endMovie();

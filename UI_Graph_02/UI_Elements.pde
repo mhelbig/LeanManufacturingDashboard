@@ -19,8 +19,8 @@ void displayBarGraph()
      
 //  print(graphRangeInDollars, ",");
   
-  translate(graphXoffset, graphYoffset);
   pushMatrix();
+  translate(graphXoffset, graphYoffset);
   
   fill(0,0,0);
   noStroke();
