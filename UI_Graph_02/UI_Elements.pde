@@ -20,7 +20,7 @@ void displayBarGraph()
 //  print(graphRangeInDollars, ",");
   
   pushMatrix();
-  translate(graphXoffset, graphYoffset);
+  translate(graphXoffset, graphYoffset+1);
   
   fill(0,0,0);
   noStroke();
@@ -51,7 +51,6 @@ int machineStateIndicatorY;
 int machineStateIndicatorR = 30;
 void displayActivityState()
 {
-  strokeWeight(progressBarStroke);
   stroke(0);
   if(machineActive) fill(0,255,0,100);
   else              fill(255,0,0,100);

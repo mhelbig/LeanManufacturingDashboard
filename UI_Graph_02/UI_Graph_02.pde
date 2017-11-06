@@ -30,7 +30,7 @@ void setup()
   size(1024,768);
 
   loadPreferences();
-  graphYoffset = videoHeight;
+  graphYoffset = videoHeight + 30;
   graphWidth = videoWidth;
   barGraphArray = new float[videoWidth];
   

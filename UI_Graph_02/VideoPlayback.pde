@@ -22,27 +22,24 @@ void displayVideoFrame()
 
 }
   
-int progressBarOffset = 10;  // how many pixels the progress bar is from the edges
 int progressBarHeight = 30;  // how many pixels tall the progress bar is
-int progressBarStroke = 4;   // how thick the progress bar border is in pixels
   
 void displayProgressBar()
 {
   noFill();
   stroke(255,255,255,150);
-  strokeWeight(progressBarStroke);
-  rect(progressBarOffset, 
-       videoHeight - progressBarOffset - progressBarHeight,
-       videoWidth-(2*progressBarOffset),
-       progressBarHeight,
-       progressBarHeight/2);
-  fill(0,0,255,100);
-//  noStroke();
-  rect(progressBarOffset + progressBarStroke/2, 
-       videoHeight - progressBarOffset - progressBarHeight + progressBarStroke/2,
-       map(playbackTime, 0, videoDuration,0, (float)(videoWidth-(2*progressBarOffset)-progressBarStroke)),
-       progressBarHeight-progressBarStroke,
-       progressBarHeight/2);
+  rect(0, 
+       videoHeight,
+       videoWidth,
+       progressBarHeight);
+       
+  if(machineActive) fill(0,255,0,100);
+  else              fill(255,0,0,100);
+  
+  line(map(playbackTime, 0, videoDuration,0, videoWidth), 
+       videoHeight,
+       map(playbackTime, 0, videoDuration,0, videoWidth),
+       videoHeight + progressBarHeight);
 }
 
 void restartVideo()
