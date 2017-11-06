@@ -1,10 +1,10 @@
 int arrayindex = 0;
 int graphXoffset = 0;
-int graphYoffset = videoHeight;
-int graphWidth = videoWidth;
+int graphYoffset;
+int graphWidth;
 int graphHeight = 150;
 float graphRangeInDollars = 100;
-float [] barGraphArray = new float[videoWidth];
+float [] barGraphArray;
 
 void displayBarGraph()
 {
@@ -46,8 +46,8 @@ void displayBarGraph()
   popMatrix();
 }
 
-int machineStateIndicatorX = 30;
-int machineStateIndicatorY = videoHeight-65;
+int machineStateIndicatorX;
+int machineStateIndicatorY;
 int machineStateIndicatorR = 30;
 void displayActivityState()
 {
@@ -83,7 +83,7 @@ void displayProfit()
 void displayKeyboardControls()
 {
  int textXposition = videoWidth + 20;
- int textYposition = 20;
+ int textYposition = 140;
  int textSpacing   = 15;
  
  text("Keyboard controls:",textXposition, textYposition);
@@ -100,4 +100,11 @@ void displayKeyboardControls()
  
  text("Q = Quit",textXposition, textYposition);
  textYposition += textSpacing;
+}
+
+PImage logo;
+void displayCompanyLogo()
+{
+  logo = loadImage("leanlogo.png");
+  image(logo, videoWidth + 20, 20);
 }

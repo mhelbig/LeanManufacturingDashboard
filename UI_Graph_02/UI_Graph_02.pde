@@ -2,10 +2,10 @@ import processing.video.*;
 import com.hamoid.*;
 
 // Video playback constants:
-int videoWidth =  720;
-int videoHeight = 480;
-int analyseFrameRate = 30;
-int outputFrameRate  = 30;
+int videoWidth;
+int videoHeight;
+int analyseFrameRate;
+int outputFrameRate;
 
 // Business operating constants:
 float overheadRatePerHour;
@@ -27,8 +27,16 @@ Preference programPreferences = new Preference();
 
 void setup() 
 {
-  loadPreferences();
   size(1024,768);
+
+  loadPreferences();
+  graphYoffset = videoHeight;
+  graphWidth = videoWidth;
+  barGraphArray = new float[videoWidth];
+  
+  machineStateIndicatorX = 30;
+  machineStateIndicatorY = videoHeight-65;
+  
   frameRate(analyseFrameRate);
   background(0);
   
@@ -45,6 +53,7 @@ void setup()
   videoExport.setFrameRate(outputFrameRate);
   
   displayKeyboardControls();
+  displayCompanyLogo();
 }
 
 void draw()

@@ -7,21 +7,29 @@ void loadPreferences()
   }
   else
   {
-  detectRegionX = int(programPreferences.getFloat("detectRegionX"));
-  detectRegionY = int(programPreferences.getFloat("detectRegionY"));
-  overheadRatePerHour = programPreferences.getFloat("overheadRatePerHour");
-  revenueRatePerHour  = programPreferences.getFloat("revenueRatePerHour");
-  sourceVideoSpeedMultiplier = programPreferences.getFloat("sourceVideoSpeedMultiplier");
+  detectRegionX              = int(programPreferences.getFloat("detectRegionX"));
+  detectRegionY              = int(programPreferences.getFloat("detectRegionY"));
+  overheadRatePerHour        =     programPreferences.getFloat("overheadRatePerHour");
+  revenueRatePerHour         =     programPreferences.getFloat("revenueRatePerHour");
+  sourceVideoSpeedMultiplier =     programPreferences.getFloat("sourceVideoSpeedMultiplier");
+  analyseFrameRate           = int(programPreferences.getFloat("analyseFrameRate"));
+  outputFrameRate            = int(programPreferences.getFloat("outputFrameRate"));
+  videoWidth                 = int(programPreferences.getFloat("videoWidth"));
+  videoHeight                = int(programPreferences.getFloat("videoHeight"));
   }
 }
 
 void saveSystemParameters()
 {
-  programPreferences.setNumber("detectRegionX",detectRegionX,false);
-  programPreferences.setNumber("detectRegionY",detectRegionY,false);
-  programPreferences.setNumber("overheadRatePerHour",overheadRatePerHour,false);
-  programPreferences.setNumber("revenueRatePerHour",revenueRatePerHour,false);
-  programPreferences.setNumber("sourceVideoSpeedMultiplier",sourceVideoSpeedMultiplier,false);
+  programPreferences.setNumber("detectRegionX",              detectRegionX,              false);
+  programPreferences.setNumber("detectRegionY",              detectRegionY,              false);
+  programPreferences.setNumber("overheadRatePerHour",        overheadRatePerHour,        false);
+  programPreferences.setNumber("revenueRatePerHour",         revenueRatePerHour,         false);
+  programPreferences.setNumber("sourceVideoSpeedMultiplier", sourceVideoSpeedMultiplier, false);
+  programPreferences.setNumber("analyseFrameRate",           analyseFrameRate,           false);
+  programPreferences.setNumber("outputFrameRate",            outputFrameRate,            false);
+  programPreferences.setNumber("videoWidth",                 videoWidth,                 false);
+  programPreferences.setNumber("videoHeight",                videoHeight,                false);
   programPreferences.savePref();
 }
 
@@ -32,6 +40,10 @@ void ResetSystemDefaultParameters()
   overheadRatePerHour        = 125;
   revenueRatePerHour         = 375;
   sourceVideoSpeedMultiplier = 60;
+  analyseFrameRate           = 30;
+  outputFrameRate            = 30;
+  videoWidth                 = 720;
+  videoHeight                = 480;
 
   saveSystemParameters();
 }
