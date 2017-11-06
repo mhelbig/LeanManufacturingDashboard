@@ -13,8 +13,6 @@ float revenueRatePerHour;
 
 // runtime variables:
 int   runMode = 1;
-float overheadRatePerFrame;
-float revenueRatePerFrame;
 float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
@@ -30,15 +28,14 @@ void setup()
   size(1024,768);
 
   loadPreferences();
-  graphYoffset = videoHeight + 30;
-  graphWidth = videoWidth;
-  barGraphArray = new float[videoWidth];
+  profitGraphYoffset = videoHeight + uiSpacing + videoProgressBarHeight + uiSpacing;
+  profitGraphWidth = videoWidth;
   
   machineStateIndicatorX = 30;
   machineStateIndicatorY = videoHeight-65;
   
   frameRate(analyseFrameRate);
-  background(0);
+  background(0,0,75);
   
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / analyseFrameRate * sourceVideoSpeedMultiplier; //<>//
@@ -87,7 +84,7 @@ void analyzeVideo()
   displayActivityState();
   calculateNetProfit();
   if(setDetectRegion) setActivityDetectRegion();
-  displayBarGraph();
+  displayProfitBarGraph();
   displayProfit();
   videoExport.saveFrame();
 }

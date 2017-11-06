@@ -1,51 +1,69 @@
-int arrayindex = 0;
-int graphXoffset = 0;
-int graphYoffset;
-int graphWidth;
-int graphHeight = 150;
-float graphRangeInDollars = 100;
-float [] barGraphArray;
+//Video progress bar
+int videoProgressBarHeight = 15;  // how many pixels tall the progress bar is
+int uiSpacing = 5;           // how many pixels between UI elements
 
-void displayBarGraph()
+void displayVideoProgressBar()
 {
-  strokeWeight(1);
-  for(int i = 1; i < graphWidth; i++)      // shift all the values left 
-  { 
-    barGraphArray[i-1] = barGraphArray[i];
-  } 
-  barGraphArray[graphWidth-1] = netProfit; // Add the new values to the end
-  if (barGraphArray[graphWidth-1] > graphRangeInDollars)    graphRangeInDollars++;
-  if (barGraphArray[graphWidth-1] < (-graphRangeInDollars)) graphRangeInDollars++;
-     
-//  print(graphRangeInDollars, ",");
-  
   pushMatrix();
-  translate(graphXoffset, graphYoffset+1);
+  translate(0, videoHeight + uiSpacing);
+  noFill();
+  stroke(255,255,255);
+  rect(0, 0, videoWidth, videoProgressBarHeight);
+       
+  if(machineActive) stroke(0,255,0,100);  //green bar
+  else              stroke(255,0,0,100);  //red bar
   
-  fill(0,0,0);
-  noStroke();
-  rect(0, 0, graphWidth, graphHeight);
+  line(map(playbackTime, 0, videoDuration,0, videoWidth), 
+       0,
+       map(playbackTime, 0, videoDuration,0, videoWidth),
+       videoProgressBarHeight);
+       
+  popMatrix();     
+}
 
-  for(int i=1; i<graphWidth; i++)  // Draw the scrolling bar graph 
-  {
-    if(barGraphArray[i] > 0) // We're profitable, show in green
-    {
-      stroke(0,255,0);
-    }
-    else
-    {
-      stroke(255,0,0); // We're losing money, show in red
-    }
-    line(i, map(barGraphArray[i],graphRangeInDollars,-graphRangeInDollars,0,graphHeight), i, graphHeight/2);
-    
-  }
+// Profit bargraph
+int profitGraphXoffset = 0;
+int profitGraphYoffset;
+int profitGraphWidth;
+int profitGraphHeight = 150;
+float profitGraphRangeInDollars = 100;
+
+void displayProfitBarGraph()
+{
+  pushMatrix();
+  translate(profitGraphXoffset, profitGraphYoffset);
+
+  noFill();
+  stroke(255,255,255);
+  rect(0, 0, profitGraphWidth, profitGraphHeight);
+       
+  if(netProfit > 0 ) stroke(0,255,0,100);  //green bar
+  else               stroke(255,0,0,100);  //red bar
+  
+  line(map(playbackTime, 0, videoDuration,0, videoWidth), 
+       constrain(map(netProfit,profitGraphRangeInDollars,-profitGraphRangeInDollars,0,profitGraphHeight), 0, profitGraphHeight),
+       map(playbackTime, 0, videoDuration,0, videoWidth),
+       profitGraphHeight/2);
+
   // Draw the center reference line
   stroke(255);
-  line(0, graphHeight/2, graphWidth, graphHeight/2);
+  line(0, profitGraphHeight/2, profitGraphWidth, profitGraphHeight/2);
   
   popMatrix();
 }
 
+// Profit Indicator
+void displayProfit()
+{
+    fill(255);
+    rect(10,40,70,20,10);
+    fill(0);
+    textAlign(RIGHT);
+    text("$", 25, 55);
+    text( round(netProfit*100) / 100.0, 75, 55);
+}
+
+// Machine State Indicator
 int machineStateIndicatorX;
 int machineStateIndicatorY;
 int machineStateIndicatorR = 30;
@@ -60,6 +78,7 @@ void displayActivityState()
           machineStateIndicatorR);
 }
 
+// Video framerate indicator
 void displayFramerate()
 {
     fill(255);
@@ -69,16 +88,7 @@ void displayFramerate()
     text(round(frameRate),23,25);
 }
 
-void displayProfit()
-{
-    fill(255);
-    rect(10,40,70,20,10);
-    fill(0);
-    textAlign(RIGHT);
-    text("$", 25, 55);
-    text( round(netProfit*100) / 100.0, 75, 55);
-}
-
+// Keyboard control reference
 void displayKeyboardControls()
 {
  int textXposition = videoWidth + 20;
@@ -101,6 +111,7 @@ void displayKeyboardControls()
  textYposition += textSpacing;
 }
 
+// Company logo
 PImage logo;
 void displayCompanyLogo()
 {
