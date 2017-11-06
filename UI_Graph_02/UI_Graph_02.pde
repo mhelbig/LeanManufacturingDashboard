@@ -26,7 +26,6 @@ Preference programPreferences = new Preference();
 void setup() 
 {
   size(1024,768);
-
   loadPreferences();
   profitGraphYoffset = videoHeight + uiSpacing + videoProgressBarHeight + uiSpacing;
   profitGraphWidth = videoWidth;
@@ -49,8 +48,11 @@ void setup()
   videoExport = new VideoExport(this,"data/output.mp4");
   videoExport.setFrameRate(outputFrameRate);
   
+  translate(uiSpacing,uiSpacing);
   displayKeyboardControls();
   displayCompanyLogo();
+  drawVideoProgressBarFrame();
+  drawProfitBarGraphFrame();
 }
 
 void draw()
@@ -81,6 +83,10 @@ void analyzeVideo()
 {
   displayVideoFrame();
   opticallyDetectMachineState();
+
+  translate(uiSpacing,uiSpacing);
+  displayVideoProgressBar();
+  displayFramerate();
   displayActivityState();
   calculateNetProfit();
   if(setDetectRegion) setActivityDetectRegion();

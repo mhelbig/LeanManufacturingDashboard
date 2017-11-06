@@ -1,6 +1,6 @@
 Preferences:
-detectRegionX=265.0
-detectRegionY=179.0
+detectRegionX=270.0
+detectRegionY=185.0
 overheadRatePerHour=125.0
 revenueRatePerHour=375.0
 sourceVideoSpeedMultiplier=60.0

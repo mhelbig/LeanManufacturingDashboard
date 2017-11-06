@@ -1,22 +1,32 @@
 //Video progress bar
 int videoProgressBarHeight = 15;  // how many pixels tall the progress bar is
-int uiSpacing = 5;           // how many pixels between UI elements
+int frameWidth             = 2;   // how many pixels wide the frames around the UI elements are
+int uiSpacing              = 5;   // how many pixels between UI elements
 
+void drawVideoProgressBarFrame()
+{
+  pushMatrix();
+  translate(0, videoHeight + uiSpacing);
+  fill(0);
+  stroke(255,255,255);
+  strokeWeight(frameWidth);
+  rect(0, 0, videoWidth, videoProgressBarHeight);
+  popMatrix();
+}
+  
 void displayVideoProgressBar()
 {
   pushMatrix();
   translate(0, videoHeight + uiSpacing);
-  noFill();
-  stroke(255,255,255);
-  rect(0, 0, videoWidth, videoProgressBarHeight);
-       
+      
   if(machineActive) stroke(0,255,0,100);  //green bar
   else              stroke(255,0,0,100);  //red bar
-  
-  line(map(playbackTime, 0, videoDuration,0, videoWidth), 
-       0,
-       map(playbackTime, 0, videoDuration,0, videoWidth),
-       videoProgressBarHeight);
+
+  strokeWeight(1);
+  line(map(playbackTime, 0, videoDuration, frameWidth, videoWidth - frameWidth), 
+       frameWidth,
+       map(playbackTime, 0, videoDuration, frameWidth, videoWidth - frameWidth),
+       videoProgressBarHeight - frameWidth);
        
   popMatrix();     
 }
@@ -28,18 +38,28 @@ int profitGraphWidth;
 int profitGraphHeight = 150;
 float profitGraphRangeInDollars = 100;
 
-void displayProfitBarGraph()
+void drawProfitBarGraphFrame()
 {
   pushMatrix();
   translate(profitGraphXoffset, profitGraphYoffset);
 
-  noFill();
+  fill(0);
   stroke(255,255,255);
+  strokeWeight(frameWidth);
   rect(0, 0, profitGraphWidth, profitGraphHeight);
+ 
+  popMatrix();
+}
+
+void displayProfitBarGraph()
+{
+  pushMatrix();
+  translate(profitGraphXoffset, profitGraphYoffset);
        
   if(netProfit > 0 ) stroke(0,255,0,100);  //green bar
   else               stroke(255,0,0,100);  //red bar
   
+  strokeWeight(1);
   line(map(playbackTime, 0, videoDuration,0, videoWidth), 
        constrain(map(netProfit,profitGraphRangeInDollars,-profitGraphRangeInDollars,0,profitGraphHeight), 0, profitGraphHeight),
        map(playbackTime, 0, videoDuration,0, videoWidth),
@@ -49,6 +69,16 @@ void displayProfitBarGraph()
   stroke(255);
   line(0, profitGraphHeight/2, profitGraphWidth, profitGraphHeight/2);
   
+  translate(profitGraphWidth + uiSpacing, profitGraphHeight/2);  // move over to the right edge of the graph across from the center line
+  fill(255);
+  rectMode(CENTER);
+  rect(0,0,70,20);
+  rectMode(CORNER);
+  fill(0);
+  textAlign(CENTER, CENTER);
+  text("$", 0, 0);
+  text( round(netProfit*100) / 100.0, 5, 0);
+
   popMatrix();
 }
 

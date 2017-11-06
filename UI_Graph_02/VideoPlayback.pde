@@ -15,9 +15,7 @@ void displayVideoFrame()
   }
 
   playbackTime = playback.time();
-  image(playback, 0, 0, videoWidth, videoHeight);
-  displayVideoProgressBar();
-  displayFramerate();
+  image(playback, uiSpacing, uiSpacing, videoWidth, videoHeight);
 //  print(playbackTime,",",videoDuration,",");
 
 }
