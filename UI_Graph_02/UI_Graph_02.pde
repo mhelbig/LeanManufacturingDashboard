@@ -4,7 +4,7 @@ import com.hamoid.*;
 // Video playback constants:
 int videoWidth;
 int videoHeight;
-int analyseFrameRate;
+int analyzeFrameRate;
 int outputFrameRate;
 
 // Business operating constants:
@@ -30,12 +30,12 @@ void setup()
   profitGraphYoffset = videoHeight + uiSpacing + videoProgressBarHeight + uiSpacing;
   profitGraphWidth = videoWidth;
   
-  frameRate(analyseFrameRate);
+  frameRate(analyzeFrameRate);
   background(0,0,75);
   
   initEventTable();
-  overheadRatePerFrame = overheadRatePerHour / 3600 / analyseFrameRate * sourceVideoSpeedMultiplier; //<>//
-  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyseFrameRate * sourceVideoSpeedMultiplier;
+  overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
+  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
 
   playback = new Movie(this, "camera.mpg");
   playback.play();
@@ -60,7 +60,7 @@ void draw()
       videoExport.startMovie();
       runMode++;
       break;
-    case 2:                        // Analyse video for activity
+    case 2:                        // Analyze video for activity
       analyzeVideo();
       break;
     case 3:                        // Save analysis data

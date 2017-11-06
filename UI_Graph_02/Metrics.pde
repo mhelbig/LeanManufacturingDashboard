@@ -25,5 +25,4 @@ void calculateMachineUtilizationPercentage()
     totalMachineUtilizationFrames ++;
   }
   machineUtilizationPercentage = totalMachineUtilizationFrames / totalShopFloorFrames;      
-  println(machineUtilizationPercentage);
 }
