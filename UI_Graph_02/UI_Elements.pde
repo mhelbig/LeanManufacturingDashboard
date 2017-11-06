@@ -32,6 +32,25 @@ void displayVideoProgressBar()
   popMatrix();     
 }
 
+// Machine Utilization Percentage
+int MachineUtilizationReadoutWidth = 70;
+void displayMachineUtilizationPercentage()
+{
+  pushMatrix();
+  translate(800, 500);  // move over ?????
+  fill(0);
+  stroke(255,255,255);
+  rectMode(CENTER);
+  rect(0,0,MachineUtilizationReadoutWidth,20);
+  rectMode(CORNER);
+  
+  fill(255,0,0);  // red bar
+  textAlign(CENTER, CENTER);
+  text(nf((machineUtilizationPercentage * 100), 2, 1) + "%", 0, 0);
+
+  popMatrix();
+}
+
 // Profit bargraph
 int profitGraphXoffset = 0;
 int profitGraphYoffset;

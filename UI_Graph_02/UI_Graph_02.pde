@@ -84,8 +84,10 @@ void analyzeVideo()
 
   translate(uiSpacing,uiSpacing);
   displayVideoProgressBar();
-  displayFramerate();
+  calculateMachineUtilizationPercentage();
+  displayMachineUtilizationPercentage();
   calculateNetProfit();
   displayProfitBarGraph();
   videoExport.saveFrame();
+//  displayFramerate();
 }
