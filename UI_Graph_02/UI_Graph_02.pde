@@ -30,9 +30,6 @@ void setup()
   profitGraphYoffset = videoHeight + uiSpacing + videoProgressBarHeight + uiSpacing;
   profitGraphWidth = videoWidth;
   
-  machineStateIndicatorX = 30;
-  machineStateIndicatorY = videoHeight-65;
-  
   frameRate(analyseFrameRate);
   background(0,0,75);
   
@@ -60,7 +57,6 @@ void draw()
   switch(runMode) //Note: the video playback function increments runMode when the video ends
   { //<>//
     case 1:
-//      loadSystemParameters();      // Read settings from file
       videoExport.startMovie();
       runMode++;
       break;
@@ -83,13 +79,13 @@ void analyzeVideo()
 {
   displayVideoFrame();
   opticallyDetectMachineState();
+  displayActivityState();
+  if(setDetectRegion) setActivityDetectRegion();
 
   translate(uiSpacing,uiSpacing);
   displayVideoProgressBar();
   displayFramerate();
-  displayActivityState();
   calculateNetProfit();
-  if(setDetectRegion) setActivityDetectRegion();
   displayProfitBarGraph();
   displayProfit();
   videoExport.saveFrame();

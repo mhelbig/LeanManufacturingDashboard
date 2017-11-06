@@ -23,7 +23,7 @@ void setActivityDetectRegion()
         detectMarkerSizeX * 8,
         detectMarkerSizeY * 8);
   
-//  println(detectRegionX, detectRegionY);
+  println(detectRegionX, detectRegionY);
   if(mousePressed) setDetectRegion = false;
 }
 

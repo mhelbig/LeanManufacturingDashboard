@@ -1,8 +1,9 @@
-//Video progress bar
-int videoProgressBarHeight = 15;  // how many pixels tall the progress bar is
+// Global UI parameters: 
 int frameWidth             = 2;   // how many pixels wide the frames around the UI elements are
 int uiSpacing              = 5;   // how many pixels between UI elements
 
+//Video progress bar
+int videoProgressBarHeight = 15;  // how many pixels tall the progress bar is
 void drawVideoProgressBarFrame()
 {
   pushMatrix();
@@ -94,16 +95,16 @@ void displayProfit()
 }
 
 // Machine State Indicator
-int machineStateIndicatorX;
-int machineStateIndicatorY;
-int machineStateIndicatorR = 30;
+int machineStateIndicatorXoffset = 0;
+int machineStateIndicatorYoffset = 0;
+int machineStateIndicatorR       = 30;
 void displayActivityState()
 {
   stroke(0);
   if(machineActive) fill(0,255,0,100);
   else              fill(255,0,0,100);
-  ellipse(machineStateIndicatorX,
-          machineStateIndicatorY,
+  ellipse(detectRegionX + machineStateIndicatorXoffset,
+          detectRegionY + machineStateIndicatorYoffset,
           machineStateIndicatorR,
           machineStateIndicatorR);
 }
