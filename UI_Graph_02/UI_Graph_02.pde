@@ -87,6 +87,5 @@ void analyzeVideo()
   displayFramerate();
   calculateNetProfit();
   displayProfitBarGraph();
-  displayProfit();
   videoExport.saveFrame();
 }

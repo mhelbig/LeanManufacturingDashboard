@@ -52,6 +52,7 @@ void drawProfitBarGraphFrame()
   popMatrix();
 }
 
+int profitReadoutWidth = 70;
 void displayProfitBarGraph()
 {
   pushMatrix();
@@ -70,28 +71,19 @@ void displayProfitBarGraph()
   stroke(255);
   line(0, profitGraphHeight/2, profitGraphWidth, profitGraphHeight/2);
   
-  translate(profitGraphWidth + uiSpacing, profitGraphHeight/2);  // move over to the right edge of the graph across from the center line
-  fill(255);
-  rectMode(CENTER);
-  rect(0,0,70,20);
-  rectMode(CORNER);
+  translate(profitGraphWidth + uiSpacing + 50, profitGraphHeight/2);  // move over to the right edge of the graph across from the center line
   fill(0);
+  stroke(255,255,255);
+  rectMode(CENTER);
+  rect(0,0,profitReadoutWidth,20);
+  rectMode(CORNER);
+  
+  if(netProfit > 0 ) fill(0,255,0);  // green bar
+  else               fill(255,0,0);  // red bar
   textAlign(CENTER, CENTER);
-  text("$", 0, 0);
-  text( round(netProfit*100) / 100.0, 5, 0);
+  text( "$" + nf(netProfit, 4, 2), 0, 0);
 
   popMatrix();
-}
-
-// Profit Indicator
-void displayProfit()
-{
-    fill(255);
-    rect(10,40,70,20,10);
-    fill(0);
-    textAlign(RIGHT);
-    text("$", 25, 55);
-    text( round(netProfit*100) / 100.0, 75, 55);
 }
 
 // Machine State Indicator
@@ -147,5 +139,5 @@ PImage logo;
 void displayCompanyLogo()
 {
   logo = loadImage("leanlogo.png");
-  image(logo, videoWidth + 20, 20);
+  image(logo, videoWidth + uiSpacing, 0);
 }
