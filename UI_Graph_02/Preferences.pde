@@ -1,21 +1,18 @@
-void ResetSystemDefaultParameters()
+void loadPreferences()
 {
-  detectRegionX              = 265;
-  detectRegionY              = 179;
-  overheadRatePerHour        = 125;
-  revenueRatePerHour         = 375;
-  sourceVideoSpeedMultiplier = 60;
-
-  saveSystemParameters();
-}
-
-void loadSystemParameters()
-{
+  if(!programPreferences.loadPref())
+  {
+    ResetSystemDefaultParameters();
+    println("Preferences file missing.  Default settings loaded.");
+  }
+  else
+  {
   detectRegionX = int(programPreferences.getFloat("detectRegionX"));
   detectRegionY = int(programPreferences.getFloat("detectRegionY"));
   overheadRatePerHour = programPreferences.getFloat("overheadRatePerHour");
   revenueRatePerHour  = programPreferences.getFloat("revenueRatePerHour");
   sourceVideoSpeedMultiplier = programPreferences.getFloat("sourceVideoSpeedMultiplier");
+  }
 }
 
 void saveSystemParameters()
@@ -26,6 +23,17 @@ void saveSystemParameters()
   programPreferences.setNumber("revenueRatePerHour",revenueRatePerHour,false);
   programPreferences.setNumber("sourceVideoSpeedMultiplier",sourceVideoSpeedMultiplier,false);
   programPreferences.savePref();
+}
+
+void ResetSystemDefaultParameters()
+{
+  detectRegionX              = 265;
+  detectRegionY              = 179;
+  overheadRatePerHour        = 125;
+  revenueRatePerHour         = 375;
+  sourceVideoSpeedMultiplier = 60;
+
+  saveSystemParameters();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +51,7 @@ class Preference
 {
   
   StringDict PreferencesDict = new StringDict();      //Make an String Dictionary
-  String preferencesFileName = "Preferences.txt";
+  String preferencesFileName = "data/Preferences.txt";
   
   Preference() 
   {

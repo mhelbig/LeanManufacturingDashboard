@@ -27,16 +27,7 @@ Preference programPreferences = new Preference();
 
 void setup() 
 {
-  if(!programPreferences.loadPref())
-  {
-    ResetSystemDefaultParameters();
-    println("Preferences file missing.  Default settings loaded.");
-  }
-  else
-  {
-    loadSystemParameters();
-  }
-
+  loadPreferences();
   size(1024,768);
   frameRate(analyseFrameRate);
   background(0);
@@ -61,7 +52,7 @@ void draw()
   switch(runMode) //Note: the video playback function increments runMode when the video ends
   { //<>//
     case 1:
-      loadSystemParameters();      // Read settings from file (future)
+//      loadSystemParameters();      // Read settings from file
       videoExport.startMovie();
       runMode++;
       break;
