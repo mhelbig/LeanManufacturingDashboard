@@ -1,5 +1,6 @@
 Table events;
 
+// Initialize
 void initEventTable()
 {
   events = new Table();
