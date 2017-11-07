@@ -1,36 +1,3 @@
-// Global UI parameters: 
-int frameWidth             = 2;   // how many pixels wide the frames around the UI elements are
-int uiSpacing              = 5;   // how many pixels between UI elements
-
-void processNetProfit()
-{
-  calculateNetProfit();
-  if(netProfit > 0 ) netProfitGraph.setBarColor(color(0,255,0,100));  //green
-  else               netProfitGraph.setBarColor(color(255,0,0,100));  //red
-  netProfitGraph.drawBar(0,netProfit);
-}
-
-void processMachineUtilization()
-{
-  calculateRollingMachineUtilization();
-  
-  if(rollingMachineUtilizationPercentage > targetMachineUtilization )
-  {
-    machineUtilization.setBarColor(color(0,255,0,100));    //green
-  }
-  else if(rollingMachineUtilizationPercentage > minimalMachineUtilization )
-  {
-     machineUtilization.setBarColor(color(255,255,0,100));  //yellow
-  } 
-  else
-  {
-    machineUtilization.setBarColor(color(255,0,0,100));    //red
-  }
-  
-  machineUtilization.drawBar(0,rollingMachineUtilizationPercentage);
-  displayMachineUtilizationPercentage();
-}
-
 class VideoProgressBar
 {
   int Xoffset = 0;  //defaults
@@ -75,24 +42,39 @@ class VideoProgressBar
   }
 }
 
-
-// Machine Utilization Percentage
-int MachineUtilizationReadoutWidth = 70;
-void displayMachineUtilizationPercentage()
+class TextBox
 {
-  pushMatrix();
-  translate(800, 500);  // move over ?????
-  fill(0);
-  stroke(255,255,255);
-  rectMode(CENTER);
-  rect(0,0,MachineUtilizationReadoutWidth,20);
-  rectMode(CORNER);
+  int Xoffset    = 0;
+  int Yoffset    = 0;
+  int barWidth   = 100;
+  int barHeight  = 50;
   
-  fill(255,0,0);  // red bar
-  textAlign(CENTER, CENTER);
-  text(nf((rollingMachineUtilizationPercentage * 100), 2, 1) + "%", 0, 0);
+  TextBox()
+  {
+  }
+  
+  void setPosition(int x, int y, int w, int h)
+  {
+    Xoffset = x;
+    Yoffset = y;
+    barWidth   = w;
+    barHeight  = h;
+  }
+  
+  void drawText(String text) 
+  {  
+    pushMatrix();
+    translate(Xoffset, Yoffset);
+    fill(0);
+    stroke(255,255,255);
+    rect(0,0,barWidth,barHeight);
 
-  popMatrix();
+    translate(barWidth / 2, barHeight / 2);
+    fill(255,0,0);
+    textAlign(CENTER, CENTER);
+    text(text, 0, 0);
+    popMatrix();
+  }
 }
 
 // Machine State Indicator

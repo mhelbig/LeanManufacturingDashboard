@@ -23,11 +23,16 @@ boolean machineActive = false;
 Movie       playback;
 VideoExport videoExport;
 
-Preference programPreferences = new Preference();
-VideoProgressBar camera       = new VideoProgressBar();
-Graph machineUtilization      = new Graph();
-Graph netProfitGraph          = new Graph();
+Preference programPreferences   = new Preference();
+VideoProgressBar camera         = new VideoProgressBar();
+Graph machineUtilizationGraph   = new Graph();
+TextBox machineUtilizationText  = new TextBox();
+Graph netProfitGraph            = new Graph();
+TextBox netProfitText           = new TextBox();
 
+// Global UI parameters: 
+int frameWidth                    = 2;   // how many pixels wide the frames around the UI elements are
+int uiSpacing                     = 5;   // how many pixels between UI elements
 int videoProgressBarHeight        = 20;  // how many pixels tall the progress bar is
 int machineUtilizationGraphHeight = 50;
 
@@ -52,24 +57,27 @@ void setup()
   videoExport.setFrameRate(outputFrameRate);
   
   translate(uiSpacing,uiSpacing);
+  int verticalPositionTracking = SourceVideoHeight + uiSpacing;
 
-  int verticalPosition = SourceVideoHeight + uiSpacing;
-  camera.drawVideoProgressBarFrame(0, verticalPosition, sourceVideoWidth, videoProgressBarHeight);
+// Progress Bar Setup  
+  camera.drawVideoProgressBarFrame(0, verticalPositionTracking, sourceVideoWidth, videoProgressBarHeight);
 
-  //Machine Utilization / Video playback position Graph setup
-  verticalPosition += (uiSpacing + videoProgressBarHeight);
-  machineUtilization.setPosition(0, verticalPosition, sourceVideoWidth, machineUtilizationGraphHeight);
-  machineUtilization.setRange(1, 0);
-  machineUtilization.drawFrame();
-  machineUtilization.drawHorizontalGridLine(targetMachineUtilization);
-  machineUtilization.drawHorizontalGridLine(minimalMachineUtilization);
+//Machine Utilization Graph setup
+  verticalPositionTracking += (uiSpacing + videoProgressBarHeight + frameWidth);
+  machineUtilizationGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, machineUtilizationGraphHeight);
+  machineUtilizationGraph.setRange(1, 0);
+  machineUtilizationGraph.drawFrame();
+  machineUtilizationGraph.drawHorizontalGridLine(targetMachineUtilization);
+  machineUtilizationGraph.drawHorizontalGridLine(minimalMachineUtilization);
+  machineUtilizationText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, machineUtilizationGraphHeight);
   
-  // Net Profit Graph setup
-  verticalPosition += (uiSpacing + machineUtilizationGraphHeight);
-  netProfitGraph.setPosition(0, verticalPosition, sourceVideoWidth, 150);
+// Net Profit Graph setup
+  verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + frameWidth);
+  netProfitGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, 150);
   netProfitGraph.setRange(100, -100);
   netProfitGraph.drawFrame();
   netProfitGraph.drawHorizontalGridLine(0);
+  netProfitText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, 150);
   
   displayKeyboardControls();
   displayCompanyLogo();
@@ -111,4 +119,35 @@ void analyzeVideo()
   processNetProfit();
   videoExport.saveFrame();
 //  displayFramerate();
+}
+
+void processNetProfit()
+{
+  calculateNetProfit();
+  if(netProfit > 0 ) netProfitGraph.setBarColor(color(0,255,0,100));  //green
+  else               netProfitGraph.setBarColor(color(255,0,0,100));  //red
+  netProfitGraph.drawBar(0,netProfit);
+  netProfitText.drawText("$" + nf(netProfit, 4, 2));
+
+}
+
+void processMachineUtilization()
+{
+  calculateRollingMachineUtilization();
+  
+  if(rollingMachineUtilizationPercentage > targetMachineUtilization )
+  {
+    machineUtilizationGraph.setBarColor(color(0,255,0,100));    //green
+  }
+  else if(rollingMachineUtilizationPercentage > minimalMachineUtilization )
+  {
+     machineUtilizationGraph.setBarColor(color(255,255,0,100));  //yellow
+  } 
+  else
+  {
+    machineUtilizationGraph.setBarColor(color(255,0,0,100));    //red
+  }
+  
+  machineUtilizationGraph.drawBar(0,rollingMachineUtilizationPercentage);
+  machineUtilizationText.drawText(nf((rollingMachineUtilizationPercentage * 100), 2, 1) + "%");
 }
