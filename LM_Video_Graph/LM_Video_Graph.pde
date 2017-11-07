@@ -10,6 +10,8 @@ int outputFrameRate;
 // Business operating constants:
 float overheadRatePerHour;
 float revenueRatePerHour;
+float minimalMachineUtilization = 0.4;
+float targetMachineUtilization = 0.6;
 
 // runtime variables:
 int   runMode = 1;
@@ -22,28 +24,21 @@ Movie       playback;
 VideoExport videoExport;
 
 Preference programPreferences = new Preference();
-int videoProgressBarHeight = 40;  // how many pixels tall the progress bar is
+VideoProgressBar camera       = new VideoProgressBar();
 Graph machineUtilization      = new Graph();
-
 Graph netProfitGraph          = new Graph();
+
+int videoProgressBarHeight        = 20;  // how many pixels tall the progress bar is
+int machineUtilizationGraphHeight = 50;
 
 void setup() 
 {
   size(1024,768);
   loadPreferences();
-  
-  //Machine Utilization / Video playback position Graph setup
-  machineUtilization.setPosition(0, (SourceVideoHeight + uiSpacing), sourceVideoWidth, videoProgressBarHeight);
-  machineUtilization.setRange(1, 0);
-  
-  // Net Profit Graph setup
-  netProfitGraph.setPosition(0, (SourceVideoHeight + uiSpacing + videoProgressBarHeight + uiSpacing ), sourceVideoWidth, 150);
-  netProfitGraph.setRange(100, -100);
-  
-  
+
   frameRate(analyzeFrameRate);
   background(0,0,75);
-  
+    
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
   revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
@@ -57,11 +52,27 @@ void setup()
   videoExport.setFrameRate(outputFrameRate);
   
   translate(uiSpacing,uiSpacing);
+
+  int verticalPosition = SourceVideoHeight + uiSpacing;
+  camera.drawVideoProgressBarFrame(0, verticalPosition, sourceVideoWidth, videoProgressBarHeight);
+
+  //Machine Utilization / Video playback position Graph setup
+  verticalPosition += (uiSpacing + videoProgressBarHeight);
+  machineUtilization.setPosition(0, verticalPosition, sourceVideoWidth, machineUtilizationGraphHeight);
+  machineUtilization.setRange(1, 0);
+  machineUtilization.drawFrame();
+  machineUtilization.drawHorizontalGridLine(targetMachineUtilization);
+  machineUtilization.drawHorizontalGridLine(minimalMachineUtilization);
+  
+  // Net Profit Graph setup
+  verticalPosition += (uiSpacing + machineUtilizationGraphHeight);
+  netProfitGraph.setPosition(0, verticalPosition, sourceVideoWidth, 150);
+  netProfitGraph.setRange(100, -100);
+  netProfitGraph.drawFrame();
+  netProfitGraph.drawHorizontalGridLine(0);
+  
   displayKeyboardControls();
   displayCompanyLogo();
-//  drawVideoProgressBarFrame();
-  machineUtilization.drawFrame();
-  netProfitGraph.drawFrame();
 }
 
 void draw()
@@ -95,6 +106,7 @@ void analyzeVideo()
   if(setDetectRegion) setActivityDetectRegion();
 
   translate(uiSpacing,uiSpacing);
+  camera.displayVideoProgressBar();
   processMachineUtilization();
   processNetProfit();
   videoExport.saveFrame();

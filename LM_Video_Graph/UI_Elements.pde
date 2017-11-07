@@ -14,42 +14,67 @@ void processMachineUtilization()
 {
   calculateRollingMachineUtilization();
   
-  if(rollingMachineUtilizationPercentage > 0.5 )       machineUtilization.setBarColor(color(0,255,0,100));    //green
-  else if (rollingMachineUtilizationPercentage > 0.3 ) machineUtilization.setBarColor(color(255,255,0,100));  //yellow
-  else                                                 machineUtilization.setBarColor(color(255,0,0,100));    //red
+  if(rollingMachineUtilizationPercentage > targetMachineUtilization )
+  {
+    machineUtilization.setBarColor(color(0,255,0,100));    //green
+  }
+  else if(rollingMachineUtilizationPercentage > minimalMachineUtilization )
+  {
+     machineUtilization.setBarColor(color(255,255,0,100));  //yellow
+  } 
+  else
+  {
+    machineUtilization.setBarColor(color(255,0,0,100));    //red
+  }
   
   machineUtilization.drawBar(0,rollingMachineUtilizationPercentage);
   displayMachineUtilizationPercentage();
 }
 
-//Video progress bar
-void drawVideoProgressBarFrame()
+class VideoProgressBar
 {
-  pushMatrix();
-  translate(0, SourceVideoHeight + uiSpacing);
-  fill(0);
-  stroke(255,255,255);
-  strokeWeight(frameWidth);
-  rect(0, 0, sourceVideoWidth, videoProgressBarHeight);
-  popMatrix();
-}
-  
-void displayVideoProgressBar()
-{
-  pushMatrix();
-  translate(0, SourceVideoHeight + uiSpacing);
-      
-  if(machineActive) stroke(0,255,0,100);  //green bar
-  else              stroke(255,0,0,100);  //red bar
+  int Xoffset = 0;  //defaults
+  int Yoffset = 0;
+  int barWidth   = 500;
+  int barHeight  = 150;
 
-  strokeWeight(1);
-  line(map(playbackTime, 0, videoDuration, frameWidth, sourceVideoWidth - frameWidth), 
-       frameWidth,
-       map(playbackTime, 0, videoDuration, frameWidth, sourceVideoWidth - frameWidth),
-       videoProgressBarHeight - frameWidth);
-       
-  popMatrix();     
+  VideoProgressBar()
+  {
+  }
+  
+  void drawVideoProgressBarFrame(int x, int y, int w, int h)
+  {
+    Xoffset = x;
+    Yoffset = y;
+    barWidth   = w;
+    barHeight  = h;
+    
+    pushMatrix();
+    translate(Xoffset, Yoffset);
+    fill(0);
+    stroke(255,255,255);
+    strokeWeight(frameWidth);
+    rect(0, 0, barWidth, barHeight);
+    popMatrix();
+  }
+    
+  void displayVideoProgressBar()
+  {
+    pushMatrix();
+    translate(Xoffset, Yoffset);
+        
+    if(machineActive) stroke(0,255,0,100);  //green bar
+    else              stroke(255,0,0,100);  //red bar
+  
+    strokeWeight(1);
+    line(map(playbackTime, 0, videoDuration, frameWidth, barWidth - frameWidth), 
+         frameWidth,
+         map(playbackTime, 0, videoDuration, frameWidth, barWidth - frameWidth),
+         barHeight - frameWidth);
+    popMatrix();     
+  }
 }
+
 
 // Machine Utilization Percentage
 int MachineUtilizationReadoutWidth = 70;

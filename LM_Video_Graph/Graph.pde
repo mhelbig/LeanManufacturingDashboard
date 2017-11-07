@@ -46,6 +46,20 @@ class Graph
     popMatrix();
   }
   
+  void drawHorizontalGridLine(float pos)
+  {
+    pushMatrix();
+    translate(GraphXoffset, GraphYoffset);
+    strokeWeight(1);
+    stroke(127);
+    
+    line(0,
+         map(pos, graphRangeTop, graphRangeBot, 0, graphHeight),
+         graphWidth,
+         map(pos, graphRangeTop, graphRangeBot, 0, graphHeight));
+    popMatrix();
+  }
+  
   void drawBar(float start, float end)
   {
     pushMatrix();
@@ -57,10 +71,6 @@ class Graph
          map(playbackTime, 0, videoDuration,0, graphWidth),
          constrain(map(start, graphRangeTop, graphRangeBot,0, graphHeight), 0, graphHeight));
   
-    // Draw the center reference line
-    stroke(255);
-    line(0, graphHeight/2, graphWidth, graphHeight/2);
-    
     translate(graphWidth + uiSpacing + 50, graphHeight/2);  // move over to the right edge of the graph across from the center line
     fill(0);
     stroke(255,255,255);
