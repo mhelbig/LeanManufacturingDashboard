@@ -3,7 +3,6 @@ int frameWidth             = 2;   // how many pixels wide the frames around the 
 int uiSpacing              = 5;   // how many pixels between UI elements
 
 //Video progress bar
-int videoProgressBarHeight = 15;  // how many pixels tall the progress bar is
 void drawVideoProgressBarFrame()
 {
   pushMatrix();

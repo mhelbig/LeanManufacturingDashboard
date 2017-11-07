@@ -2,8 +2,8 @@ class Graph
 {
   int GraphXoffset = 0;  //defaults
   int GraphYoffset = 0;
-  int GraphWidth   = 500;
-  int GraphHeight  = 150;
+  int graphWidth   = 500;
+  int graphHeight  = 150;
   float graphRangeTop = 50;
   float graphRangeBot = -50;
   color barColor = color(255, 255, 255);
@@ -18,8 +18,8 @@ class Graph
   {
     GraphXoffset = x;
     GraphYoffset = y;
-    GraphWidth   = w;
-    GraphHeight  = h;
+    graphWidth   = w;
+    graphHeight  = h;
   }
   
   void setRange(float t, float b)
@@ -41,27 +41,27 @@ class Graph
     fill(0);
     stroke(255,255,255);
     strokeWeight(frameWidth);
-    rect(0, 0, GraphWidth, GraphHeight);
+    rect(0, 0, graphWidth, graphHeight);
    
     popMatrix();
   }
   
-  void drawBar()
+  void drawBar(float start, float end)
   {
     pushMatrix();
     translate(GraphXoffset, GraphYoffset);
     stroke(barColor);
     strokeWeight(1);
-    line(map(playbackTime, 0, videoDuration,0, GraphWidth), 
-         constrain(map(netProfit,graphRangeTop,graphRangeBot,0,GraphHeight), 0, GraphHeight),
-         map(playbackTime, 0, videoDuration,0, GraphWidth),
-         GraphHeight/2);
+    line(map(playbackTime, 0, videoDuration,0, graphWidth), 
+         constrain(map(end, graphRangeTop, graphRangeBot, 0, graphHeight), 0, graphHeight),
+         map(playbackTime, 0, videoDuration,0, graphWidth),
+         constrain(map(start, graphRangeTop, graphRangeBot,0, graphHeight), 0, graphHeight));
   
     // Draw the center reference line
     stroke(255);
-    line(0, GraphHeight/2, GraphWidth, GraphHeight/2);
+    line(0, graphHeight/2, graphWidth, graphHeight/2);
     
-    translate(GraphWidth + uiSpacing + 50, GraphHeight/2);  // move over to the right edge of the graph across from the center line
+    translate(graphWidth + uiSpacing + 50, graphHeight/2);  // move over to the right edge of the graph across from the center line
     fill(0);
     stroke(255,255,255);
     rectMode(CENTER);

@@ -22,16 +22,24 @@ Movie       playback;
 VideoExport videoExport;
 
 Preference programPreferences = new Preference();
-Graph netProfitGraph = new Graph();
+int videoProgressBarHeight = 40;  // how many pixels tall the progress bar is
+Graph machineUtilization      = new Graph();
+
+Graph netProfitGraph          = new Graph();
 
 void setup() 
 {
   size(1024,768);
   loadPreferences();
   
+  //Machine Utilization / Video playback position Graph setup
+  machineUtilization.setPosition(0, (SourceVideoHeight + uiSpacing), sourceVideoWidth, videoProgressBarHeight);
+  machineUtilization.setRange(1, 0);
+  
   // Net Profit Graph setup
   netProfitGraph.setPosition(0, (SourceVideoHeight + uiSpacing + videoProgressBarHeight + uiSpacing ), sourceVideoWidth, 150);
   netProfitGraph.setRange(100, -100);
+  
   
   frameRate(analyzeFrameRate);
   background(0,0,75);
@@ -51,7 +59,8 @@ void setup()
   translate(uiSpacing,uiSpacing);
   displayKeyboardControls();
   displayCompanyLogo();
-  drawVideoProgressBarFrame();
+//  drawVideoProgressBarFrame();
+  machineUtilization.drawFrame();
   netProfitGraph.drawFrame();
 }
 
@@ -86,14 +95,16 @@ void analyzeVideo()
   if(setDetectRegion) setActivityDetectRegion();
 
   translate(uiSpacing,uiSpacing);
-  displayVideoProgressBar();
+//  displayVideoProgressBar();
+  machineUtilization.drawBar(0,machineUtilizationPercentage);
+
   calculateMachineUtilizationPercentage();
   displayMachineUtilizationPercentage();
   calculateNetProfit();
   if(netProfit > 0 ) netProfitGraph.setBarColor(color(0,255,0,100));  //green
   else               netProfitGraph.setBarColor(color(255,0,0,100));  //red
 
-  netProfitGraph.drawBar();
+  netProfitGraph.drawBar(0,netProfit);
   videoExport.saveFrame();
 //  displayFramerate();
 }
