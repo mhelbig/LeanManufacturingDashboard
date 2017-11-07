@@ -13,16 +13,23 @@ void calculateNetProfit()
 }
 
 // Machine Utilization
-float totalShopFloorFrames;
-float totalMachineUtilizationFrames;
-float machineUtilizationPercentage;
+int averagingBufferSize = 1000;
+int bufferPointer = 0;
+int[] machineUtilizationBuffer = new int[averagingBufferSize];
+float rollingMachineUtilizationPercentage;
 
-void calculateMachineUtilizationPercentage()
+void calculateRollingMachineUtilization()
 {
-  totalShopFloorFrames ++;
-  if(machineActive)
+  int i;
+  int totalActivity = 0;
+  
+  machineUtilizationBuffer[bufferPointer] = machineActive ? 1 : 0;
+  bufferPointer++;
+  if(bufferPointer >= averagingBufferSize) bufferPointer = 0;
+
+  for(i=0;i<averagingBufferSize;i++)
   {
-    totalMachineUtilizationFrames ++;
+    totalActivity+=machineUtilizationBuffer[i];
   }
-  machineUtilizationPercentage = totalMachineUtilizationFrames / totalShopFloorFrames;      
+  rollingMachineUtilizationPercentage = float(totalActivity) / float(averagingBufferSize);      
 }

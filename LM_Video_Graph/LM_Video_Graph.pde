@@ -95,16 +95,8 @@ void analyzeVideo()
   if(setDetectRegion) setActivityDetectRegion();
 
   translate(uiSpacing,uiSpacing);
-//  displayVideoProgressBar();
-  machineUtilization.drawBar(0,machineUtilizationPercentage);
-
-  calculateMachineUtilizationPercentage();
-  displayMachineUtilizationPercentage();
-  calculateNetProfit();
-  if(netProfit > 0 ) netProfitGraph.setBarColor(color(0,255,0,100));  //green
-  else               netProfitGraph.setBarColor(color(255,0,0,100));  //red
-
-  netProfitGraph.drawBar(0,netProfit);
+  processMachineUtilization();
+  processNetProfit();
   videoExport.saveFrame();
 //  displayFramerate();
 }

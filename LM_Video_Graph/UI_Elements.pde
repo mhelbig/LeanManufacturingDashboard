@@ -2,6 +2,26 @@
 int frameWidth             = 2;   // how many pixels wide the frames around the UI elements are
 int uiSpacing              = 5;   // how many pixels between UI elements
 
+void processNetProfit()
+{
+  calculateNetProfit();
+  if(netProfit > 0 ) netProfitGraph.setBarColor(color(0,255,0,100));  //green
+  else               netProfitGraph.setBarColor(color(255,0,0,100));  //red
+  netProfitGraph.drawBar(0,netProfit);
+}
+
+void processMachineUtilization()
+{
+  calculateRollingMachineUtilization();
+  
+  if(rollingMachineUtilizationPercentage > 0.5 )       machineUtilization.setBarColor(color(0,255,0,100));    //green
+  else if (rollingMachineUtilizationPercentage > 0.3 ) machineUtilization.setBarColor(color(255,255,0,100));  //yellow
+  else                                                 machineUtilization.setBarColor(color(255,0,0,100));    //red
+  
+  machineUtilization.drawBar(0,rollingMachineUtilizationPercentage);
+  displayMachineUtilizationPercentage();
+}
+
 //Video progress bar
 void drawVideoProgressBarFrame()
 {
@@ -45,7 +65,7 @@ void displayMachineUtilizationPercentage()
   
   fill(255,0,0);  // red bar
   textAlign(CENTER, CENTER);
-  text(nf((machineUtilizationPercentage * 100), 2, 1) + "%", 0, 0);
+  text(nf((rollingMachineUtilizationPercentage * 100), 2, 1) + "%", 0, 0);
 
   popMatrix();
 }
