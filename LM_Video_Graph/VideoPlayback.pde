@@ -15,7 +15,7 @@ void displayVideoFrame()
   }
 
   playbackTime = playback.time();
-  image(playback, uiSpacing, uiSpacing, videoWidth, videoHeight);
+  image(playback, uiSpacing, uiSpacing, sourceVideoWidth, SourceVideoHeight);
 //  print(playbackTime,",",videoDuration,",");
 
 }

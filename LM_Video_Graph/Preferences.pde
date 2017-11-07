@@ -11,11 +11,11 @@ void loadPreferences()
   detectRegionY              = int(programPreferences.getFloat("detectRegionY"));
   overheadRatePerHour        =     programPreferences.getFloat("overheadRatePerHour");
   revenueRatePerHour         =     programPreferences.getFloat("revenueRatePerHour");
+  sourceVideoWidth           = int(programPreferences.getFloat("sourceVideoWidth"));
+  SourceVideoHeight          = int(programPreferences.getFloat("sourceVideoHeight"));
   sourceVideoSpeedMultiplier =     programPreferences.getFloat("sourceVideoSpeedMultiplier");
   analyzeFrameRate           = int(programPreferences.getFloat("analyzeFrameRate"));
   outputFrameRate            = int(programPreferences.getFloat("outputFrameRate"));
-  videoWidth                 = int(programPreferences.getFloat("videoWidth"));
-  videoHeight                = int(programPreferences.getFloat("videoHeight"));
   }
 }
 
@@ -25,11 +25,11 @@ void saveSystemParameters()
   programPreferences.setNumber("detectRegionY",              detectRegionY,              false);
   programPreferences.setNumber("overheadRatePerHour",        overheadRatePerHour,        false);
   programPreferences.setNumber("revenueRatePerHour",         revenueRatePerHour,         false);
+  programPreferences.setNumber("sourceVideoWidth",           sourceVideoWidth,           false);
+  programPreferences.setNumber("sourceVideoHeight",          SourceVideoHeight,          false);
   programPreferences.setNumber("sourceVideoSpeedMultiplier", sourceVideoSpeedMultiplier, false);
   programPreferences.setNumber("analyzeFrameRate",           analyzeFrameRate,           false);
   programPreferences.setNumber("outputFrameRate",            outputFrameRate,            false);
-  programPreferences.setNumber("videoWidth",                 videoWidth,                 false);
-  programPreferences.setNumber("videoHeight",                videoHeight,                false);
   programPreferences.savePref();
 }
 
@@ -39,11 +39,11 @@ void ResetSystemDefaultParameters()
   detectRegionY              = 179;
   overheadRatePerHour        = 125;
   revenueRatePerHour         = 375;
+  sourceVideoWidth           = 720;
+  SourceVideoHeight          = 480;
   sourceVideoSpeedMultiplier = 60;
   analyzeFrameRate           = 30;
   outputFrameRate            = 30;
-  videoWidth                 = 720;
-  videoHeight                = 480;
 
   saveSystemParameters();
 }

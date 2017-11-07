@@ -2,8 +2,8 @@ import processing.video.*;
 import com.hamoid.*;
 
 // Video playback constants:
-int videoWidth;
-int videoHeight;
+int sourceVideoWidth;
+int SourceVideoHeight;
 int analyzeFrameRate;
 int outputFrameRate;
 
@@ -30,7 +30,7 @@ void setup()
   loadPreferences();
   
   // Net Profit Graph setup
-  netProfitGraph.setPosition(0, (videoHeight + uiSpacing + videoProgressBarHeight + uiSpacing ), videoWidth, 150);
+  netProfitGraph.setPosition(0, (SourceVideoHeight + uiSpacing + videoProgressBarHeight + uiSpacing ), sourceVideoWidth, 150);
   netProfitGraph.setRange(100, -100);
   
   frameRate(analyzeFrameRate);

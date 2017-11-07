@@ -7,26 +7,26 @@ int videoProgressBarHeight = 15;  // how many pixels tall the progress bar is
 void drawVideoProgressBarFrame()
 {
   pushMatrix();
-  translate(0, videoHeight + uiSpacing);
+  translate(0, SourceVideoHeight + uiSpacing);
   fill(0);
   stroke(255,255,255);
   strokeWeight(frameWidth);
-  rect(0, 0, videoWidth, videoProgressBarHeight);
+  rect(0, 0, sourceVideoWidth, videoProgressBarHeight);
   popMatrix();
 }
   
 void displayVideoProgressBar()
 {
   pushMatrix();
-  translate(0, videoHeight + uiSpacing);
+  translate(0, SourceVideoHeight + uiSpacing);
       
   if(machineActive) stroke(0,255,0,100);  //green bar
   else              stroke(255,0,0,100);  //red bar
 
   strokeWeight(1);
-  line(map(playbackTime, 0, videoDuration, frameWidth, videoWidth - frameWidth), 
+  line(map(playbackTime, 0, videoDuration, frameWidth, sourceVideoWidth - frameWidth), 
        frameWidth,
-       map(playbackTime, 0, videoDuration, frameWidth, videoWidth - frameWidth),
+       map(playbackTime, 0, videoDuration, frameWidth, sourceVideoWidth - frameWidth),
        videoProgressBarHeight - frameWidth);
        
   popMatrix();     
@@ -79,7 +79,7 @@ void displayFramerate()
 // Keyboard control reference
 void displayKeyboardControls()
 {
- int textXposition = videoWidth + 20;
+ int textXposition = sourceVideoWidth + 20;
  int textYposition = 140;
  int textSpacing   = 15;
  
@@ -104,5 +104,5 @@ PImage logo;
 void displayCompanyLogo()
 {
   logo = loadImage("leanlogo.png");
-  image(logo, videoWidth + uiSpacing, 0);
+  image(logo, sourceVideoWidth + uiSpacing, 0);
 }
