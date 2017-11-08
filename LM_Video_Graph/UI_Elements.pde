@@ -1,3 +1,33 @@
+void drawBaseUIElements()
+{  translate(uiSpacing,uiSpacing);
+  int verticalPositionTracking = SourceVideoHeight + uiSpacing;
+
+// Progress Bar Setup  
+  camera.drawVideoProgressBarFrame(0, verticalPositionTracking, sourceVideoWidth, videoProgressBarHeight);
+
+//Machine Utilization Graph setup
+  verticalPositionTracking += (uiSpacing + videoProgressBarHeight + frameWidth);
+  machineUtilizationGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, machineUtilizationGraphHeight);
+  machineUtilizationGraph.setRange(1, 0);
+  machineUtilizationGraph.drawFrame();
+  machineUtilizationGraph.drawHorizontalGridLine(targetMachineUtilization);
+  machineUtilizationGraph.drawHorizontalGridLine(minimalMachineUtilization);
+  machineUtilizationText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, machineUtilizationGraphHeight);
+  machineUtilizationText.setTextSize(20);
+  
+// Net Profit Graph setup
+  verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + frameWidth);
+  netProfitGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, 150);
+  netProfitGraph.setRange(100, -100);
+  netProfitGraph.drawFrame();
+  netProfitGraph.drawHorizontalGridLine(0);
+  netProfitText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, 150);
+  netProfitText.setTextSize(20);
+  
+  displayKeyboardControls();
+  displayCompanyLogo();
+}
+
 class VideoProgressBar
 {
   int Xoffset = 0;  //defaults
@@ -46,8 +76,10 @@ class TextBox
 {
   int Xoffset    = 0;
   int Yoffset    = 0;
-  int barWidth   = 100;
-  int barHeight  = 50;
+  int boxWidth   = 100;
+  int boxHeight  = 50;
+  color textColor = color(255,255,255);
+  float textHeight = 20;
   
   TextBox()
   {
@@ -57,20 +89,31 @@ class TextBox
   {
     Xoffset = x;
     Yoffset = y;
-    barWidth   = w;
-    barHeight  = h;
+    boxWidth   = w;
+    boxHeight  = h;
   }
   
+  void setTextColor(color c)
+  {
+    textColor = c;
+  }
+    
+  void setTextSize(float s)
+  {
+    textHeight = s;
+  }
+    
   void drawText(String text) 
   {  
     pushMatrix();
     translate(Xoffset, Yoffset);
     fill(0);
     stroke(255,255,255);
-    rect(0,0,barWidth,barHeight);
+    rect(0,0,boxWidth,boxHeight);
 
-    translate(barWidth / 2, barHeight / 2);
-    fill(255,0,0);
+    translate(boxWidth / 2, boxHeight / 2);
+    fill(textColor);
+    textSize(textHeight);
     textAlign(CENTER, CENTER);
     text(text, 0, 0);
     popMatrix();
@@ -108,6 +151,8 @@ void displayKeyboardControls()
  int textXposition = sourceVideoWidth + 20;
  int textYposition = 140;
  int textSpacing   = 15;
+ 
+ fill(255,255,255);
  
  text("Keyboard controls:",textXposition, textYposition);
  textYposition += textSpacing;

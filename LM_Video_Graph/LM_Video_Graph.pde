@@ -50,32 +50,6 @@ void setup()
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
   revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
-  
-  translate(uiSpacing,uiSpacing);
-  int verticalPositionTracking = SourceVideoHeight + uiSpacing;
-
-// Progress Bar Setup  
-  camera.drawVideoProgressBarFrame(0, verticalPositionTracking, sourceVideoWidth, videoProgressBarHeight);
-
-//Machine Utilization Graph setup
-  verticalPositionTracking += (uiSpacing + videoProgressBarHeight + frameWidth);
-  machineUtilizationGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, machineUtilizationGraphHeight);
-  machineUtilizationGraph.setRange(1, 0);
-  machineUtilizationGraph.drawFrame();
-  machineUtilizationGraph.drawHorizontalGridLine(targetMachineUtilization);
-  machineUtilizationGraph.drawHorizontalGridLine(minimalMachineUtilization);
-  machineUtilizationText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, machineUtilizationGraphHeight);
-  
-// Net Profit Graph setup
-  verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + frameWidth);
-  netProfitGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, 150);
-  netProfitGraph.setRange(100, -100);
-  netProfitGraph.drawFrame();
-  netProfitGraph.drawHorizontalGridLine(0);
-  netProfitText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, 150);
-  
-  displayKeyboardControls();
-  displayCompanyLogo();
 }
 
 void draw()
@@ -84,21 +58,26 @@ void draw()
   { //<>//
     case 1:
       loadVideoFileToProcess();
+      break;
     case 2:
       createVideoFileForOutput();
       videoExport.startMovie();
+      drawBaseUIElements();
       break;
     case 3:                        // Analyze video, generate graphs & .csv data file
       analyzeVideo();
       break;
     case 4:                        // Save analysis data
-      runMode=100;
       addEvent(videoDuration,0);
+      videoExport.endMovie();
+      runMode++;
+      break;
+    case 5:
+      // wait for the user to press 'Q'
       break;
     case 100:                      // gracefully end the program
       closeEventTable();
       saveSystemParameters();
-      videoExport.endMovie();
       exit();
   }
 }
@@ -154,10 +133,18 @@ void analyzeVideo()
 void processNetProfit()
 {
   calculateNetProfit();
-  if(netProfit > 0 ) netProfitGraph.setBarColor(color(0,255,0,100));  //green
-  else               netProfitGraph.setBarColor(color(255,0,0,100));  //red
+  if(netProfit > 0 )
+  {
+    netProfitGraph.setBarColor(color(0,255,0));  //green
+    netProfitText.setTextColor(color(0,255,0));
+  }
+  else
+  {
+    netProfitGraph.setBarColor(color(255,0,0));  //red
+    netProfitText.setTextColor(color(255,0,0));
+  }
   netProfitGraph.drawBar(0,netProfit);
-  netProfitText.drawText("$" + nf(netProfit, 4, 2));
+  netProfitText.drawText("$" + nf(round(netProfit), 4));
 
 }
 
@@ -167,15 +154,19 @@ void processMachineUtilization()
   
   if(rollingMachineUtilizationPercentage > targetMachineUtilization )
   {
-    machineUtilizationGraph.setBarColor(color(0,255,0,100));    //green
+    machineUtilizationGraph.setBarColor(color(0,255,0));    //green
+    machineUtilizationText.setTextColor(color(0,255,0));
+
   }
   else if(rollingMachineUtilizationPercentage > minimalMachineUtilization )
   {
-     machineUtilizationGraph.setBarColor(color(255,255,0,100));  //yellow
+     machineUtilizationGraph.setBarColor(color(255,255,0));  //yellow
+     machineUtilizationText.setTextColor(color(255,255,0));
   } 
   else
   {
-    machineUtilizationGraph.setBarColor(color(255,0,0,100));    //red
+    machineUtilizationGraph.setBarColor(color(255,0,0));    //red
+    machineUtilizationText.setTextColor(color(255,0,0));
   }
   
   machineUtilizationGraph.drawBar(0,rollingMachineUtilizationPercentage);
