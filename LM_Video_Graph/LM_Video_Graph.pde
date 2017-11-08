@@ -25,12 +25,13 @@ String[] sourceVideoPathNameSplit;
 Movie       playback;
 VideoExport videoExport;
 
-Preference programPreferences   = new Preference();
-VideoProgressBar camera         = new VideoProgressBar();
-Graph machineUtilizationGraph   = new Graph();
-TextBox machineUtilizationText  = new TextBox();
-Graph netProfitGraph            = new Graph();
-TextBox netProfitText           = new TextBox();
+Preference programPreferences     = new Preference();
+VideoProgressBar camera           = new VideoProgressBar();
+Graph machineUtilizationGraph     = new Graph();
+TextBox machineUtilizationText    = new TextBox();
+Graph netProfitGraph              = new Graph();
+TextBox netProfitText             = new TextBox();
+RollingAverage machineUtilization = new RollingAverage();
 
 // Global UI parameters: 
 int frameWidth                    = 2;   // how many pixels wide the frames around the UI elements are
@@ -45,7 +46,6 @@ void setup()
   loadPreferences();
 
   frameRate(analyzeFrameRate);
-  background(0,0,75);
     
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
@@ -64,11 +64,12 @@ void draw()
       loadVideoFileToProcess();
       break;
     case 2:                        // Create output file, reset data
-      sourceVideoPathNameWithExtension = "unselected";
+      drawBaseUIElements();
       createVideoFileForOutput();
       videoExport.startMovie();
       netProfit = 0;
       events.clearRows();
+      machineUtilization.reset();
       runMode++;
       break;
     case 3:                        // Analyze video, generate graphs & .csv data file
@@ -76,6 +77,7 @@ void draw()
       break;
     case 4:                        // User chose Stop video
       stopVideo();
+      sourceVideoPathNameWithExtension = "unselected";
     case 5:                        // Save analysis data
       addEvent(videoDuration,0);
       videoExport.endMovie();
@@ -155,15 +157,16 @@ void processNetProfit()
 
 void processMachineUtilization()
 {
-  calculateRollingMachineUtilization();
+  machineUtilization.add( float(machineActive ? 1 : 0));
+  machineUtilization.calculate();
   
-  if(rollingMachineUtilizationPercentage > targetMachineUtilization )
+  if(machineUtilization.currentValue() > targetMachineUtilization )
   {
     machineUtilizationGraph.setBarColor(color(0,255,0));    //green
     machineUtilizationText.setTextColor(color(0,255,0));
 
   }
-  else if(rollingMachineUtilizationPercentage > minimalMachineUtilization )
+  else if(machineUtilization.currentValue() > minimalMachineUtilization )
   {
      machineUtilizationGraph.setBarColor(color(255,255,0));  //yellow
      machineUtilizationText.setTextColor(color(255,255,0));
@@ -174,8 +177,8 @@ void processMachineUtilization()
     machineUtilizationText.setTextColor(color(255,0,0));
   }
   
-  machineUtilizationGraph.drawBar(0,rollingMachineUtilizationPercentage);
-  machineUtilizationText.drawText(nf((rollingMachineUtilizationPercentage * 100), 2, 1) + "%");
+  machineUtilizationGraph.drawBar(0,machineUtilization.currentValue());
+  machineUtilizationText.drawText(nf((machineUtilization.currentValue() * 100), 2, 1) + "%");
 }
 
 void sourceFileSelected(File selection)

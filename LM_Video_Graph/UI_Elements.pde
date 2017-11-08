@@ -1,29 +1,37 @@
 void drawBaseUIElements()
-{  translate(uiSpacing,uiSpacing);
-  int verticalPositionTracking = SourceVideoHeight + uiSpacing;
+{
+  int verticalPositionTracking = uiSpacing + SourceVideoHeight + (frameWidth * 2);
 
+  background(0,0,75);
+  translate(uiSpacing,uiSpacing);
+  fill(0,0,0);
+  stroke(255,255,255);
+  strokeWeight(frameWidth);
+
+  rect(0-frameWidth, 0-frameWidth, sourceVideoWidth + (frameWidth * 2), SourceVideoHeight + (frameWidth * 2));
+  
 // Progress Bar Setup  
   camera.drawVideoProgressBarFrame(0, verticalPositionTracking, sourceVideoWidth, videoProgressBarHeight);
 
 //Machine Utilization Graph setup
-  verticalPositionTracking += (uiSpacing + videoProgressBarHeight + frameWidth);
+  verticalPositionTracking += (uiSpacing + videoProgressBarHeight + (frameWidth * 2));
   machineUtilizationGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, machineUtilizationGraphHeight);
   machineUtilizationGraph.setRange(1, 0);
   machineUtilizationGraph.drawFrame();
   machineUtilizationGraph.drawHorizontalGridLine(targetMachineUtilization);
   machineUtilizationGraph.drawHorizontalGridLine(minimalMachineUtilization);
-  machineUtilizationText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, machineUtilizationGraphHeight);
+  machineUtilizationText.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), verticalPositionTracking, 100, machineUtilizationGraphHeight);
   machineUtilizationText.setTextSize(20);
   
 // Net Profit Graph setup
-  verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + frameWidth);
+  verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + (frameWidth * 2));
   netProfitGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, 150);
   netProfitGraph.setRange(100, -100);
   netProfitGraph.drawFrame();
   netProfitGraph.drawHorizontalGridLine(0);
-  netProfitText.setPosition(sourceVideoWidth + uiSpacing, verticalPositionTracking, 100, 150);
+  netProfitText.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), verticalPositionTracking, 100, 150);
   netProfitText.setTextSize(20);
-  
+
   displayKeyboardControls();
   displayCompanyLogo();
 }
@@ -51,7 +59,7 @@ class VideoProgressBar
     fill(0);
     stroke(255,255,255);
     strokeWeight(frameWidth);
-    rect(0, 0, barWidth, barHeight);
+    rect(0-frameWidth, 0-frameWidth, barWidth + (frameWidth *2), barHeight + (frameWidth * 2) );
     popMatrix();
   }
     
@@ -109,7 +117,7 @@ class TextBox
     translate(Xoffset, Yoffset);
     fill(0);
     stroke(255,255,255);
-    rect(0,0,boxWidth,boxHeight);
+    rect(0-frameWidth, 0-frameWidth, boxWidth + (frameWidth *2), boxHeight + (frameWidth * 2));
 
     translate(boxWidth / 2, boxHeight / 2);
     fill(textColor);
@@ -174,6 +182,6 @@ void displayKeyboardControls()
 PImage logo;
 void displayCompanyLogo()
 {
-  logo = loadImage("leanlogo.png");
-  image(logo, sourceVideoWidth + uiSpacing, 0);
+  logo = loadImage("logo.png");
+  image(logo, sourceVideoWidth + uiSpacing + frameWidth, 0);
 }

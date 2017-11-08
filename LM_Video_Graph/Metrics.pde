@@ -13,23 +13,48 @@ void calculateNetProfit()
 }
 
 // Machine Utilization
-int averagingBufferSize = 1000;
-int bufferPointer = 0;
-int[] machineUtilizationBuffer = new int[averagingBufferSize];
-float rollingMachineUtilizationPercentage;
-
-void calculateRollingMachineUtilization()
+class RollingAverage
 {
-  int i;
-  int totalActivity = 0;
+  int bufferSize = 1000;
+  int bufferPointer = 0;
+  float totalActivity = 0;
+  float[] buffer = new float[bufferSize];
   
-  machineUtilizationBuffer[bufferPointer] = machineActive ? 1 : 0;
-  bufferPointer++;
-  if(bufferPointer >= averagingBufferSize) bufferPointer = 0;
-
-  for(i=0;i<averagingBufferSize;i++)
+  RollingAverage()
   {
-    totalActivity+=machineUtilizationBuffer[i];
   }
-  rollingMachineUtilizationPercentage = float(totalActivity) / float(averagingBufferSize);      
+  
+  void reset()
+  {
+    int i;
+
+    for(i=0;i<bufferSize;i++)
+    {
+      buffer[i] = 0;
+    }
+    totalActivity = 0;      
+  }
+  
+  void add(float input)
+  {
+    buffer[bufferPointer] = input;
+    bufferPointer++;
+    if(bufferPointer >= bufferSize) bufferPointer = 0;
+  }    
+  
+  void calculate()
+  {
+    int i;
+    totalActivity = 0;
+
+    for(i=0;i<bufferSize;i++)
+    {
+      totalActivity+= buffer[i];
+    }
+  }
+  
+  float currentValue()
+  {
+    return (totalActivity / float(bufferSize));
+  }
 }

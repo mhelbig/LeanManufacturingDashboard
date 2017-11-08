@@ -41,7 +41,7 @@ class Graph
     fill(0);
     stroke(255,255,255);
     strokeWeight(frameWidth);
-    rect(0, 0, graphWidth, graphHeight);
+    rect(0-frameWidth, 0-frameWidth, graphWidth + (frameWidth *2), graphHeight + (frameWidth * 2) );
    
     popMatrix();
   }
