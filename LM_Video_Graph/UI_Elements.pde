@@ -157,16 +157,16 @@ void displayKeyboardControls()
  text("Keyboard controls:",textXposition, textYposition);
  textYposition += textSpacing;
  
- text("R = Restart Video from beginning",textXposition, textYposition);
+ text("L = Load Video file to process",textXposition, textYposition);
  textYposition += textSpacing;
  
- text("M = Manually set Machine Active/Inactive",textXposition, textYposition);
+ text("S = Stop processing video",textXposition, textYposition);
  textYposition += textSpacing;
  
- text("S = Set machine active sensor position",textXposition, textYposition);
+ text("M = Set machine active sensor position",textXposition, textYposition);
  textYposition += textSpacing;
  
- text("Q = Quit",textXposition, textYposition);
+ text("E = Exit program",textXposition, textYposition);
  textYposition += textSpacing;
 }
 

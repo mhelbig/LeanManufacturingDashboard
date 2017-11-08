@@ -14,7 +14,7 @@ float minimalMachineUtilization = 0.4;
 float targetMachineUtilization = 0.6;
 
 // runtime variables:
-int   runMode = 1;
+int   runMode = 0;
 float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
@@ -50,19 +50,22 @@ void setup()
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
   revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
+  
+  drawBaseUIElements();
 }
 
 void draw()
 {
   switch(runMode) //Note: the video playback function increments runMode when the video ends
   { //<>//
+    case 0:                        // waiting for "Load video"
+      break;
     case 1:
       loadVideoFileToProcess();
       break;
     case 2:
       createVideoFileForOutput();
       videoExport.startMovie();
-      drawBaseUIElements();
       break;
     case 3:                        // Analyze video, generate graphs & .csv data file
       analyzeVideo();
@@ -70,10 +73,7 @@ void draw()
     case 4:                        // Save analysis data
       addEvent(videoDuration,0);
       videoExport.endMovie();
-      runMode++;
-      break;
-    case 5:
-      // wait for the user to press 'Q'
+      runMode=0;
       break;
     case 100:                      // gracefully end the program
       closeEventTable();
