@@ -19,6 +19,7 @@ float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
 boolean machineActive = false;
+String sourceVideo = "unselected";
 
 Movie       playback;
 VideoExport videoExport;
@@ -38,6 +39,7 @@ int machineUtilizationGraphHeight = 50;
 
 void setup() 
 {
+  
   size(1024,768);
   loadPreferences();
 
@@ -47,14 +49,6 @@ void setup()
   initEventTable();
   overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
   revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
-
-  playback = new Movie(this, "camera.mpg");
-  playback.play();
-  videoDuration = playback.duration();
-  playback.stop();                      // we need to do this to get a valid duration
-  
-  videoExport = new VideoExport(this,"data/output.mp4");
-  videoExport.setFrameRate(outputFrameRate);
   
   translate(uiSpacing,uiSpacing);
   int verticalPositionTracking = SourceVideoHeight + uiSpacing;
@@ -88,15 +82,17 @@ void draw()
   switch(runMode) //Note: the video playback function increments runMode when the video ends
   { //<>//
     case 1:
+      loadVideoFileToProcess();
+    case 2:
+      createVideoFileForOutput();
       videoExport.startMovie();
-      runMode++;
       break;
-    case 2:                        // Analyze video for activity
+    case 3:                        // Analyze video, generate graphs & .csv data file
       analyzeVideo();
       break;
-    case 3:                        // Save analysis data
-      addEvent(videoDuration,0);
+    case 4:                        // Save analysis data
       runMode=100;
+      addEvent(videoDuration,0);
       break;
     case 100:                      // gracefully end the program
       closeEventTable();
@@ -104,6 +100,37 @@ void draw()
       videoExport.endMovie();
       exit();
   }
+}
+
+void loadVideoFileToProcess()
+{
+  selectInput("Select a source camera file:", "sourceFileSelected");
+
+  while ( sourceVideo == "unselected")
+  {
+    print("");  //It seems as though we need to have something in the while for it to do or it hangs here forever. This does the trick for whatever reason.
+  }
+  
+  if(sourceVideo == null)
+  {
+    println("No file Selected");
+    runMode = 100;
+  }
+  else
+  {
+    playback = new Movie(this, sourceVideo);
+    playback.play();
+    videoDuration = playback.duration();
+    playback.stop();                      // we need to do this to get a valid duration
+    runMode++;
+  }
+}
+
+void createVideoFileForOutput()
+{
+  videoExport = new VideoExport(this,sourceVideo + ".mp4");
+  videoExport.setFrameRate(outputFrameRate);
+  runMode++;
 }
 
 void analyzeVideo()
@@ -150,4 +177,17 @@ void processMachineUtilization()
   
   machineUtilizationGraph.drawBar(0,rollingMachineUtilizationPercentage);
   machineUtilizationText.drawText(nf((rollingMachineUtilizationPercentage * 100), 2, 1) + "%");
+}
+
+void sourceFileSelected(File selection)
+{
+  println("File Selected Callback Function called");
+  if(selection == null)
+  {
+    sourceVideo = null;
+  }
+  else
+  {
+    sourceVideo = selection.getAbsolutePath();
+  }
 }
