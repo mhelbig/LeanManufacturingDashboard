@@ -20,14 +20,10 @@ void displayVideoFrame()
 
 }
   
-void restartVideo()
+void stopVideo()
 {
   startFlag = false;
   playback.stop();
-  videoExport.endMovie();
-  videoExport.startMovie();
-  netProfit = 0;
-  events.clearRows();
 }
   
 void movieEvent(Movie video)

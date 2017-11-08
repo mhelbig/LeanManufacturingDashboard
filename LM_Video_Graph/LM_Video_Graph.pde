@@ -63,14 +63,20 @@ void draw()
     case 1:
       loadVideoFileToProcess();
       break;
-    case 2:
+    case 2:                        // Create output file, reset data
+      sourceVideoPathNameWithExtension = "unselected";
       createVideoFileForOutput();
       videoExport.startMovie();
+      netProfit = 0;
+      events.clearRows();
+      runMode++;
       break;
     case 3:                        // Analyze video, generate graphs & .csv data file
       analyzeVideo();
       break;
-    case 4:                        // Save analysis data
+    case 4:                        // User chose Stop video
+      stopVideo();
+    case 5:                        // Save analysis data
       addEvent(videoDuration,0);
       videoExport.endMovie();
       runMode=0;
@@ -112,7 +118,6 @@ void createVideoFileForOutput()
   println(sourceVideoPathNameSplit[0]);
   videoExport = new VideoExport(this,sourceVideoPathNameSplit[0] + "-Processed.mp4");
   videoExport.setFrameRate(outputFrameRate);
-  runMode++;
 }
 
 void analyzeVideo()
