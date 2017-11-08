@@ -19,7 +19,8 @@ float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
 boolean machineActive = false;
-String sourceVideo = "unselected";
+String sourceVideoPathNameWithExtension = "unselected";
+String[] sourceVideoPathNameSplit;
 
 Movie       playback;
 VideoExport videoExport;
@@ -104,21 +105,21 @@ void draw()
 
 void loadVideoFileToProcess()
 {
-  selectInput("Select a source camera file:", "sourceFileSelected");
+  selectInput("Select a source video file:", "sourceFileSelected");
 
-  while ( sourceVideo == "unselected")
+  while ( sourceVideoPathNameWithExtension == "unselected")
   {
     print("");  //It seems as though we need to have something in the while for it to do or it hangs here forever. This does the trick for whatever reason.
   }
   
-  if(sourceVideo == null)
+  if(sourceVideoPathNameWithExtension == null)
   {
     println("No file Selected");
     runMode = 100;
   }
   else
   {
-    playback = new Movie(this, sourceVideo);
+    playback = new Movie(this, sourceVideoPathNameWithExtension);
     playback.play();
     videoDuration = playback.duration();
     playback.stop();                      // we need to do this to get a valid duration
@@ -128,7 +129,9 @@ void loadVideoFileToProcess()
 
 void createVideoFileForOutput()
 {
-  videoExport = new VideoExport(this,sourceVideo + ".mp4");
+  sourceVideoPathNameSplit = split(sourceVideoPathNameWithExtension, ".");
+  println(sourceVideoPathNameSplit[0]);
+  videoExport = new VideoExport(this,sourceVideoPathNameSplit[0] + "-Processed.mp4");
   videoExport.setFrameRate(outputFrameRate);
   runMode++;
 }
@@ -184,10 +187,10 @@ void sourceFileSelected(File selection)
   println("File Selected Callback Function called");
   if(selection == null)
   {
-    sourceVideo = null;
+    sourceVideoPathNameWithExtension = null;
   }
   else
   {
-    sourceVideo = selection.getAbsolutePath();
+    sourceVideoPathNameWithExtension = selection.getAbsolutePath();
   }
 }
