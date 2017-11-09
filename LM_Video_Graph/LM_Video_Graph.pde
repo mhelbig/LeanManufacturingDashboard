@@ -25,19 +25,16 @@ String[] sourceVideoPathNameSplit;
 Movie       playback;
 VideoExport videoExport;
 
-Preference programPreferences     = new Preference();
-VideoProgressBar camera           = new VideoProgressBar();
-Graph machineUtilizationGraph     = new Graph();
-TextBox machineUtilizationText    = new TextBox();
-Graph netProfitGraph              = new Graph();
-TextBox netProfitText             = new TextBox();
-RollingAverage machineUtilization = new RollingAverage();
+Preference programPreferences        = new Preference();
+VideoProgressBar camera              = new VideoProgressBar();
+Graph utilizationGraph               = new Graph();
+TextBox utilizationBoxTitle          = new TextBox();
+TextBox utilizationPercentageTextBox = new TextBox();
 
-// Global UI parameters: 
-int frameWidth                    = 2;   // how many pixels wide the frames around the UI elements are
-int uiSpacing                     = 5;   // how many pixels between UI elements
-int videoProgressBarHeight        = 20;  // how many pixels tall the progress bar is
-int machineUtilizationGraphHeight = 50;
+Graph netProfitGraph                 = new Graph();
+TextBox netProfitBoxTitle            = new TextBox();
+TextBox netProfitTextBox             = new TextBox();
+RollingAverage machineUtilization    = new RollingAverage();
 
 void setup() 
 {
@@ -143,15 +140,15 @@ void processNetProfit()
   if(netProfit > 0 )
   {
     netProfitGraph.setBarColor(color(0,255,0));  //green
-    netProfitText.setTextColor(color(0,255,0));
+    netProfitTextBox.setTextColor(color(0,255,0));
   }
   else
   {
     netProfitGraph.setBarColor(color(255,0,0));  //red
-    netProfitText.setTextColor(color(255,0,0));
+    netProfitTextBox.setTextColor(color(255,0,0));
   }
   netProfitGraph.drawBar(0,netProfit);
-  netProfitText.drawText("$" + nf(round(netProfit), 4));
+  netProfitTextBox.drawText("$" + nf(round(netProfit), 4));
 
 }
 
@@ -162,23 +159,23 @@ void processMachineUtilization()
   
   if(machineUtilization.currentValue() > targetMachineUtilization )
   {
-    machineUtilizationGraph.setBarColor(color(0,255,0));    //green
-    machineUtilizationText.setTextColor(color(0,255,0));
+    utilizationGraph.setBarColor(color(0,255,0));    //green
+    utilizationPercentageTextBox.setTextColor(color(0,255,0));
 
   }
   else if(machineUtilization.currentValue() > minimalMachineUtilization )
   {
-     machineUtilizationGraph.setBarColor(color(255,255,0));  //yellow
-     machineUtilizationText.setTextColor(color(255,255,0));
+     utilizationGraph.setBarColor(color(255,255,0));  //yellow
+     utilizationPercentageTextBox.setTextColor(color(255,255,0));
   } 
   else
   {
-    machineUtilizationGraph.setBarColor(color(255,0,0));    //red
-    machineUtilizationText.setTextColor(color(255,0,0));
+    utilizationGraph.setBarColor(color(255,0,0));    //red
+    utilizationPercentageTextBox.setTextColor(color(255,0,0));
   }
   
-  machineUtilizationGraph.drawBar(0,machineUtilization.currentValue());
-  machineUtilizationText.drawText(nf((machineUtilization.currentValue() * 100), 2, 1) + "%");
+  utilizationGraph.drawBar(0,machineUtilization.currentValue());
+  utilizationPercentageTextBox.drawText(nf((machineUtilization.currentValue() * 100), 2, 1) + "%");
 }
 
 void sourceFileSelected(File selection)
