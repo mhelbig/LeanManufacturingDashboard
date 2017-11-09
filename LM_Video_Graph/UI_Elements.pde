@@ -1,8 +1,8 @@
 // Global UI parameters: 
 int frameWidth                    = 2;   // how many pixels wide the frames around the UI elements are
 int uiSpacing                     = 5;   // how many pixels between UI elements
-int videoProgressBarHeight        = 20;  // how many pixels tall the progress bar is
-int machineUtilizationGraphHeight = 50;
+int videoProgressBarHeight        = 25;  // how many pixels tall the progress bar is
+int machineUtilizationGraphHeight = 75;
 int netProfitGraphHeight          = 150;
 int titleBoxWidth                 = 120;
 int TextBoxWidth                  = 90;
@@ -19,8 +19,25 @@ void drawBaseUIElements()
 
   rect(0-frameWidth, 0-frameWidth, sourceVideoWidth + (frameWidth * 2), SourceVideoHeight + (frameWidth * 2));
   
-// Progress Bar Setup  
+// Progress bar Setup  
   camera.drawVideoProgressBarFrame(0, verticalPositionTracking, sourceVideoWidth, videoProgressBarHeight);
+
+//Progress bar text box and title setup
+  progressBarTitle.setTextSize(20);
+  progressBarTitle.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), 
+                               verticalPositionTracking, 
+                               titleBoxWidth, 
+                               videoProgressBarHeight);
+  progressBarTitle.drawText("Progress");
+  
+  progressBarTextBox.setTextSize(20);
+  progressBarTextBox.setPosition(sourceVideoWidth + ( uiSpacing * 2) + titleBoxWidth + (frameWidth * 4), 
+                                 verticalPositionTracking, 
+                                 TextBoxWidth, 
+                                 videoProgressBarHeight);
+  progressBarTextBox.drawText("----");
+                                        
+  
 
 //Machine Utilization Graph setup
   verticalPositionTracking += (uiSpacing + videoProgressBarHeight + (frameWidth * 2));
@@ -70,7 +87,6 @@ void drawBaseUIElements()
                                netProfitGraphHeight);
   netProfitTextBox.drawText("----");                           
 
-  displayProgramConstants();
 //  displayKeyboardControls();
   displayCompanyLogo();
 }
@@ -197,7 +213,7 @@ void displayProgramConstants()
 {
  int fieldTextXposition = sourceVideoWidth + 20;
  int valueTextXposition = fieldTextXposition + 210; 
- int textYposition = 140;
+ int textYposition = 340;
  int textHeight    = 14;
  int textSpacing   = 2;
  
@@ -206,8 +222,14 @@ void displayProgramConstants()
  textAlign(LEFT, CENTER);
  
  
- text("Analysis Parameters",fieldTextXposition, textYposition);
+ text("File:  \"" + sourceVideoFileNameOnly + "\"", fieldTextXposition, textYposition);
 
+ textYposition += (textHeight + textSpacing);
+ text("Processed:" + month() +"/" + day() + "/" + year(), fieldTextXposition, textYposition);
+ 
+ textYposition += (textHeight * 3 + textSpacing);
+ text("Analysis Constants",fieldTextXposition, textYposition);
+ 
  textYposition += (textHeight + textSpacing);
  text("Overhead Rate Per Hour:",                     fieldTextXposition, textYposition);
  text("$" + nf(overheadRatePerHour, 3, 2),           valueTextXposition, textYposition);
@@ -221,7 +243,7 @@ void displayProgramConstants()
  text(nf(targetMachineUtilization * 100,2,1) + "%",  valueTextXposition, textYposition);
  
  textYposition += (textHeight + textSpacing);
- text("Minimum Machine Utilization:",                fieldTextXposition, textYposition);
+ text("Lower Utilization Limit:",                    fieldTextXposition, textYposition);
  text(nf(minimalMachineUtilization *100 ,2,1) + "%", valueTextXposition, textYposition);
 }
 
@@ -230,7 +252,7 @@ void displayProgramConstants()
 void displayKeyboardControls()
 {
  int textXposition = sourceVideoWidth + 20;
- int textYposition = 140;
+ int textYposition = 400;
  int textSpacing   = 15;
  
  fill(255,255,255);
@@ -256,5 +278,5 @@ PImage logo;
 void displayCompanyLogo()
 {
   logo = loadImage("logo.png");
-  image(logo, sourceVideoWidth + uiSpacing + frameWidth, 0);
+  image(logo, sourceVideoWidth + 60, 40);
 }

@@ -19,6 +19,7 @@ float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
 boolean machineActive = false;
+String sourceVideoFileNameOnly;
 String sourceVideoPathNameWithExtension = "unselected";
 String[] sourceVideoPathNameSplit;
 
@@ -27,6 +28,10 @@ VideoExport videoExport;
 
 Preference programPreferences        = new Preference();
 VideoProgressBar camera              = new VideoProgressBar();
+
+TextBox progressBarTitle             = new TextBox();
+TextBox progressBarTextBox           = new TextBox();
+
 Graph utilizationGraph               = new Graph();
 TextBox utilizationBoxTitle          = new TextBox();
 TextBox utilizationPercentageTextBox = new TextBox();
@@ -67,6 +72,7 @@ void draw()
       netProfit = 0;
       events.clearRows();
       machineUtilization.reset();
+      displayProgramConstants();
       runMode++;
       break;
     case 3:                        // Analyze video, generate graphs & .csv data file
@@ -111,6 +117,21 @@ void loadVideoFileToProcess()
   }
 }
 
+// Callback function:
+void sourceFileSelected(File selection)
+{
+  println("File Selected Callback Function called");
+  if(selection == null)
+  {
+    sourceVideoPathNameWithExtension = null;
+  }
+  else
+  {
+    sourceVideoPathNameWithExtension = selection.getAbsolutePath();
+    sourceVideoFileNameOnly          = selection.getName();
+  }
+}
+
 void createVideoFileForOutput()
 {
   sourceVideoPathNameSplit = split(sourceVideoPathNameWithExtension, ".");
@@ -128,6 +149,7 @@ void analyzeVideo()
 
   translate(uiSpacing,uiSpacing);
   camera.displayVideoProgressBar();
+  progressBarTextBox.drawText(nf((playbackTime/videoDuration*100),1,1) + "%");
   processMachineUtilization();
   processNetProfit();
   videoExport.saveFrame();
@@ -148,7 +170,7 @@ void processNetProfit()
     netProfitTextBox.setTextColor(color(255,0,0));
   }
   netProfitGraph.drawBar(0,netProfit);
-  netProfitTextBox.drawText("$" + nf(round(netProfit), 4));
+  netProfitTextBox.drawText("$" + nf(round(netProfit), 3));
 
 }
 
@@ -176,17 +198,4 @@ void processMachineUtilization()
   
   utilizationGraph.drawBar(0,machineUtilization.currentValue());
   utilizationPercentageTextBox.drawText(nf((machineUtilization.currentValue() * 100), 2, 1) + "%");
-}
-
-void sourceFileSelected(File selection)
-{
-  println("File Selected Callback Function called");
-  if(selection == null)
-  {
-    sourceVideoPathNameWithExtension = null;
-  }
-  else
-  {
-    sourceVideoPathNameWithExtension = selection.getAbsolutePath();
-  }
 }
