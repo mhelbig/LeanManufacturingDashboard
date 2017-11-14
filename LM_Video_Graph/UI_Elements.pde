@@ -1,3 +1,12 @@
+// Global UI parameters: 
+int frameWidth                    = 2;   // how many pixels wide the frames around the UI elements are
+int uiSpacing                     = 5;   // how many pixels between UI elements
+int videoProgressBarHeight        = 25;  // how many pixels tall the progress bar is
+int machineUtilizationGraphHeight = 75;
+int netProfitGraphHeight          = 150;
+int titleBoxWidth                 = 120;
+int TextBoxWidth                  = 90;
+
 void drawBaseUIElements()
 {
   int verticalPositionTracking = uiSpacing + SourceVideoHeight + (frameWidth * 2);
@@ -10,29 +19,75 @@ void drawBaseUIElements()
 
   rect(0-frameWidth, 0-frameWidth, sourceVideoWidth + (frameWidth * 2), SourceVideoHeight + (frameWidth * 2));
   
-// Progress Bar Setup  
+// Progress bar Setup  
   camera.drawVideoProgressBarFrame(0, verticalPositionTracking, sourceVideoWidth, videoProgressBarHeight);
+
+//Progress bar text box and title setup
+  progressBarTitle.setTextSize(20);
+  progressBarTitle.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), 
+                               verticalPositionTracking, 
+                               titleBoxWidth, 
+                               videoProgressBarHeight);
+  progressBarTitle.drawText("Progress");
+  
+  progressBarTextBox.setTextSize(20);
+  progressBarTextBox.setPosition(sourceVideoWidth + ( uiSpacing * 2) + titleBoxWidth + (frameWidth * 4), 
+                                 verticalPositionTracking, 
+                                 TextBoxWidth, 
+                                 videoProgressBarHeight);
+  progressBarTextBox.drawText("----");
+                                        
+  
 
 //Machine Utilization Graph setup
   verticalPositionTracking += (uiSpacing + videoProgressBarHeight + (frameWidth * 2));
-  machineUtilizationGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, machineUtilizationGraphHeight);
-  machineUtilizationGraph.setRange(1, 0);
-  machineUtilizationGraph.drawFrame();
-  machineUtilizationGraph.drawHorizontalGridLine(targetMachineUtilization);
-  machineUtilizationGraph.drawHorizontalGridLine(minimalMachineUtilization);
-  machineUtilizationText.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), verticalPositionTracking, 100, machineUtilizationGraphHeight);
-  machineUtilizationText.setTextSize(20);
+  utilizationGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, machineUtilizationGraphHeight);
+  utilizationGraph.setRange(1, 0);
+  utilizationGraph.drawFrame();
+  utilizationGraph.drawHorizontalGridLine(targetMachineUtilization);
+  utilizationGraph.drawHorizontalGridLine(minimalMachineUtilization);
+
+ 
+//Machine Utilization text box and title setup
+  utilizationBoxTitle.setTextSize(20);
+  utilizationBoxTitle.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), 
+                                  verticalPositionTracking, 
+                                  titleBoxWidth, 
+                                  machineUtilizationGraphHeight);
+  utilizationBoxTitle.drawText("Utilization");
+  
+  utilizationPercentageTextBox.setTextSize(20);
+  utilizationPercentageTextBox.setPosition(sourceVideoWidth + ( uiSpacing * 2) + titleBoxWidth + (frameWidth * 4), 
+                                           verticalPositionTracking, 
+                                           TextBoxWidth, 
+                                           machineUtilizationGraphHeight);
+  utilizationPercentageTextBox.drawText("----");
+                                        
   
 // Net Profit Graph setup
   verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + (frameWidth * 2));
+  
   netProfitGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, 150);
-  netProfitGraph.setRange(100, -100);
+  netProfitGraph.setRange(1000, -250);
   netProfitGraph.drawFrame();
   netProfitGraph.drawHorizontalGridLine(0);
-  netProfitText.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2), verticalPositionTracking, 100, 150);
-  netProfitText.setTextSize(20);
+  
+// Net Profit text box and title setup
+  netProfitBoxTitle.setTextSize(20);
+  netProfitBoxTitle.setPosition(sourceVideoWidth + uiSpacing + (frameWidth * 2),
+                                verticalPositionTracking, 
+                                titleBoxWidth, 
+                                netProfitGraphHeight);
+  netProfitBoxTitle.drawText("Net Profit");
 
-  displayKeyboardControls();
+  netProfitTextBox.setTextSize(20);
+  netProfitTextBox.setPosition(sourceVideoWidth + ( uiSpacing * 2) + titleBoxWidth + (frameWidth * 4),
+                               verticalPositionTracking, 
+                               TextBoxWidth, 
+                               netProfitGraphHeight);
+  netProfitTextBox.drawText("----");                           
+
+//  displayKeyboardControls();
   displayCompanyLogo();
 }
 
@@ -117,6 +172,7 @@ class TextBox
     translate(Xoffset, Yoffset);
     fill(0);
     stroke(255,255,255);
+    strokeWeight(frameWidth);
     rect(0-frameWidth, 0-frameWidth, boxWidth + (frameWidth *2), boxHeight + (frameWidth * 2));
 
     translate(boxWidth / 2, boxHeight / 2);
@@ -153,11 +209,58 @@ void displayFramerate()
     text(round(frameRate),23,25);
 }
 
+void displayProgramConstants()
+{
+ int fieldTextXposition = sourceVideoWidth + 20;
+ int valueTextXposition = fieldTextXposition + 210; 
+ int textYposition = 300;
+ int textHeight    = 14;
+ int textSpacing   = 2;
+ 
+ fill(255,255,255);
+ textSize(textHeight);
+ textAlign(LEFT, CENTER);
+ 
+ 
+ text("File:  \"" + sourceVideoFileNameOnly + "\"", fieldTextXposition, textYposition);
+
+ textYposition += (textHeight + textSpacing);
+ text("Processed:" + month() +"/" + day() + "/" + year(), fieldTextXposition, textYposition);
+ 
+ textYposition += (textHeight * 3 + textSpacing);
+ text("Analysis Constants",fieldTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Playback Time:",                              fieldTextXposition, textYposition);
+ text(round(videoDuration) + "s",                    valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Playback Video Speed:",                       fieldTextXposition, textYposition);
+ text(round(sourceVideoSpeedMultiplier) + "X",       valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Overhead Rate Per Hour:",                     fieldTextXposition, textYposition);
+ text("$" + nf(overheadRatePerHour, 3 ,2),           valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Revenue Rate Per Hour:",                      fieldTextXposition, textYposition);
+ text("$" + nf(revenueRatePerHour, 3, 2),            valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Target Machine Utilization:",                 fieldTextXposition, textYposition);
+ text(nf(targetMachineUtilization * 100,2,1) + "%",  valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Lower Utilization Limit:",                    fieldTextXposition, textYposition);
+ text(nf(minimalMachineUtilization *100 ,2,1) + "%", valueTextXposition, textYposition);
+}
+
+
 // Keyboard control reference
 void displayKeyboardControls()
 {
  int textXposition = sourceVideoWidth + 20;
- int textYposition = 140;
+ int textYposition = 400;
  int textSpacing   = 15;
  
  fill(255,255,255);
@@ -183,5 +286,5 @@ PImage logo;
 void displayCompanyLogo()
 {
   logo = loadImage("logo.png");
-  image(logo, sourceVideoWidth + uiSpacing + frameWidth, 0);
+  image(logo, sourceVideoWidth + 60, 40);
 }

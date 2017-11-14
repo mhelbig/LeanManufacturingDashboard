@@ -4,7 +4,6 @@ import com.hamoid.*;
 // Video playback constants:
 int sourceVideoWidth;
 int SourceVideoHeight;
-int analyzeFrameRate;
 int outputFrameRate;
 
 // Business operating constants:
@@ -19,25 +18,27 @@ float sourceVideoSpeedMultiplier;
 float videoDuration;
 float playbackTime = 0;
 boolean machineActive = false;
+String sourceVideoFileNameOnly;
 String sourceVideoPathNameWithExtension = "unselected";
 String[] sourceVideoPathNameSplit;
 
 Movie       playback;
 VideoExport videoExport;
 
-Preference programPreferences     = new Preference();
-VideoProgressBar camera           = new VideoProgressBar();
-Graph machineUtilizationGraph     = new Graph();
-TextBox machineUtilizationText    = new TextBox();
-Graph netProfitGraph              = new Graph();
-TextBox netProfitText             = new TextBox();
-RollingAverage machineUtilization = new RollingAverage();
+Preference programPreferences        = new Preference();
+VideoProgressBar camera              = new VideoProgressBar();
 
-// Global UI parameters: 
-int frameWidth                    = 2;   // how many pixels wide the frames around the UI elements are
-int uiSpacing                     = 5;   // how many pixels between UI elements
-int videoProgressBarHeight        = 20;  // how many pixels tall the progress bar is
-int machineUtilizationGraphHeight = 50;
+TextBox progressBarTitle             = new TextBox();
+TextBox progressBarTextBox           = new TextBox();
+
+Graph utilizationGraph               = new Graph();
+TextBox utilizationBoxTitle          = new TextBox();
+TextBox utilizationPercentageTextBox = new TextBox();
+
+Graph netProfitGraph                 = new Graph();
+TextBox netProfitBoxTitle            = new TextBox();
+TextBox netProfitTextBox             = new TextBox();
+RollingAverage machineUtilization    = new RollingAverage();
 
 void setup() 
 {
@@ -45,11 +46,11 @@ void setup()
   size(1024,768);
   loadPreferences();
 
-  frameRate(analyzeFrameRate);
+  frameRate(outputFrameRate);
     
   initEventTable();
-  overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
-  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
+  overheadRatePerFrame = overheadRatePerHour / 3600 / outputFrameRate * sourceVideoSpeedMultiplier; //<>//
+  revenueRatePerFrame  = revenueRatePerHour  / 3600 / outputFrameRate * sourceVideoSpeedMultiplier;
   
   drawBaseUIElements();
 }
@@ -70,6 +71,7 @@ void draw()
       netProfit = 0;
       events.clearRows();
       machineUtilization.reset();
+      displayProgramConstants();
       runMode++;
       break;
     case 3:                        // Analyze video, generate graphs & .csv data file
@@ -108,9 +110,24 @@ void loadVideoFileToProcess()
   {
     playback = new Movie(this, sourceVideoPathNameWithExtension);
     playback.play();
-    videoDuration = playback.duration();
+    videoDuration = 599; //playback.duration();
     playback.stop();                      // we need to do this to get a valid duration
     runMode++;
+  }
+}
+
+// Callback function:
+void sourceFileSelected(File selection)
+{
+  println("File Selected Callback Function called");
+  if(selection == null)
+  {
+    sourceVideoPathNameWithExtension = null;
+  }
+  else
+  {
+    sourceVideoPathNameWithExtension = selection.getAbsolutePath();
+    sourceVideoFileNameOnly          = selection.getName();
   }
 }
 
@@ -131,9 +148,11 @@ void analyzeVideo()
 
   translate(uiSpacing,uiSpacing);
   camera.displayVideoProgressBar();
+  progressBarTextBox.drawText(nf((playbackTime/videoDuration*100),1,1) + "%");
   processMachineUtilization();
   processNetProfit();
   videoExport.saveFrame();
+  println(playback.time());
 //  displayFramerate();
 }
 
@@ -143,15 +162,15 @@ void processNetProfit()
   if(netProfit > 0 )
   {
     netProfitGraph.setBarColor(color(0,255,0));  //green
-    netProfitText.setTextColor(color(0,255,0));
+    netProfitTextBox.setTextColor(color(0,255,0));
   }
   else
   {
     netProfitGraph.setBarColor(color(255,0,0));  //red
-    netProfitText.setTextColor(color(255,0,0));
+    netProfitTextBox.setTextColor(color(255,0,0));
   }
   netProfitGraph.drawBar(0,netProfit);
-  netProfitText.drawText("$" + nf(round(netProfit), 4));
+  netProfitTextBox.drawText("$" + nf(round(netProfit), 3));
 
 }
 
@@ -162,34 +181,21 @@ void processMachineUtilization()
   
   if(machineUtilization.currentValue() > targetMachineUtilization )
   {
-    machineUtilizationGraph.setBarColor(color(0,255,0));    //green
-    machineUtilizationText.setTextColor(color(0,255,0));
+    utilizationGraph.setBarColor(color(0,255,0));    //green
+    utilizationPercentageTextBox.setTextColor(color(0,255,0));
 
   }
   else if(machineUtilization.currentValue() > minimalMachineUtilization )
   {
-     machineUtilizationGraph.setBarColor(color(255,255,0));  //yellow
-     machineUtilizationText.setTextColor(color(255,255,0));
+     utilizationGraph.setBarColor(color(255,255,0));  //yellow
+     utilizationPercentageTextBox.setTextColor(color(255,255,0));
   } 
   else
   {
-    machineUtilizationGraph.setBarColor(color(255,0,0));    //red
-    machineUtilizationText.setTextColor(color(255,0,0));
+    utilizationGraph.setBarColor(color(255,0,0));    //red
+    utilizationPercentageTextBox.setTextColor(color(255,0,0));
   }
   
-  machineUtilizationGraph.drawBar(0,machineUtilization.currentValue());
-  machineUtilizationText.drawText(nf((machineUtilization.currentValue() * 100), 2, 1) + "%");
-}
-
-void sourceFileSelected(File selection)
-{
-  println("File Selected Callback Function called");
-  if(selection == null)
-  {
-    sourceVideoPathNameWithExtension = null;
-  }
-  else
-  {
-    sourceVideoPathNameWithExtension = selection.getAbsolutePath();
-  }
+  utilizationGraph.drawBar(0,machineUtilization.currentValue());
+  utilizationPercentageTextBox.drawText(nf((machineUtilization.currentValue() * 100), 2, 1) + "%");
 }
