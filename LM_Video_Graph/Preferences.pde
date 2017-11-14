@@ -14,7 +14,6 @@ void loadPreferences()
   sourceVideoWidth           = int(programPreferences.getFloat("sourceVideoWidth"));
   SourceVideoHeight          = int(programPreferences.getFloat("sourceVideoHeight"));
   sourceVideoSpeedMultiplier =     programPreferences.getFloat("sourceVideoSpeedMultiplier");
-  analyzeFrameRate           = int(programPreferences.getFloat("analyzeFrameRate"));
   outputFrameRate            = int(programPreferences.getFloat("outputFrameRate"));
   }
 }
@@ -28,7 +27,6 @@ void saveSystemParameters()
   programPreferences.setNumber("sourceVideoWidth",           sourceVideoWidth,           false);
   programPreferences.setNumber("sourceVideoHeight",          SourceVideoHeight,          false);
   programPreferences.setNumber("sourceVideoSpeedMultiplier", sourceVideoSpeedMultiplier, false);
-  programPreferences.setNumber("analyzeFrameRate",           analyzeFrameRate,           false);
   programPreferences.setNumber("outputFrameRate",            outputFrameRate,            false);
   programPreferences.savePref();
 }
@@ -42,7 +40,6 @@ void ResetSystemDefaultParameters()
   sourceVideoWidth           = 720;
   SourceVideoHeight          = 480;
   sourceVideoSpeedMultiplier = 60;
-  analyzeFrameRate           = 30;
   outputFrameRate            = 30;
 
   saveSystemParameters();

@@ -4,7 +4,6 @@ import com.hamoid.*;
 // Video playback constants:
 int sourceVideoWidth;
 int SourceVideoHeight;
-int analyzeFrameRate;
 int outputFrameRate;
 
 // Business operating constants:
@@ -47,11 +46,11 @@ void setup()
   size(1024,768);
   loadPreferences();
 
-  frameRate(analyzeFrameRate);
+  frameRate(outputFrameRate);
     
   initEventTable();
-  overheadRatePerFrame = overheadRatePerHour / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier; //<>//
-  revenueRatePerFrame  = revenueRatePerHour  / 3600 / analyzeFrameRate * sourceVideoSpeedMultiplier;
+  overheadRatePerFrame = overheadRatePerHour / 3600 / outputFrameRate * sourceVideoSpeedMultiplier; //<>//
+  revenueRatePerFrame  = revenueRatePerHour  / 3600 / outputFrameRate * sourceVideoSpeedMultiplier;
   
   drawBaseUIElements();
 }
@@ -111,7 +110,7 @@ void loadVideoFileToProcess()
   {
     playback = new Movie(this, sourceVideoPathNameWithExtension);
     playback.play();
-    videoDuration = playback.duration();
+    videoDuration = 599; //playback.duration();
     playback.stop();                      // we need to do this to get a valid duration
     runMode++;
   }
@@ -153,6 +152,7 @@ void analyzeVideo()
   processMachineUtilization();
   processNetProfit();
   videoExport.saveFrame();
+  println(playback.time());
 //  displayFramerate();
 }
 

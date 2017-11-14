@@ -68,7 +68,7 @@ void drawBaseUIElements()
   verticalPositionTracking += (uiSpacing + machineUtilizationGraphHeight + (frameWidth * 2));
   
   netProfitGraph.setPosition(0, verticalPositionTracking, sourceVideoWidth, 150);
-  netProfitGraph.setRange(100, -100);
+  netProfitGraph.setRange(1000, -250);
   netProfitGraph.drawFrame();
   netProfitGraph.drawHorizontalGridLine(0);
   
@@ -213,7 +213,7 @@ void displayProgramConstants()
 {
  int fieldTextXposition = sourceVideoWidth + 20;
  int valueTextXposition = fieldTextXposition + 210; 
- int textYposition = 340;
+ int textYposition = 300;
  int textHeight    = 14;
  int textSpacing   = 2;
  
@@ -231,8 +231,16 @@ void displayProgramConstants()
  text("Analysis Constants",fieldTextXposition, textYposition);
  
  textYposition += (textHeight + textSpacing);
+ text("Playback Time:",                              fieldTextXposition, textYposition);
+ text(round(videoDuration) + "s",                    valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
+ text("Playback Video Speed:",                       fieldTextXposition, textYposition);
+ text(round(sourceVideoSpeedMultiplier) + "X",       valueTextXposition, textYposition);
+ 
+ textYposition += (textHeight + textSpacing);
  text("Overhead Rate Per Hour:",                     fieldTextXposition, textYposition);
- text("$" + nf(overheadRatePerHour, 3, 2),           valueTextXposition, textYposition);
+ text("$" + nf(overheadRatePerHour, 3 ,2),           valueTextXposition, textYposition);
  
  textYposition += (textHeight + textSpacing);
  text("Revenue Rate Per Hour:",                      fieldTextXposition, textYposition);

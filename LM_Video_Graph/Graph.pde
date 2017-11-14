@@ -4,7 +4,7 @@ class Graph
   int GraphYoffset = 0;
   int graphWidth   = 500;
   int graphHeight  = 150;
-  float graphRangeTop = 50;
+  float graphRangeTop = -50;
   float graphRangeBot = -50;
   color barColor = color(255, 255, 255);
   
