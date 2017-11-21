@@ -18,6 +18,7 @@ class Graph
   int   frameLineWeight  = 4;
   int   gridLineWeight   = 1;
   float gridlineTextSize;                    // as a percentage of the graph height
+  int lastPositionX = 0;                     // remembers the last bar's x position
 
 //Bar attributes:
   color barColor       = color(255,0,0,127);     // use transparency to keep the bars from overwriting the gridlines
@@ -149,12 +150,18 @@ void setGridLineColor(color c)
   
   void drawBar(float xPos, float yStart, float yEnd)
   {
+    int currentPositionX = mapAxisX(xPos);  
     pushMatrix();
     {
       translate(graphPositionX, graphPositionY);
       stroke(barColor);
       strokeWeight(1);
-      line(mapAxisX(xPos), mapAxisY(yEnd), mapAxisX(xPos), mapAxisY(yStart)); 
+      
+      while(lastPositionX < currentPositionX)
+      {
+        lastPositionX++;
+        line(lastPositionX, mapAxisY(yEnd), lastPositionX, mapAxisY(yStart)); 
+      }
     }
     popMatrix();
   }
