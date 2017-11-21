@@ -93,7 +93,7 @@ void setGridLineColor(color c)
       }
       textSize(gridlineTextSize);
       fill(gridlineColor);
-      translate(x, graphHeight  + frameLineWeight + 4);
+      translate(x, graphHeight  + frameLineWeight + 8);
       rotate(-PI/2);
       textAlign(RIGHT, CENTER);
       text(text, 0, 0);
@@ -118,7 +118,7 @@ void setGridLineColor(color c)
       textSize(gridlineTextSize);
       textAlign(LEFT, CENTER);
       fill(gridlineColor);
-      translate(graphWidth + frameLineWeight + 2, y);
+      translate(graphWidth + frameLineWeight + 8, y);
       text(text, 0, 0);
     }
     popMatrix();
