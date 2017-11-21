@@ -26,10 +26,10 @@ class Graph
   {
   }
   
-  void initialize(int x, int y, int w, int h,                                      //size and position
-                  float xMin, float xMax, float yMin, float yMax,                  //ranges
-                  color background, color tColor,  float tTextSize, String title,  //graph area attributes
-                  color fColor, int fLineWeight)                                   //frame attributes
+  void initialize(int x, int y, int w, int h,                       //size and position
+                  float xMin, float xMax, float yMin, float yMax,   //ranges
+                  color background, color tColor,                   //graph area attributes
+                  color fColor, int fLineWeight)                    //frame attributes
   {
     graphPositionX          = x;  //Note: size refers to the graphing portion, the frame, title, and axis text is drawn outside this area
     graphPositionY          = y;
@@ -54,14 +54,6 @@ class Graph
       fill(background);
       strokeWeight(fLineWeight);
       rect(0 - (fLineWeight/2), 0 - (fLineWeight/2), graphWidth  + (fLineWeight/2), graphHeight + (fLineWeight/2));
-      
-      // Chart Title
-      textSize(tTextSize);
-      textAlign(CENTER, BOTTOM);
-      fill(textColor);
-      translate( (graphPositionX + graphWidth) /2 , -frameLineWeight - 4);
-      text(title, 0, 0);
-      
     }     
     popMatrix();
   }
@@ -127,6 +119,22 @@ void setGridLineColor(color c)
       fill(textColor);
       translate(graphWidth + frameLineWeight + 2, y);
       text(text, 0, 0);
+    }
+    popMatrix();
+  }
+  
+////////////////////////////////////////////////////////////////////
+// title
+////////////////////////////////////////////////////////////////////
+  void drawTitle(int xPos, int yPos, float size, String title)
+  {
+    pushMatrix();
+    {
+      translate(graphPositionX, graphPositionY);
+      textSize(size);
+      textAlign(LEFT, TOP);
+      fill(textColor);
+      text(title, xPos, yPos);
     }
     popMatrix();
   }
