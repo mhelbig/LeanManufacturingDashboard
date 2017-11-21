@@ -53,7 +53,7 @@ class Graph
       stroke(fColor);
       fill(background);
       strokeWeight(fLineWeight);
-      rect(0 - (fLineWeight/2), 0 - (fLineWeight/2), graphWidth  + (fLineWeight/2), graphHeight + (fLineWeight/2));
+      rect(0 - (fLineWeight/2), 0 - (fLineWeight/2), graphWidth  + fLineWeight, graphHeight + fLineWeight);
     }     
     popMatrix();
   }
@@ -91,7 +91,7 @@ void setGridLineColor(color c)
         line(x, 0, x, graphHeight);
       }
       textSize(gridlineTextSize);
-      fill(textColor);
+      fill(gridlineColor);
       translate(x, graphHeight  + frameLineWeight + 4);
       rotate(-PI/2);
       textAlign(RIGHT, CENTER);
@@ -116,7 +116,7 @@ void setGridLineColor(color c)
       }
       textSize(gridlineTextSize);
       textAlign(LEFT, CENTER);
-      fill(textColor);
+      fill(gridlineColor);
       translate(graphWidth + frameLineWeight + 2, y);
       text(text, 0, 0);
     }
@@ -126,13 +126,13 @@ void setGridLineColor(color c)
 ////////////////////////////////////////////////////////////////////
 // title
 ////////////////////////////////////////////////////////////////////
-  void drawTitle(int xPos, int yPos, float size, String title)
+  void drawTitle(int xPos, int yPos, int alignH, int alignV, float size, String title)
   {
     pushMatrix();
     {
       translate(graphPositionX, graphPositionY);
       textSize(size);
-      textAlign(LEFT, TOP);
+      textAlign(alignH, alignV);
       fill(textColor);
       text(title, xPos, yPos);
     }
@@ -150,13 +150,12 @@ void setGridLineColor(color c)
   void drawBar(float xPos, float yStart, float yEnd)
   {
     pushMatrix();
-    translate(graphPositionX, graphPositionY);
-    stroke(barColor);
-    strokeWeight(1);
-    line(map(xPos, graphRangeTop, graphRangeBottom,0, graphWidth), 
-         constrain(map(yEnd, graphRangeRight, graphRangeLeft, 0, graphHeight), 0, graphHeight),
-         map(xPos, graphRangeTop, graphRangeBottom,0, graphWidth),
-         constrain(map(yStart, graphRangeRight, graphRangeLeft,0, graphHeight), 0, graphHeight));
+    {
+      translate(graphPositionX, graphPositionY);
+      stroke(barColor);
+      strokeWeight(1);
+      line(mapAxisX(xPos), mapAxisY(yEnd), mapAxisX(xPos), mapAxisY(yStart)); 
+    }
     popMatrix();
   }
   
