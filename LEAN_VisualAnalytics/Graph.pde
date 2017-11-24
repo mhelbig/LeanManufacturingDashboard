@@ -1,62 +1,91 @@
 class Graph
 {
-// Graph size and postion:
-  int graphPositionX;
-  int graphPositionY;
+// Graph overall size
+  int graphX;
+  int graphY;
   int graphWidth;
   int graphHeight;
   
-// Graph range:  
+  int graphLeftMargin;
+  int graphRightMargin;
+  int graphTopMargin;
+  int graphBottomMargin;
+  
+// Graph data range in units:  
   float graphRangeLeft;
   float graphRangeRight;
   float graphRangeTop;
   float graphRangeBottom;
   
-// Graph attributes:
+// Calculated graph size and position in pixels:
+  int graphPlotAreaX;
+  int graphPlotAreaY;
+  int graphPlotAreaWidth;
+  int graphPlotAreaHeight;
+  
+// Graph appearance attributes:
   color textColor        = color(255,255,255);   // all text on the graph is the same color
   color gridlineColor    = color(128,128,128);
   int   frameLineWeight  = 4;
   int   gridLineWeight   = 1;
-  float gridlineTextSize;                    // as a percentage of the graph height
-  int lastPositionX = 0;                     // remembers the last bar's x position
+  float gridlineTextSize;
+  int   lastPositionX = 0;                   // this remembers the last bar's x position
+  color frameColor;
+  color backgroundColor;
+  color barColor = color(255,0,0,127);     // Default.  Note: use transparency to keep the bars from overwriting the gridlines
 
-//Bar attributes:
-  color barColor       = color(255,0,0,127);     // use transparency to keep the bars from overwriting the gridlines
-
-  Graph()
+  Graph(int x, int y, int w, int h,                       //size and position
+        int marL,int marR, int marT, int marB,            //margins
+        float xMin, float xMax, float yMin, float yMax,   //ranges
+        color background, color tColor,                   //graph area attributes
+        color fColor, int fLineWeight)                    //frame attributes
   {
+    graphX      = x + fLineWeight/2;
+    graphY      = y + fLineWeight/2;
+    graphWidth  = w - fLineWeight/2;
+    graphHeight = h - fLineWeight/2;
+    
+    graphLeftMargin     = marL;
+    graphRightMargin    = marR;
+    graphTopMargin      = marT;
+    graphBottomMargin   = marB;
+    
+    graphPlotAreaX      = graphX + marL + fLineWeight;
+    graphPlotAreaY      = graphY + marT + fLineWeight;
+    graphPlotAreaWidth  = graphWidth - marL - marR - fLineWeight * 2;
+    graphPlotAreaHeight = graphHeight - marT - marB - fLineWeight * 2;
+    
+    graphRangeLeft      = xMin;
+    graphRangeRight     = xMax;
+    graphRangeTop       = yMax;
+    graphRangeBottom    = yMin;
+    
+    textColor           = tColor;
+    frameLineWeight     = fLineWeight;
+    frameColor          = fColor;
+    backgroundColor     = background;
+    frameLineWeight     = fLineWeight;
   }
   
-  void initialize(int x, int y, int w, int h,                       //size and position
-                  float xMin, float xMax, float yMin, float yMax,   //ranges
-                  color background, color tColor,                   //graph area attributes
-                  color fColor, int fLineWeight)                    //frame attributes
+  void initializeGraphFrame()
   {
-    graphPositionX          = x;  //Note: size refers to the graphing portion, the frame, title, and axis text is drawn outside this area
-    graphPositionY          = y;
-    graphWidth              = w;
-    graphHeight             = h;
-    graphRangeLeft          = xMin;
-    graphRangeRight         = xMax;
-    graphRangeTop           = yMax;
-    graphRangeBottom        = yMin;
-    textColor               = tColor;
-    frameLineWeight         = fLineWeight;
-    
-    println(graphPositionY,graphHeight);
-    
+    stroke(frameColor);
+    fill(backgroundColor);
+    strokeWeight(frameLineWeight);
     pushMatrix();
     {
-      translate(graphPositionX, graphPositionY);
-    
-      // Chart frame:
-      fill(0);
-      stroke(fColor);
-      fill(background);
-      strokeWeight(fLineWeight);
-      rect(0 - (fLineWeight/2), 0 - (fLineWeight/2), graphWidth  + fLineWeight, graphHeight + fLineWeight);
+      translate(graphPlotAreaX, graphPlotAreaY);
+      rect(0 - (frameLineWeight/2), 0 - (frameLineWeight/2), graphPlotAreaWidth  + frameLineWeight, graphPlotAreaHeight + frameLineWeight);
     }     
     popMatrix();
+  }
+
+  void drawReferenceFrame() // draws a rectangle representing the defined size of the graph area
+  {
+    stroke(frameColor);
+    noFill();
+    strokeWeight(1);
+    rect(graphX, graphY, graphWidth, graphHeight);  //reference frame
   }
 
 ////////////////////////////////////////////////////////////////////
@@ -82,18 +111,18 @@ void setGridLineColor(color c)
     int x = mapAxisX(xPos);
     pushMatrix();
     {
-      translate(graphPositionX, graphPositionY);
+      translate(graphPlotAreaX, graphPlotAreaY);
     
-      if( x > 0 && x < graphWidth)  // draw the gridline only if it's not on the frame
+      if( x > 0 && x < graphPlotAreaWidth)  // draw the gridline only if it's not on the frame
       {
         stroke(gridlineColor);
         strokeWeight(gridLineWeight);
         
-        line(x, 0, x, graphHeight);
+        line(x, 0, x, graphPlotAreaHeight);
       }
       textSize(gridlineTextSize);
       fill(gridlineColor);
-      translate(x, graphHeight  + frameLineWeight + 8);
+      translate(x, graphPlotAreaHeight  + frameLineWeight + 8);
       rotate(-PI/2);
       textAlign(RIGHT, CENTER);
       text(text, 0, 0);
@@ -106,19 +135,19 @@ void setGridLineColor(color c)
     int y = mapAxisY(yPos);
     pushMatrix();
     {
-      translate(graphPositionX, graphPositionY);
+      translate(graphPlotAreaX, graphPlotAreaY);
     
-      if( y > 0 && y < graphHeight)  // draw the gridline only if it's not on the frame
+      if( y > 0 && y < graphPlotAreaHeight)  // draw the gridline only if it's not on the frame
       {
         stroke(gridlineColor);
         strokeWeight(gridLineWeight);
         
-        line(0, mapAxisY(yPos), graphWidth, mapAxisY(yPos));
+        line(0, mapAxisY(yPos), graphPlotAreaWidth, mapAxisY(yPos));
       }
       textSize(gridlineTextSize);
       textAlign(LEFT, CENTER);
       fill(gridlineColor);
-      translate(graphWidth + frameLineWeight + 8, y);
+      translate(graphPlotAreaWidth + frameLineWeight + 8, y);
       text(text, 0, 0);
     }
     popMatrix();
@@ -131,7 +160,7 @@ void setGridLineColor(color c)
   {
     pushMatrix();
     {
-      translate(graphPositionX, graphPositionY);
+      translate(graphPlotAreaX, graphPlotAreaY);
       textSize(size);
       textAlign(alignH, alignV);
       fill(textColor);
@@ -153,7 +182,7 @@ void setGridLineColor(color c)
     int currentPositionX = mapAxisX(xPos);  
     pushMatrix();
     {
-      translate(graphPositionX, graphPositionY);
+      translate(graphPlotAreaX, graphPlotAreaY);
       stroke(barColor);
       strokeWeight(1);
       
@@ -165,17 +194,39 @@ void setGridLineColor(color c)
     }
     popMatrix();
   }
+////////////////////////////////////////////////////////////////////
+// Graph position reporting
+////////////////////////////////////////////////////////////////////
+int graphPositionLeft()
+{
+  return(graphX);
+}
+
+int graphPositionRight()
+{
+  return(graphX + graphWidth);
+}  
   
+int graphPositionTop()
+{
+  return(graphY);
+}
+
+int graphPositionBottom()
+{
+  return(graphY + graphHeight);
+}
+
 ////////////////////////////////////////////////////////////////////
 // X and Y axis mapping conversions
 ////////////////////////////////////////////////////////////////////
   int mapAxisX(float value)
   {
-    return int(constrain(map(value, graphRangeLeft, graphRangeRight, 0, graphWidth),0, graphWidth));
+    return int(constrain(map(value, graphRangeLeft, graphRangeRight, 0, graphPlotAreaWidth),0, graphPlotAreaWidth));
   }
 
   int mapAxisY(float value)
   {
-    return int(constrain(map(value, graphRangeTop, graphRangeBottom, 0, graphHeight),0, graphHeight));
+    return int(constrain(map(value, graphRangeTop, graphRangeBottom, 0, graphPlotAreaHeight),0, graphPlotAreaHeight));
   }
 }
