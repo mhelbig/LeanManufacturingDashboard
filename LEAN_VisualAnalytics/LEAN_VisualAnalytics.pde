@@ -1,36 +1,21 @@
 float startTime = 6;
 float endTime   = 6 + 12;
 
-int leftMargin   = 5;
-int topMargin    = 5;
-int rightMargin  = 75;
-int bottomMargin = 0;
-int bottomMarginAxisLabels   = 65;
-int graphFrameLineWeight     = 3;
-color graphBackgroundColor   = 40;
 color screenBackgroundColor  = 0;
-color graphBorderColor       = 255;
-color graphTextColor         = 196;
 int graphBarTransparency     = 80;
 int graphWidths              = 720;
 
-int machineUptimeGraphHeight = 250;
+int machineUptimeGraphHeight = 200;
 float machineUptimeMinUptime = 0;
 float machineUptimeMaxUptime = 100;
 
-int netProfitGraphHeight     = 290;
+int netProfitGraphHeight     = 250;
 float netProfitMin           = -250;
 float netProfitMax           =  250;
 
 
-Graph machineUptime = new Graph(0, 0,  graphWidths, machineUptimeGraphHeight, 
-                                leftMargin, rightMargin, topMargin, bottomMargin,
-                                startTime, endTime, machineUptimeMinUptime, machineUptimeMaxUptime,
-                                color(graphBackgroundColor), color(graphBorderColor), color(graphTextColor), graphFrameLineWeight);
-Graph netProfit     = new Graph(0, machineUptime.graphPositionBottom()+ topMargin, graphWidths, netProfitGraphHeight,
-                                leftMargin, rightMargin, 0, bottomMarginAxisLabels,
-                                startTime, endTime, netProfitMin, netProfitMax,
-                                color(graphBackgroundColor), color(graphBorderColor), color(graphTextColor), graphFrameLineWeight);
+Graph machineUptime = new Graph();
+Graph netProfit     = new Graph();
 
 void setup() 
 {
@@ -39,14 +24,13 @@ void setup()
   background(screenBackgroundColor);
   noCursor();
 
-  machineUptime.initializeGraphFrame();
-  netProfit.initializeGraphFrame();
+  machineUptime.initializeGraphFrame(0, 0,  graphWidths, machineUptimeGraphHeight, true, false,
+                                     startTime, endTime, machineUptimeMinUptime, machineUptimeMaxUptime);
+  netProfit.initializeGraphFrame(0, machineUptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
+                                 startTime, endTime, netProfitMin, netProfitMax);
   
-//  machineUptime.drawReferenceFrame();
-//  netProfit.drawReferenceFrame();
-
-  machineUptime.setGridTextSize(18);                  
-  netProfit.setGridTextSize(18);                  
+//  machineUptime.drawDebugReferenceFrame();
+//  netProfit.drawDebugReferenceFrame();
 
   netProfit.setGridLineColor(color(80));
   for (float timeOfDay = startTime; timeOfDay <= endTime; timeOfDay ++)
@@ -56,7 +40,7 @@ void setup()
   }
 
   machineUptime.setGridLineColor(color(80));
-  for (int i = 20; i <=80; i=i+20)
+  for (int i = 10; i <=90; i=i+10)
   {
     machineUptime.addGridlineHorizontal(i, nf(i) + "%");
   }
