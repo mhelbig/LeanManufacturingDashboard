@@ -3,8 +3,10 @@ color graphBackgroundColor        = 40;
 color graphFrameColor             = 255;
 color graphTextColor              = color(255,255,255);
 color graphGridlineColor          = color(128,128,128);
+int   graphBarTransparency        = 100;
 int   graphFrameLineWeight        = 2;
 int   graphGridLineWeight         = 1;
+float graphTitleTextSize          = 18;
 float graphGridlineTextSize       = 18;
 int   graphLeftMargin             = 4;
 int   graphTopMargin              = 4;
@@ -40,8 +42,8 @@ class Graph
   {
   }
   
-  void initializeGraphFrame(int x, int y, int w, int h, boolean rightAxisLabels, boolean bottomAxisLabels,       //size and position
-                            float xMin, float xMax, float yMin, float yMax)   //ranges
+  void initializeGraphFrame(int x, int y, int w, int h, boolean rightAxisLabels, boolean bottomAxisLabels, //size and position
+                            float xMin, float xMax, float yMin, float yMax)                                //ranges
   {
     graphX      = x;
     graphY      = y;
@@ -147,12 +149,12 @@ void setGridLineColor(color c)
 ////////////////////////////////////////////////////////////////////
 // title
 ////////////////////////////////////////////////////////////////////
-  void drawTitle(int xPos, int yPos, int alignH, int alignV, float size, String title)
+  void drawTitle(int xPos, int yPos, int alignH, int alignV, String title)
   {
     pushMatrix();
     {
       translate(graphPlotAreaX, graphPlotAreaY);
-      textSize(size);
+      textSize(graphTitleTextSize);
       textAlign(alignH, alignV);
       fill(graphTextColor);
       text(title, xPos, yPos);
@@ -165,7 +167,7 @@ void setGridLineColor(color c)
 ////////////////////////////////////////////////////////////////////
   void setBarColor(color c)
   {
-    barColor = c;
+    barColor = color(c,graphBarTransparency);
   }
   
   void drawBar(float xPos, float yStart, float yEnd)
