@@ -1,25 +1,12 @@
 Table machineCycles;
+String machineCyclesFilename;
 
-// Initialize
-void initEventTable()
-{
-  machineCycles = new Table();
-  machineCycles.addColumn("time");
-  machineCycles.addColumn("cycles");
-  machineCycles.addColumn("state");
-}
-
-void addEvent(int time, int cycles, int state)
+void addEvent(String time, int cycles, int state)
 {
   TableRow newRow = machineCycles.addRow();
-  newRow.setInt("time",time);
+  newRow.setString("time",time);
   newRow.setInt("cycles",cycles);
   newRow.setInt("state",state);
-}
-
-void openEventTable()
-{
-  machineCycles = loadTable("data/events.csv", "header");
 }
 
 void readMachineActiveStateTable(int id)
@@ -34,7 +21,30 @@ void readMachineActiveStateTable(int id)
 //    else machineActive = true;
 }
 
-void closeEventTable()
+void buildEventTableFilename(String machineName)
 {
-  saveTable(machineCycles, "data/events.csv");
+  machineCyclesFilename = "data/" + machineName + "-" + year() + "-" + nf(month(),2) + "-" + nf(day(),2) + ".csv";
+}
+
+void openEventTable()
+{
+  machineCycles = loadTable(machineCyclesFilename, "header");
+  if (machineCycles == null)
+  {
+    createEventTableFile();
+  }
+}
+
+void createEventTableFile()
+{
+  machineCycles = new Table();
+  machineCycles.addColumn("time");
+  machineCycles.addColumn("cycles");
+  machineCycles.addColumn("state");
+  saveEventTable();
+}
+
+void saveEventTable()
+{
+  saveTable(machineCycles, machineCyclesFilename);
 }

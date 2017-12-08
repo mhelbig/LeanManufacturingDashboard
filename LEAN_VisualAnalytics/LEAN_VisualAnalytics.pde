@@ -4,6 +4,12 @@ void setup()
   size(800, 480);
   background(screenBackgroundColor);
   noCursor();
+
+  String timeOfDay = nf(hour(),2) + ":" + nf(minute(),2);
+  buildEventTableFilename("Komatsu");
+  openEventTable();
+  addEvent(timeOfDay,2,3);
+  saveEventTable();
 }
 
 void draw()
