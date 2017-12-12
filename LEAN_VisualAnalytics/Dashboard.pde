@@ -15,8 +15,8 @@ float uptimeYellowLimit = 50;
 float uptimeGreenLimit  = 75;
 
 int netProfitGraphHeight     = 250;
-float netProfitMin           = -250;
-float netProfitMax           =  250;
+float netProfitMin           = -100;
+float netProfitMax           =  200;
 float netProfitGridLines     =  6;
 float netProfitRedLimit      = -1;
 float netProfitYellowLimit   = 75;
@@ -34,6 +34,11 @@ void drawDayDashboard()
                                      startHour, endHour, uptimeMinUptime, uptimeMaxUptime);
   netProfit.initializeGraphFrame(0, uptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
                                  startHour, endHour, netProfitMin, netProfitMax);
+  netProfit.adjustGraphVerticalRange();                                 
+  
+  status.drawGraphPlotArea();
+  uptime.drawGraphPlotArea();
+  netProfit.drawGraphPlotArea();
   
 //  status.drawDebugReferenceFrame();
 //  uptime.drawDebugReferenceFrame();
@@ -66,16 +71,5 @@ void drawDayDashboard()
 
 // Net profit
   netProfit.drawTitle(10, 6, LEFT, TOP, "Net Profit");
-  float gridSpacing = round((netProfitMax - netProfitMin)/netProfitGridLines);
-  float bottom = netProfitMin;
-  float top = netProfitMax;
-  
-  for (float i = bottom; i <=top; i = i + gridSpacing)
-  {
-    if(i >= netProfitGreenLimit)  netProfit.setGridLineColor(color(0,255,0));
-    if(i <= netProfitYellowLimit) netProfit.setGridLineColor(color(255,255,0));
-    if(i <  netProfitRedLimit)    netProfit.setGridLineColor(color(255,0,0));
-    if(i ==  0)                   netProfit.setGridLineColor(color(80));
-    netProfit.addGridlineHorizontal(i, "$" + nf(i) );
-  }
+  netProfit.drawHorizontalGridlines();  
 }

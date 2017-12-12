@@ -6,6 +6,7 @@ color graphGridlineColor          = color(128,128,128);
 int   graphBarTransparency        = 100;
 int   graphFrameLineWeight        = 2;
 int   graphGridLineWeight         = 1;
+int   graphVerticalGridlines      = 5;
 float graphTitleTextSize          = 18;
 float graphGridlineTextSize       = 18;
 int   graphLeftMargin             = 4;
@@ -29,6 +30,9 @@ class Graph
   float graphRangeTop;
   float graphRangeBottom;
   
+  float graphRangeTopMax;
+  float graphRangeBottomMax;
+  
 // Calculated graph size and position in pixels:
   int graphPlotAreaX;
   int graphPlotAreaY;
@@ -43,7 +47,7 @@ class Graph
   }
   
   void initializeGraphFrame(int x, int y, int w, int h, boolean rightAxisLabels, boolean bottomAxisLabels, //size and position
-                            float xMin, float xMax, float yMin, float yMax)                                //ranges
+                            float left, float right, float bottom, float top)                                //ranges
   {
     graphX      = x;
     graphY      = y;
@@ -66,12 +70,16 @@ class Graph
       graphPlotAreaHeight -= graphBottomAxisLabelsMargin;
     }
     
-    graphRangeLeft      = xMin;
-    graphRangeRight     = xMax;
-    graphRangeTop       = yMax;
-    graphRangeBottom    = yMin;
-    println(graphRangeBottom);
-    
+    graphRangeLeft      = left;
+    graphRangeRight     = right;
+    graphRangeTop       = top;
+    graphRangeBottom    = bottom;
+    graphRangeTopMax    = top;
+    graphRangeBottomMax = bottom;
+  }
+  
+  void drawGraphPlotArea()
+  {
     stroke(graphFrameColor);
     fill(graphBackgroundColor);
     strokeWeight(graphFrameLineWeight);
@@ -94,9 +102,45 @@ class Graph
 ////////////////////////////////////////////////////////////////////
 // Gridlines:  
 ////////////////////////////////////////////////////////////////////
-void setGridLineColor(color c)
+  void setGridLineColor(color c)
   {
     graphGridlineColor = c;
+  }
+  
+  void adjustGraphVerticalRange()
+  {
+    float[] graphIncrements = {10, 20, 50, 75, 100, 200, 500, 750, 1000, 2000, 5000};
+    float verticalGraphRange = graphRangeTopMax - graphRangeBottomMax;
+    
+    for(float increment : graphIncrements)
+    {
+      if((increment * graphVerticalGridlines) > verticalGraphRange)
+      {
+        for(float bottom = 0; bottom < graphVerticalGridlines; bottom--)
+        {
+          if(bottom * increment < graphRangeBottomMax)
+          {
+            graphRangeBottom = bottom * increment;
+            graphRangeTop = graphRangeBottom + (increment * graphVerticalGridlines); 
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
+  
+  void drawHorizontalGridlines()
+  {
+    for (float i = graphRangeBottom; i <=graphRangeTop; i = i + ((graphRangeTop - graphRangeBottom) / graphVerticalGridlines))
+    {
+      println(i);
+      if(i >= netProfitGreenLimit)  netProfit.setGridLineColor(color(0,255,0));
+      if(i <= netProfitYellowLimit) netProfit.setGridLineColor(color(255,255,0));
+      if(i <  netProfitRedLimit)    netProfit.setGridLineColor(color(255,0,0));
+      if(i ==  0)                   netProfit.setGridLineColor(color(80));
+      addGridlineHorizontal(i, "$" + nf(i) );
+    }
   }
   
   void addGridlineVertical(float xPos, String text)
@@ -173,6 +217,12 @@ void setGridLineColor(color c)
   void drawBar(float xPos, float yStart, float yEnd)
   {
     int currentPositionX = mapAxisX(xPos);  
+    
+    if(yEnd > graphRangeTopMax)      graphRangeTopMax = yEnd;
+    if(yEnd < graphRangeBottomMax)   graphRangeBottomMax = yEnd;
+    if(yStart > graphRangeTopMax)    graphRangeTopMax = yStart;
+    if(yStart < graphRangeBottomMax) graphRangeBottomMax = yStart;
+
     pushMatrix();
     {
       translate(graphPlotAreaX, graphPlotAreaY);
