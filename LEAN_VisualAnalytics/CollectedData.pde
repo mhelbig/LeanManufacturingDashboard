@@ -1,7 +1,7 @@
 Table machineCycles;
 String machineCyclesFilename;
 
-void addEvent(String time, int cycles, int state)
+void addEventData(String time, int cycles, int state)
 {
   TableRow newRow = machineCycles.addRow();
   newRow.setString("time",time);

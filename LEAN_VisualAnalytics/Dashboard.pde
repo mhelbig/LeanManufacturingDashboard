@@ -1,39 +1,70 @@
-float startHour = 0;
-float endHour   = 24;
+int startMinute             = 0;
+int endMinute               = 24 * 60;
 
-color screenBackgroundColor  = 0;
-int graphWidths              = 720;
+color screenBackgroundColor = 0;
+int   graphWidths           = 720;
 
-int statusGraphHeight = 40;
+int   statusGraphHeight     = 40;
 
-int uptimeGraphHeight   = 150;
-float uptimeMinUptime   = 0;
-float uptimeMaxUptime   = 100;
-int   uptimeGrid        = 20;
-float uptimeRedLimit    = 30;
-float uptimeYellowLimit = 50;
-float uptimeGreenLimit  = 75;
+int   uptimeGraphHeight     = 150;
+float uptimeMinUptime       = 0;
+float uptimeMaxUptime       = 100;
+int   uptimeGrid            = 20;
+float uptimeRedLimit        = 30;
+float uptimeYellowLimit     = 50;
+float uptimeGreenLimit      = 75;
 
-int netProfitGraphHeight     = 250;
-float netProfitMin           = -100;
-float netProfitMax           =  200;
-float netProfitGridLines     =  6;
-float netProfitRedLimit      = -1;
-float netProfitYellowLimit   = 75;
-float netProfitGreenLimit    = 150;
+int   netProfitGraphHeight  = 250;
+float netProfitMin          = -100;
+float netProfitMax          =  200;
+float netProfitGridLines    =  6;
+float netProfitRedLimit     = -1;
+float netProfitYellowLimit  = 75;
+float netProfitGreenLimit   = 150;
 
 Graph status    = new Graph();
 Graph uptime    = new Graph();
 Graph netProfit = new Graph();
 
+Table graphData;
+
+void createGraphDataTable()
+{
+  graphData = new Table();
+  graphData.addColumn("time");
+  graphData.addColumn("status");
+  graphData.addColumn("uptime");
+  graphData.addColumn("netprofit");
+}
+
+void addGraphData(int time, int status, int uptime, float netprofit)
+{
+  TableRow newRow = graphData.addRow();
+  newRow.setInt("time",time);
+  newRow.setInt("status",status);
+  newRow.setInt("uptime",uptime);
+  newRow.setFloat("netprofit",netprofit);
+}
+
+void loadGraphDataTableWithRandomTestData()
+{
+  for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
+  {
+    addGraphData(minuteOfDay, int(random(0,4)), int(random(0, 100)), random(-100, 200));
+  }
+}
+
+
 void drawDayDashboard()
 {
+  background(screenBackgroundColor);
+
   status.initializeGraphFrame(0, 0,  graphWidths, statusGraphHeight, true, false,
-                                     startHour, endHour, 0, 1);
+                                     startMinute, endMinute, 0, 1);
   uptime.initializeGraphFrame(0, status.graphPositionBottom(),  graphWidths, uptimeGraphHeight, true, false,
-                                     startHour, endHour, uptimeMinUptime, uptimeMaxUptime);
+                                 startMinute, endMinute, uptimeMinUptime, uptimeMaxUptime);
   netProfit.initializeGraphFrame(0, uptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
-                                 startHour, endHour, netProfitMin, netProfitMax);
+                                 startMinute, endMinute, netProfitMin, netProfitMax);
   netProfit.adjustGraphVerticalRange();                                 
   
   status.drawGraphPlotArea();
@@ -48,13 +79,13 @@ void drawDayDashboard()
   status.setGridLineColor(color(80));
   uptime.setGridLineColor(color(80));
   netProfit.setGridLineColor(color(80));
-  for (float timeOfDay = startHour; timeOfDay <= endHour; timeOfDay ++)
+  for (float minuteOfDay = startMinute; minuteOfDay <= endMinute; minuteOfDay += 60)
   {
-    status.addGridlineVertical(timeOfDay, "");
-    uptime.addGridlineVertical(timeOfDay, "");
-    int t = int (timeOfDay % 12);
+    status.addGridlineVertical(minuteOfDay, "");
+    uptime.addGridlineVertical(minuteOfDay, "");
+    int t = int ((minuteOfDay/60) % 12);
     if (t == 0) t=12;
-    netProfit.addGridlineVertical(timeOfDay, nf(t)+ ((timeOfDay < 12) ? "a" : "p"));
+    netProfit.addGridlineVertical(minuteOfDay, nf(t)+ ((minuteOfDay < 12) ? "a" : "p"));
   }
 
 // Status graph
@@ -72,4 +103,40 @@ void drawDayDashboard()
 // Net profit
   netProfit.drawTitle(10, 6, LEFT, TOP, "Net Profit");
   netProfit.drawHorizontalGridlines();  
+}
+
+void drawGraphFromTable()
+{
+  for (int i=startMinute; i<endMinute; i++)
+  {
+    TableRow tableRow = graphData.getRow(i);
+    
+    int graphStatus = tableRow.getInt("status");
+    switch(graphStatus)
+    {
+      case 0:
+        status.setBarColor(color(127,127,127));
+        break;
+      case 1:
+        status.setBarColor(color(0,255,0));
+        break;
+      case 2:
+        status.setBarColor(color(255,127,0));
+        break;
+      case 3:
+        status.setBarColor(color(255,0,0));
+        break;
+    }
+    status.drawBar(i, 0, statusGraphHeight);
+    
+    float uptimePercentage = tableRow.getFloat("uptime");
+    if      (uptimePercentage > uptimeGreenLimit)  uptime.setBarColor(color(0,255,0));
+    else if (uptimePercentage > uptimeYellowLimit) uptime.setBarColor(color(255,255,0));
+    else                            uptime.setBarColor(color(255,0,0));
+    uptime.drawBar(i, 0, uptimePercentage);
+
+    float netProfitDollars = tableRow.getFloat("netprofit");
+    netProfit.drawBar(i, 0, netProfitDollars );
+    netProfit.adjustGraphVerticalRange();
+  }
 }
