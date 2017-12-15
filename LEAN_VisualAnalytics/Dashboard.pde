@@ -26,35 +26,6 @@ Graph status    = new Graph();
 Graph uptime    = new Graph();
 Graph netProfit = new Graph();
 
-Table graphData;
-
-void createGraphDataTable()
-{
-  graphData = new Table();
-  graphData.addColumn("time");
-  graphData.addColumn("status");
-  graphData.addColumn("uptime");
-  graphData.addColumn("netprofit");
-}
-
-void addGraphData(int time, int status, int uptime, float netprofit)
-{
-  TableRow newRow = graphData.addRow();
-  newRow.setInt("time",time);
-  newRow.setInt("status",status);
-  newRow.setInt("uptime",uptime);
-  newRow.setFloat("netprofit",netprofit);
-}
-
-void loadGraphDataTableWithRandomTestData()
-{
-  for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
-  {
-    addGraphData(minuteOfDay, int(random(0,4)), int(random(0, 100)), random(-100, 200));
-  }
-}
-
-
 void drawDayDashboard()
 {
   background(screenBackgroundColor);
@@ -105,11 +76,11 @@ void drawDayDashboard()
   netProfit.drawHorizontalGridlines();  
 }
 
-void drawGraphFromTable()
+void drawGraphFromTable(Table data)
 {
   for (int i=startMinute; i<endMinute; i++)
   {
-    TableRow tableRow = graphData.getRow(i);
+    TableRow tableRow = data.getRow(i);
     
     int graphStatus = tableRow.getInt("status");
     switch(graphStatus)

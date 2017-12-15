@@ -18,5 +18,5 @@ void draw()
 {
   noLoop();
   drawDayDashboard();
-  drawGraphFromTable();
+  drawGraphFromTable(graphData);
 }

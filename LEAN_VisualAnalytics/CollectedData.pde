@@ -48,3 +48,31 @@ void saveEventTable()
 {
   saveTable(machineCycles, machineCyclesFilename);
 }
+
+Table graphData;
+
+void createGraphDataTable()
+{
+  graphData = new Table();
+  graphData.addColumn("time");
+  graphData.addColumn("status");
+  graphData.addColumn("uptime");
+  graphData.addColumn("netprofit");
+}
+
+void addGraphData(int time, int status, int uptime, float netprofit)
+{
+  TableRow newRow = graphData.addRow();
+  newRow.setInt("time",time);
+  newRow.setInt("status",status);
+  newRow.setInt("uptime",uptime);
+  newRow.setFloat("netprofit",netprofit);
+}
+
+void loadGraphDataTableWithRandomTestData()
+{
+  for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
+  {
+    addGraphData(minuteOfDay, int(random(0,4)), int(random(0, 100)), random(-100, 200));
+  }
+}
