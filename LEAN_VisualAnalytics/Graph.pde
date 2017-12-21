@@ -134,11 +134,10 @@ int   graphBottomAxisLabelsMargin = 60;
   {
     for (float i = graphRangeBottom; i <=graphRangeTop; i = i + ((graphRangeTop - graphRangeBottom) / graphVerticalGridlines))
     {
-      println(i);
-      if(i >= machine.netProfitGreenLimit)  machine.netProfit.setGridLineColor(color(0,255,0));
-      if(i <= machine.netProfitYellowLimit) machine.netProfit.setGridLineColor(color(255,255,0));
-      if(i <  machine.netProfitRedLimit)    machine.netProfit.setGridLineColor(color(255,0,0));
-      if(i ==  0)                           machine.netProfit.setGridLineColor(color(80));
+      if(i >= dashboard.netProfitGreenLimit)  dashboard.netProfit.setGridLineColor(color(0,255,0));
+      if(i <= dashboard.netProfitYellowLimit) dashboard.netProfit.setGridLineColor(color(255,255,0));
+      if(i <  dashboard.netProfitRedLimit)    dashboard.netProfit.setGridLineColor(color(255,0,0));
+      if(i ==  0)                           dashboard.netProfit.setGridLineColor(color(80));
       addGridlineHorizontal(i, "$" + nf(i) );
     }
   }

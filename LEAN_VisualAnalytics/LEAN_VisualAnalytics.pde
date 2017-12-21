@@ -1,4 +1,5 @@
-DayDashboard machine = new DayDashboard();
+DayDashboard dashboard = new DayDashboard();
+EventData rawEvents  = new EventData("Komatsu"); 
 
 void setup() 
 {
@@ -7,17 +8,16 @@ void setup()
   size(800, 480);
   noCursor();
   String timeOfDay = nf(hour(),2) + ":" + nf(minute(),2);
-  buildEventTableFilename("Komatsu");
-  openEventTable();
-  addEventData(timeOfDay,2,3);
-  saveEventTable();
+  rawEvents.openEventTable();
+  rawEvents.addEventData(timeOfDay,2,3);
+  rawEvents.saveEventTable();
   
-  machine.loadWithRandomTestData();
-  machine.drawDashboardArea();
+  dashboard.loadWithRandomTestData();
+  dashboard.drawDashboardArea();
 }
 
 void draw()
 {
   noLoop();
-  machine.drawDashboardData();
+  dashboard.drawDashboardData();
 }
