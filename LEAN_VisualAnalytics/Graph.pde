@@ -1,3 +1,5 @@
+class Graph
+{
 // Global graph appearance attributes:
 color graphBackgroundColor        = 40;
 color graphFrameColor             = 255;
@@ -16,8 +18,6 @@ int   graphBottomMargin           = 0;
 int   graphRightAxisLabelsMargin  = 65;
 int   graphBottomAxisLabelsMargin = 60;
 
-class Graph
-{
 // Graph overall size
   int graphX;
   int graphY;
@@ -49,7 +49,7 @@ class Graph
   void initializeGraphFrame(int x, int y, int w, int h, boolean rightAxisLabels, boolean bottomAxisLabels, //size and position
                             float left, float right, float bottom, float top)                                //ranges
   {
-    graphX      = x;
+    graphX      = x; //<>//
     graphY      = y;
     graphWidth  = w;
     graphHeight = h;
@@ -135,10 +135,10 @@ class Graph
     for (float i = graphRangeBottom; i <=graphRangeTop; i = i + ((graphRangeTop - graphRangeBottom) / graphVerticalGridlines))
     {
       println(i);
-      if(i >= netProfitGreenLimit)  netProfit.setGridLineColor(color(0,255,0));
-      if(i <= netProfitYellowLimit) netProfit.setGridLineColor(color(255,255,0));
-      if(i <  netProfitRedLimit)    netProfit.setGridLineColor(color(255,0,0));
-      if(i ==  0)                   netProfit.setGridLineColor(color(80));
+      if(i >= machine.netProfitGreenLimit)  machine.netProfit.setGridLineColor(color(0,255,0));
+      if(i <= machine.netProfitYellowLimit) machine.netProfit.setGridLineColor(color(255,255,0));
+      if(i <  machine.netProfitRedLimit)    machine.netProfit.setGridLineColor(color(255,0,0));
+      if(i ==  0)                           machine.netProfit.setGridLineColor(color(80));
       addGridlineHorizontal(i, "$" + nf(i) );
     }
   }
