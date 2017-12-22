@@ -3,29 +3,51 @@ class EventData
   Table machineCycles;
   String machineCyclesFilename;
   
+  int startMinute             = 0;
+  int endMinute               = 24 * 60;
+
   EventData(String machineName)
   {
     machineCyclesFilename = "data/" + machineName + "-" + year() + "-" + nf(month(),2) + "-" + nf(day(),2) + ".csv";
   }
   
-  void addEventData(String time, int cycles, int state)
+  void addEventData(int time, int cycles, int state)
   {
     TableRow newRow = machineCycles.addRow();
-    newRow.setString("time",time);
+    newRow.setInt("time",time);
     newRow.setInt("cycles",cycles);
     newRow.setInt("state",state);
   }
   
-  void readMachineActiveStateTable(int id)
+  void loadWithRandomData()
   {
-    TableRow tableRow;
-    int cycles;
+    int j = 0;
+    int s = 0;
     
-      tableRow   = machineCycles.getRow(id);       //get the current row
-      cycles     = tableRow.getInt("state");       //get number of cycles for given time period
+    machineCycles.clearRows();
+    for (int i=startMinute; i<endMinute; i++)
+      {
+        
+        if (j < i)
+        {
+          j = int(random(i + 4,i + 40));
+          s = int(random(0,4));
+        }
+        addEventData(i,int(random(0,200)),s);
+      }
       
-  //    if(cycles > 60 ) machineActive = false;
-  //    else machineActive = true;
+  }
+  
+  int cycles(int id)
+  {
+    TableRow tableRow = machineCycles.getRow(id);
+    return(tableRow.getInt("cycles"));
+  }
+  
+  int state(int id)
+  {
+    TableRow tableRow = machineCycles.getRow(id);
+    return(tableRow.getInt("state"));
   }
   
   void openEventTable()

@@ -9,15 +9,16 @@ void setup()
   noCursor();
   String timeOfDay = nf(hour(),2) + ":" + nf(minute(),2);
   rawEvents.openEventTable();
-  rawEvents.addEventData(timeOfDay,2,3);
+  rawEvents.loadWithRandomData();
   rawEvents.saveEventTable();
   
-  dashboard.loadWithRandomTestData();
+//  dashboard.loadWithRandomData();
   dashboard.drawDashboardArea();
 }
 
 void draw()
 {
   noLoop();
+  dashboard.calculateDashboard(rawEvents);
   dashboard.drawDashboardData();
 }

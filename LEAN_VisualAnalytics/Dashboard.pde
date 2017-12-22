@@ -15,12 +15,15 @@ class DayDashboard
   float uptimeGreenLimit      = 75;
   
   int   netProfitGraphHeight  = 250;
-  float netProfitMin          = -100;
-  float netProfitMax          =  200;
+  float netProfitMin          = -200;
+  float netProfitMax          =  500;
   float netProfitGridLines    =  6;
   float netProfitRedLimit     = -1;
   float netProfitYellowLimit  = 75;
   float netProfitGreenLimit   = 150;
+  
+  float overheadRatePerHour   =  75.00;
+  float profitRatePerHour     = 150.00;
   
   Table graphData;
   Graph status    = new Graph();
@@ -96,6 +99,27 @@ class DayDashboard
     netProfit.drawHorizontalGridlines();  
   }
   
+  void calculateDashboard(EventData rawEvents)
+  {
+    int status = 0;
+    float netProfit = 0;
+    for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
+    {
+      TableRow dashboardDataRow = graphData.getRow(minuteOfDay);
+      status = rawEvents.state(minuteOfDay);
+      
+      dashboardDataRow.setInt("status",status); 
+      dashboardDataRow.setInt("uptime",rawEvents.cycles(minuteOfDay));
+      
+      netProfit -= (overheadRatePerHour / 60);
+      if(status >= 2)
+      {
+        netProfit += (profitRatePerHour / 60);
+      }
+      dashboardDataRow.setFloat("netprofit",netProfit); 
+    }    
+  }
+  
   void drawDashboardData()
   {
     for (int i=startMinute; i<endMinute; i++)
@@ -109,13 +133,13 @@ class DayDashboard
           status.setBarColor(color(127,127,127));
           break;
         case 1:
-          status.setBarColor(color(0,255,0));
+          status.setBarColor(color(255,0,0));
           break;
         case 2:
           status.setBarColor(color(255,127,0));
           break;
         case 3:
-          status.setBarColor(color(255,0,0));
+          status.setBarColor(color(0,255,0));
           break;
       }
       status.drawBar(i, 0, statusGraphHeight);
@@ -132,7 +156,7 @@ class DayDashboard
     }
   }
 
-  void loadWithRandomTestData()
+  void loadWithRandomData()
   {
     for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
     {
