@@ -15,8 +15,8 @@ class DayDashboard
   float uptimeGreenLimit      = 75;
   
   int   netProfitGraphHeight  = 250;
-  float netProfitMin          = -200;
-  float netProfitMax          =  500;
+  float netProfitMin          = -100;
+  float netProfitMax          =  300;
   float netProfitGridLines    =  6;
   float netProfitRedLimit     = -1;
   float netProfitYellowLimit  = 75;
@@ -29,6 +29,7 @@ class DayDashboard
   Graph status    = new Graph();
   Graph uptime    = new Graph();
   Graph netProfit = new Graph();
+  RollingAverage utilizationAverage = new RollingAverage();
   
   DayDashboard()  //constructor
   {
@@ -109,7 +110,10 @@ class DayDashboard
       status = rawEvents.state(minuteOfDay);
       
       dashboardDataRow.setInt("status",status); 
-      dashboardDataRow.setInt("uptime",rawEvents.cycles(minuteOfDay));
+      
+      utilizationAverage.add( float(status > 2 ? 1 : 0));
+      utilizationAverage.calculate();
+      dashboardDataRow.setInt("uptime",int(utilizationAverage.currentValue()*100));
       
       netProfit -= (overheadRatePerHour / 60);
       if(status >= 2)
@@ -145,12 +149,16 @@ class DayDashboard
       status.drawBar(i, 0, statusGraphHeight);
       
       float uptimePercentage = tableRow.getFloat("uptime");
+      
       if      (uptimePercentage > uptimeGreenLimit)  uptime.setBarColor(color(0,255,0));
       else if (uptimePercentage > uptimeYellowLimit) uptime.setBarColor(color(255,255,0));
-      else                            uptime.setBarColor(color(255,0,0));
+      else                                           uptime.setBarColor(color(255,0,0));
       uptime.drawBar(i, 0, uptimePercentage);
   
       float netProfitDollars = tableRow.getFloat("netprofit");
+      if      (netProfitDollars > netProfitGreenLimit)  netProfit.setBarColor(color(0,255,0));
+      else if (netProfitDollars > netProfitYellowLimit) netProfit.setBarColor(color(255,255,0));
+      else                                              netProfit.setBarColor(color(255,0,0));
       netProfit.drawBar(i, 0, netProfitDollars );
       netProfit.adjustGraphVerticalRange();
     }
