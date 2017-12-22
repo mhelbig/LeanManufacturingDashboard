@@ -22,12 +22,14 @@ void setup()
 void draw()
 {
 //  noLoop();
+}
+
+void mouseClicked()
+{
   background(0);
   rawEvents.loadWithRandomData();
   calculateDashboard(rawEvents, dashTable);
   dashboard.drawDashboardArea();
   dashboard.drawDashboardData();
   rawEvents.saveEventTable();
-  
-  delay(5000);
 }

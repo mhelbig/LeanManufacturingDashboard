@@ -12,10 +12,9 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
     TableRow rawDataRow   = rawEvents.machineCycles.getRow(minuteOfDay);
     
     status = rawDataRow.getInt("state");
-    
     dashboardRow.setInt("status",status); 
     
-    utilizationAverage.add( float(status > 2 ? 1 : 0));
+    utilizationAverage.add( float(status >= 2 ? 1 : 0));
     utilizationAverage.calculate();
     dashboardRow.setInt("uptime",int(utilizationAverage.currentValue()*100));
     
@@ -26,8 +25,9 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
     }
     dashboardRow.setFloat("netprofit",netProfit); 
     
-    if(netProfit > netProfitMax)   netProfitMax = netProfit;
-    if(netProfit < netProfitMin)   netProfitMin = netProfit;
+    //autorange the graph to fit the min and max netprofit:
+    if(netProfit > netProfitMax) netProfitMax = netProfit;
+    if(netProfit < netProfitMin) netProfitMin = netProfit;
     dashboard.netProfit.adjustGraphVerticalRange(netProfitMax,netProfitMin);
     
   }    
