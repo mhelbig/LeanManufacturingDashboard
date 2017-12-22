@@ -32,7 +32,6 @@ class DayDashboard
                                    startMinute, endMinute, uptimeMinUptime, uptimeMaxUptime);
     netProfit.initializeGraphFrame(0, uptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
                                    startMinute, endMinute, netProfitMin, netProfitMax);
-    netProfit.adjustGraphVerticalRange();   
   }
   
   void drawDashboardArea()
@@ -111,7 +110,6 @@ class DayDashboard
       else if (netProfitDollars > netProfitYellowLimit) netProfit.setBarColor(color(255,255,0));
       else                                              netProfit.setBarColor(color(255,0,0));
       netProfit.drawBar(i, 0, netProfitDollars );
-      netProfit.adjustGraphVerticalRange();
     }
   }
 }  

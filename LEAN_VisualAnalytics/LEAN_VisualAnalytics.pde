@@ -12,20 +12,22 @@ DayDashboard dashboard      = new DayDashboard();
 void setup() 
 {
   //fullScreen();
-  background(0);
   size(800, 480);
-  noCursor();
+  //noCursor();
   rawEvents.initializeEventTable("Komatsu");
-  rawEvents.loadWithRandomData();
-  rawEvents.saveEventTable();
   
 //  dashboard.loadWithRandomData();
-  dashboard.drawDashboardArea();
 }
 
 void draw()
 {
-  noLoop();
+//  noLoop();
+  background(0);
+  rawEvents.loadWithRandomData();
   calculateDashboard(rawEvents, dashTable);
+  dashboard.drawDashboardArea();
   dashboard.drawDashboardData();
+  rawEvents.saveEventTable();
+  
+  delay(5000);
 }

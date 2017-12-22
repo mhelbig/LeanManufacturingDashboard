@@ -30,9 +30,6 @@ int   graphBottomAxisLabelsMargin = 60;
   float graphRangeTop;
   float graphRangeBottom;
   
-  float graphRangeTopMax;
-  float graphRangeBottomMax;
-  
 // Calculated graph size and position in pixels:
   int graphPlotAreaX;
   int graphPlotAreaY;
@@ -74,12 +71,12 @@ int   graphBottomAxisLabelsMargin = 60;
     graphRangeRight     = right;
     graphRangeTop       = top;
     graphRangeBottom    = bottom;
-    graphRangeTopMax    = top;
-    graphRangeBottomMax = bottom;
   }
   
   void drawGraphPlotArea()
   {
+    lastPositionX = 0;
+    
     stroke(graphFrameColor);
     fill(graphBackgroundColor);
     strokeWeight(graphFrameLineWeight);
@@ -107,10 +104,10 @@ int   graphBottomAxisLabelsMargin = 60;
     graphGridlineColor = c;
   }
   
-  void adjustGraphVerticalRange()
+  void adjustGraphVerticalRange(float topMax, float bottomMax)
   {
     float[] graphIncrements = {10, 20, 50, 75, 100, 200, 500, 750, 1000, 2000, 5000};
-    float verticalGraphRange = graphRangeTopMax - graphRangeBottomMax;
+    float verticalGraphRange = topMax - bottomMax;
     
     for(float increment : graphIncrements)
     {
@@ -118,7 +115,7 @@ int   graphBottomAxisLabelsMargin = 60;
       {
         for(float bottom = 0; bottom < graphVerticalGridlines; bottom--)
         {
-          if(bottom * increment < graphRangeBottomMax)
+          if(bottom * increment < bottomMax)
           {
             graphRangeBottom = bottom * increment;
             graphRangeTop = graphRangeBottom + (increment * graphVerticalGridlines); 
@@ -217,11 +214,6 @@ int   graphBottomAxisLabelsMargin = 60;
   {
     int currentPositionX = mapAxisX(xPos);  
     
-    if(yEnd > graphRangeTopMax)      graphRangeTopMax = yEnd;
-    if(yEnd < graphRangeBottomMax)   graphRangeBottomMax = yEnd;
-    if(yStart > graphRangeTopMax)    graphRangeTopMax = yStart;
-    if(yStart < graphRangeBottomMax) graphRangeBottomMax = yStart;
-
     pushMatrix();
     {
       translate(graphPlotAreaX, graphPlotAreaY);

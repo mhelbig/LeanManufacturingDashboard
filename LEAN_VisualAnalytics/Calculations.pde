@@ -3,6 +3,8 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
   RollingAverage utilizationAverage = new RollingAverage();
   int status = 0;
   float netProfit = 0;
+  float netProfitMax = 0;
+  float netProfitMin = 0;
 
   for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
   {
@@ -23,6 +25,11 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
       netProfit += (profitRatePerHour / 60);
     }
     dashboardRow.setFloat("netprofit",netProfit); 
+    
+    if(netProfit > netProfitMax)   netProfitMax = netProfit;
+    if(netProfit < netProfitMin)   netProfitMin = netProfit;
+    dashboard.netProfit.adjustGraphVerticalRange(netProfitMax,netProfitMin);
+    
   }    
 }
 
