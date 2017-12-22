@@ -1,5 +1,13 @@
-DayDashboard dashboard = new DayDashboard();
-EventData rawEvents  = new EventData("Komatsu"); 
+//System-wide global variables:
+float overheadRatePerHour   =  75.00;
+float profitRatePerHour     = 150.00;
+  
+int startMinute             = 0;
+int endMinute               = 24 * 60;
+
+EventDataTable rawEvents    = new EventDataTable();
+DashboardTable dashTable    = new DashboardTable();
+DayDashboard dashboard      = new DayDashboard();
 
 void setup() 
 {
@@ -7,8 +15,7 @@ void setup()
   background(0);
   size(800, 480);
   noCursor();
-  String timeOfDay = nf(hour(),2) + ":" + nf(minute(),2);
-  rawEvents.openEventTable();
+  rawEvents.initializeEventTable("Komatsu");
   rawEvents.loadWithRandomData();
   rawEvents.saveEventTable();
   
@@ -19,6 +26,6 @@ void setup()
 void draw()
 {
   noLoop();
-  dashboard.calculateDashboard(rawEvents);
+  calculateDashboard(rawEvents, dashTable);
   dashboard.drawDashboardData();
 }

@@ -1,8 +1,5 @@
 class DayDashboard
 {
-  int startMinute             = 0;
-  int endMinute               = 24 * 60;
-
   int   graphWidths           = 720;
   int   statusGraphHeight     = 40;
   
@@ -22,14 +19,9 @@ class DayDashboard
   float netProfitYellowLimit  = 75;
   float netProfitGreenLimit   = 150;
   
-  float overheadRatePerHour   =  75.00;
-  float profitRatePerHour     = 150.00;
-  
-  Table graphData;
   Graph status    = new Graph();
   Graph uptime    = new Graph();
   Graph netProfit = new Graph();
-  RollingAverage utilizationAverage = new RollingAverage();
   
   DayDashboard()  //constructor
   {
@@ -41,23 +33,6 @@ class DayDashboard
     netProfit.initializeGraphFrame(0, uptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
                                    startMinute, endMinute, netProfitMin, netProfitMax);
     netProfit.adjustGraphVerticalRange();   
-
-    // create the dashboard data table
-    graphData = new Table();
-    graphData.addColumn("time");
-    graphData.addColumn("status");
-    graphData.addColumn("uptime");
-    graphData.addColumn("netprofit");
-    
-    // initialize it with zeros
-    for (int i = startMinute; i < endMinute; i++)
-    {
-      TableRow newRow = graphData.addRow();
-      newRow.setInt("time",0);
-      newRow.setInt("status",0);
-      newRow.setInt("uptime",0);
-      newRow.setFloat("netprofit",0.0);
-    }    
   }
   
   void drawDashboardArea()
@@ -100,35 +75,11 @@ class DayDashboard
     netProfit.drawHorizontalGridlines();  
   }
   
-  void calculateDashboard(EventData rawEvents)
-  {
-    int status = 0;
-    float netProfit = 0;
-    for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
-    {
-      TableRow dashboardDataRow = graphData.getRow(minuteOfDay);
-      status = rawEvents.state(minuteOfDay);
-      
-      dashboardDataRow.setInt("status",status); 
-      
-      utilizationAverage.add( float(status > 2 ? 1 : 0));
-      utilizationAverage.calculate();
-      dashboardDataRow.setInt("uptime",int(utilizationAverage.currentValue()*100));
-      
-      netProfit -= (overheadRatePerHour / 60);
-      if(status >= 2)
-      {
-        netProfit += (profitRatePerHour / 60);
-      }
-      dashboardDataRow.setFloat("netprofit",netProfit); 
-    }    
-  }
-  
   void drawDashboardData()
   {
     for (int i=startMinute; i<endMinute; i++)
-    {
-      TableRow tableRow = graphData.getRow(i);
+    {      
+      TableRow tableRow = dashTable.dashboardData.getRow(i);
       
       int graphStatus = tableRow.getInt("status");
       switch(graphStatus)
@@ -161,18 +112,6 @@ class DayDashboard
       else                                              netProfit.setBarColor(color(255,0,0));
       netProfit.drawBar(i, 0, netProfitDollars );
       netProfit.adjustGraphVerticalRange();
-    }
-  }
-
-  void loadWithRandomData()
-  {
-    for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
-    {
-      TableRow row = graphData.getRow(minuteOfDay);
-      row.setInt("time",minuteOfDay);
-      row.setInt("status",int(random(0,4)));
-      row.setInt("uptime",int(random(0, 100)));
-      row.setFloat("netprofit",random(-100, 200));
     }
   }
 }  
