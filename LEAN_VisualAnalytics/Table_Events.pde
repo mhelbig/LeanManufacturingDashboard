@@ -18,16 +18,18 @@ class EventDataTable
       machineCycles = new Table();
       machineCycles.addColumn("time");
       machineCycles.addColumn("cycles");
+      machineCycles.addColumn("active");
       machineCycles.addColumn("state");
       saveEventTable();
     }
   }
   
-  void addEventData(int time, int cycles, int state)
+  void addEventData(int time, int cycles, int active, int state)
   {
     TableRow newRow = machineCycles.addRow();
     newRow.setInt("time",time);
     newRow.setInt("cycles",cycles);
+    newRow.setInt("active",active);
     newRow.setInt("state",state);
   }
   
@@ -45,7 +47,7 @@ class EventDataTable
           j = int(random(i + 10,i + 60));
           s = int(random(0,4));
         }
-        addEventData(i,int(random(0,200)),s);
+        addEventData(i,int(random(0,200)),0,s);
       }
       
   }
