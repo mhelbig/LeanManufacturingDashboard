@@ -1,7 +1,10 @@
+import processing.io.*;
+
 //System-wide global variables:
+int machineCycleInputBCM    = 26; 
 float overheadRatePerHour   =  75.00;
 float profitRatePerHour     = 150.00;
-boolean runningOnPi         = true;
+boolean runningOnPi         = false;
   
 int startMinute             = 0;
 int endMinute               = 24 * 60;
@@ -27,6 +30,8 @@ void setup()
   if(runningOnPi)
   {
     noCursor();
+    SetupCycleCounter(machineCycleInputBCM);
+    SetupTimeCounter(5);
   }
   rawEvents.initializeEventTable("Komatsu");
   mouseClicked();  // generate the first screen, then let the mouse clicks update it
