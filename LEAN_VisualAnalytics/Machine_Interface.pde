@@ -6,7 +6,7 @@ int activeStartTime;
 
 void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating
 {
-  if(!runningOnPi)
+  if(inEmulatorMode)
   {
     pinCountRegister+= event.getCount();
     if(pinCountRegister < 0)

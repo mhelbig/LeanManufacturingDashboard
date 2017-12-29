@@ -5,6 +5,7 @@ int machineCycleInputBCM    = 26;
 float overheadRatePerHour   =  75.00;
 float profitRatePerHour     = 150.00;
 boolean runningOnPi         = false;
+boolean inEmulatorMode      = true;
   
 int startMinute             = 0;
 int endMinute               = 24 * 60;
@@ -27,15 +28,19 @@ void settings()
 
 void setup() 
 {
+  rawEvents.initializeEventTable("Komatsu");
+  
   if(runningOnPi)
   {
     noCursor();
     SetupCycleCounter(machineCycleInputBCM);
     SetupTimeCounter(5);
   }
-  rawEvents.initializeEventTable("Komatsu");
-  mouseClicked();  // generate the first screen, then let the mouse clicks update it
-//  dashboard.loadWithRandomData();
+
+  if(inEmulatorMode)
+  {
+    mouseClicked();  // generate the first screen, then let the mouse clicks update it
+  }
 }
 
 void draw()
@@ -45,10 +50,13 @@ void draw()
 
 void mouseClicked()
 {
-  background(0);
-  rawEvents.loadWithRandomData();
-  calculateDashboard(rawEvents, dashTable);
-  dashboard.drawDashboardArea();
-  dashboard.drawDashboardData();
-  rawEvents.saveEventTable();
+  if(inEmulatorMode)
+  {
+    background(0);
+    rawEvents.loadWithRandomData();
+    calculateDashboard(rawEvents, dashTable);
+    dashboard.drawDashboardArea();
+    dashboard.drawDashboardData();
+    rawEvents.saveEventTable();
+  }
 }
