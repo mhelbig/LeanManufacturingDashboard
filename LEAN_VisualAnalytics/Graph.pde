@@ -46,7 +46,7 @@ int   graphBottomAxisLabelsMargin = 60;
   void initializeGraphFrame(int x, int y, int w, int h, boolean rightAxisLabels, boolean bottomAxisLabels, //size and position
                             float left, float right, float bottom, float top)                                //ranges
   {
-    graphX      = x; //<>//
+    graphX      = x;
     graphY      = y;
     graphWidth  = w;
     graphHeight = h;
@@ -113,12 +113,12 @@ int   graphBottomAxisLabelsMargin = 60;
     {
       if((increment * graphVerticalGridlines) > verticalGraphRange)
       {
-        for(float bottom = 0; bottom < graphVerticalGridlines; bottom--)
+        for(float top = 0; top < graphVerticalGridlines; top++)
         {
-          if(bottom * increment < bottomMax)
+          if(top * increment > topMax)
           {
-            graphRangeBottom = bottom * increment;
-            graphRangeTop = graphRangeBottom + (increment * graphVerticalGridlines); 
+            graphRangeTop = top * increment;
+            graphRangeBottom = graphRangeTop - (increment * graphVerticalGridlines); 
             break;
           }
         }

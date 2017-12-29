@@ -11,11 +11,14 @@ DayDashboard dashboard      = new DayDashboard();
 
 void setup() 
 {
-  //fullScreen();
-  size(800, 480);
-  //noCursor();
-  rawEvents.initializeEventTable("Komatsu");
+  // un-comment for running on the pi  
+  // fullScreen(); noCursor();
   
+  // un-comment for running on the PC  
+  size(800, 480);
+
+  rawEvents.initializeEventTable("Komatsu");
+  mouseClicked();  // start off with a screen, then let the mouse clicks update it
 //  dashboard.loadWithRandomData();
 }
 

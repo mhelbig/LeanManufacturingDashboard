@@ -29,8 +29,7 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
     if(netProfit > netProfitMax) netProfitMax = netProfit;
     if(netProfit < netProfitMin) netProfitMin = netProfit;
     dashboard.netProfit.adjustGraphVerticalRange(netProfitMax,netProfitMin);
-    
-  }    
+  }
 }
 
 

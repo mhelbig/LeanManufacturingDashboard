@@ -42,7 +42,7 @@ class EventDataTable
         
         if (j < i)
         {
-          j = int(random(i + 4,i + 40));
+          j = int(random(i + 10,i + 60));
           s = int(random(0,4));
         }
         addEventData(i,int(random(0,200)),s);
