@@ -1,6 +1,7 @@
 //System-wide global variables:
 float overheadRatePerHour   =  75.00;
 float profitRatePerHour     = 150.00;
+boolean runningOnPi         = true;
   
 int startMinute             = 0;
 int endMinute               = 24 * 60;
@@ -9,16 +10,26 @@ EventDataTable rawEvents    = new EventDataTable();
 DashboardTable dashTable    = new DashboardTable();
 DayDashboard dashboard      = new DayDashboard();
 
+void settings()
+{
+  if(runningOnPi)
+  {
+    fullScreen();
+  }
+  else
+  {
+  size(800, 480);
+  }
+}  
+
 void setup() 
 {
-  // un-comment for running on the pi  
-  // fullScreen(); noCursor();
-  
-  // un-comment for running on the PC  
-  size(800, 480);
-
+  if(runningOnPi)
+  {
+    noCursor();
+  }
   rawEvents.initializeEventTable("Komatsu");
-  mouseClicked();  // start off with a screen, then let the mouse clicks update it
+  mouseClicked();  // generate the first screen, then let the mouse clicks update it
 //  dashboard.loadWithRandomData();
 }
 
