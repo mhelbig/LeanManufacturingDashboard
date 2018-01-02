@@ -1,52 +1,69 @@
-int pinCountRegister;
-int pinTimeRegister;
-int activeStartTime;
+int pinActiveInput = 25;
+int pinCounInput = 24;
+int activityFlag;
+int cycleCounter = 0;
 
 // Machine Cycle counting:
 
-void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating
+void SetupHardwareIO()
+{
+  if(runningOnPi)
+  {
+    GPIO.pinMode(pinActiveInput, GPIO.INPUT);
+    GPIO.pinMode(pinCounInput, GPIO.INPUT);
+    GPIO.attachInterrupt(pinCounInput, this, "countEvent", GPIO.FALLING);
+  }
+}
+
+void countEvent(int pin)
+{
+  cycleCounter++;
+  // pin is required by the attachInterrupt method, though it's not used here
+}
+
+int readCycleCounter()
+{
+  return(cycleCounter);
+}
+
+void clearCycleCounter()
+{
+  cycleCounter = 0;
+}
+
+void checkActivityInput()
+{
+  if(!inEmulatorMode && runningOnPi)
+  {
+    if(GPIO.digitalRead(pinActiveInput) == GPIO.LOW)  //machine is active, set the flag
+    {
+      activityFlag = 1;
+    }
+  }
+}
+
+int readActivityStatus()
+{
+  return(activityFlag);
+}
+
+void clearActivityFlag()
+{
+  activityFlag = 0;
+}
+
+void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating & sets activity flag
 {
   if(inEmulatorMode)
   {
-    pinCountRegister+= event.getCount();
-    if(pinCountRegister < 0)
+    // Update the counter value, bounds check to keep from going negative
+    cycleCounter+= event.getCount();
+    if(cycleCounter < 0)
     {
-      pinCountRegister = 0;
+      cycleCounter = 0;
     }
-    println("Counts = "+pinCountRegister);
-  }
-}
-
-void SetupCycleCounter(int pin)
-{
-  GPIO.pinMode(pin, GPIO.INPUT);
-  GPIO.attachInterrupt(pin, this, "countEvent", GPIO.FALLING);
-}
-
-void countEvent(int countPin)
-{
-  pinCountRegister++;
-  println("Pin "+countPin+" counts = "+pinCountRegister);
-}
-
-// Machine Active timer:
-void SetupTimeCounter(int pin)
-{
-  GPIO.pinMode(pin, GPIO.INPUT);
-  GPIO.attachInterrupt(pin, this, "timeEvent", GPIO.CHANGE);
-  activeStartTime = millis()/1000;  // preset the start time, just in case the machine is already active
-}
-
-void timeEvent(int timePin)
-{
-  if(GPIO.digitalRead(timePin) == GPIO.HIGH)  //machine just went active, record the time it started
-  {
-    activeStartTime = millis() / 1000;
-    println("Active: "+timePin+" time = "+pinTimeRegister);
-  }
-  else  //machine just went inactive, add up the time that it was active
-  {
-    pinTimeRegister+=( (millis()/1000) - activeStartTime);
-    println("Inactive: "+timePin+" time = "+pinTimeRegister);
+    
+    // Set the activity flag as well
+    activityFlag = 1;
   }
 }

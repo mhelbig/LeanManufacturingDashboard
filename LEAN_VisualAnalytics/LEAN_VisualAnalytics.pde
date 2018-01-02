@@ -1,14 +1,17 @@
-import processing.io.*;
+import processing.io.*;    //Hardware IO
 
+// Target device compile flags:
+boolean runningOnPi         = true;
+boolean inEmulatorMode      = false;
+  
 //System-wide global variables:
-int machineCycleInputBCM    = 26; 
+int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24
+int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25
 float overheadRatePerHour   =  75.00;
 float profitRatePerHour     = 150.00;
-boolean runningOnPi         = false;
-boolean inEmulatorMode      = true;
-  
 int startMinute             = 0;
 int endMinute               = 24 * 60;
+int timer                   = millis() + 1000;
 
 EventDataTable rawEvents    = new EventDataTable();
 DashboardTable dashTable    = new DashboardTable();
@@ -28,35 +31,42 @@ void settings()
 
 void setup() 
 {
-  rawEvents.initializeEventTable("Komatsu");
-  
   if(runningOnPi)
   {
     noCursor();
-    SetupCycleCounter(machineCycleInputBCM);
-    SetupTimeCounter(5);
   }
 
-  if(inEmulatorMode)
-  {
-    mouseClicked();  // generate the first screen, then let the mouse clicks update it
-  }
+  rawEvents.initializeEventTable("Komatsu");
+  SetupHardwareIO();
+  mouseClicked();  // generate the first screen, then let the mouse clicks update it
 }
 
 void draw()
 {
-//  noLoop();
+  checkActivityInput();
+  if(millis() > timer)
+  {
+    if(readActivityStatus() == 1)
+    {
+      print("Activity  ");
+    }
+    else
+    {
+      print("none      ");
+    }
+    println("counts: " + readCycleCounter());
+    timer = millis() + 1000;
+    clearActivityFlag();
+    clearCycleCounter();
+  }
 }
 
 void mouseClicked()
 {
-  if(inEmulatorMode)
-  {
-    background(0);
-    rawEvents.loadWithRandomData();
-    calculateDashboard(rawEvents, dashTable);
-    dashboard.drawDashboardArea();
-    dashboard.drawDashboardData();
-    rawEvents.saveEventTable();
-  }
+  background(0);
+  rawEvents.loadWithRandomData();
+  calculateDashboard(rawEvents, dashTable);
+  dashboard.drawDashboardArea();
+  dashboard.drawDashboardData();
+  rawEvents.saveEventTable();
 }
