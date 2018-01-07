@@ -31,7 +31,7 @@ void clearCycleCounter()
   cycleCounter = 0;
 }
 
-void checkActivityInput()
+void checkActivityInput()  // call this often
 {
   if(!inEmulatorMode && runningOnPi)
   {

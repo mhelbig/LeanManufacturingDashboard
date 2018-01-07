@@ -20,6 +20,11 @@ class EventDataTable
       machineCycles.addColumn("cycles");
       machineCycles.addColumn("active");
       machineCycles.addColumn("state");
+      
+     for (int i=startMinute; i<endMinute; i++)
+     {
+       addEventData(i,0,0,0);
+     }
       saveEventTable();
     }
   }
