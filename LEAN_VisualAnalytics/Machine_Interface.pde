@@ -42,7 +42,7 @@ void checkActivityInput()  // call this often
   }
 }
 
-int readActivityStatus()
+int readActivityState()
 {
   return(activityFlag);
 }

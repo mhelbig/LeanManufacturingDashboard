@@ -51,7 +51,7 @@ void draw()
   
   if(intervalTimeExpired())
   {
-    rawEvents.setEventData(minuteOfDay(), readCycleCounter(), readActivityStatus(), 2);
+    rawEvents.setEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
     clearActivityFlag();
     clearCycleCounter();
     updateDashboard();

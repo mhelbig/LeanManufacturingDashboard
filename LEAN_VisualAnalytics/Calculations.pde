@@ -1,7 +1,10 @@
 void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
 {
   RollingAverage utilizationAverage = new RollingAverage();
-  int status = 0;
+  int state = 0;
+  int active = 0;
+  int cycles = 0;
+  
   float netProfit = 0;
   float netProfitMax = 0;
   float netProfitMin = 0;
@@ -11,15 +14,19 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
     TableRow dashboardRow = dashTable.dashboardData.getRow(minuteOfDay);
     TableRow rawDataRow   = rawEvents.machineCycles.getRow(minuteOfDay);
     
-    status = rawDataRow.getInt("state");
-    dashboardRow.setInt("state",status); 
+    cycles = rawDataRow.getInt("cycles");
+
+    active = rawDataRow.getInt("active");
+
+    state = rawDataRow.getInt("state");
+    dashboardRow.setInt("state",state); 
     
-    utilizationAverage.add( float(status >= 2 ? 1 : 0));
+    utilizationAverage.add( float(active == 1 ? 1 : 0));
     utilizationAverage.calculate();
     dashboardRow.setInt("uptime",int(utilizationAverage.currentValue()*100));
     
     netProfit -= (overheadRatePerHour / 60);
-    if(status >= 2)
+    if(state >= 2)
     {
       netProfit += (profitRatePerHour / 60);
     }
