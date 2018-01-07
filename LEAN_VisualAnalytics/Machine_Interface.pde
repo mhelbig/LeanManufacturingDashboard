@@ -57,7 +57,7 @@ void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating & 
   if(inEmulatorMode)
   {
     // Update the counter value, bounds check to keep from going negative
-    cycleCounter+= event.getCount();
+    cycleCounter+= abs(event.getCount());
     if(cycleCounter < 0)
     {
       cycleCounter = 0;

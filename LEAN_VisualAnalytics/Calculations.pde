@@ -12,7 +12,7 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
     TableRow rawDataRow   = rawEvents.machineCycles.getRow(minuteOfDay);
     
     status = rawDataRow.getInt("state");
-    dashboardRow.setInt("status",status); 
+    dashboardRow.setInt("state",status); 
     
     utilizationAverage.add( float(status >= 2 ? 1 : 0));
     utilizationAverage.calculate();

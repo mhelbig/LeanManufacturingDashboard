@@ -9,7 +9,12 @@ class EventDataTable
   
   void initializeEventTable(String machineName)
   {
-    machineCyclesFilename = "data/" + machineName + "-" + year() + "-" + nf(month(),2) + "-" + nf(day(),2) + ".csv";
+    machineCyclesFilename ="data/"
+    + machineName + "-" 
+    + cal.get(Calendar.YEAR) + "-"
+    + nf(cal.get(Calendar.MONTH),2)
+    + "-" + nf(cal.get(Calendar.DATE),2)
+    + ".csv";
     
     machineCycles = loadTable(machineCyclesFilename, "header");
     
@@ -23,19 +28,22 @@ class EventDataTable
       
      for (int i=startMinute; i<endMinute; i++)
      {
-       addEventData(i,0,0,0);
+        TableRow newRow = machineCycles.addRow();
+        newRow.setInt("time",i);
+        newRow.setInt("cycles",0);
+        newRow.setInt("active",0);
+        newRow.setInt("state",0);
      }
       saveEventTable();
     }
   }
   
-  void addEventData(int time, int cycles, int active, int state)
+  void setEventData(int time, int cycles, int active, int state)
   {
-    TableRow newRow = machineCycles.addRow();
-    newRow.setInt("time",time);
-    newRow.setInt("cycles",cycles);
-    newRow.setInt("active",active);
-    newRow.setInt("state",state);
+    TableRow row = machineCycles.getRow(time);
+    row.setInt("cycles",cycles);
+    row.setInt("active",active);
+    row.setInt("state",state);
   }
   
   void loadWithRandomData()
@@ -52,7 +60,7 @@ class EventDataTable
           j = int(random(i + 10,i + 60));
           s = int(random(0,4));
         }
-        addEventData(i,int(random(0,200)),0,s);
+        setEventData(i,int(random(0,200)),0,s);
       }
       
   }

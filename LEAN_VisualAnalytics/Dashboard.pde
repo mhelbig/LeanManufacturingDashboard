@@ -80,7 +80,7 @@ class DayDashboard
     {      
       TableRow tableRow = dashTable.dashboardData.getRow(i);
       
-      int graphStatus = tableRow.getInt("status");
+      int graphStatus = tableRow.getInt("state");
       switch(graphStatus)
       {
         case 0:
