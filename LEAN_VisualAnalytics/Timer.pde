@@ -3,7 +3,7 @@ int newDayFlag;
 
 void initializeTimer()
 {
-    if(inEmulatorMode)              // set the time and date to a point in the past
+    if(runFullSpeed)              // set the time and date to a point in the past
     {
       cal.set(Calendar.MILLISECOND, 0); 
       cal.set(Calendar.SECOND, 0); 
@@ -22,7 +22,7 @@ void initializeTimer()
 
 boolean intervalTimeExpired()
 {
-  if(!inEmulatorMode)  // when in emulator mode, don't update the real time, let it advance it as fast as we can with getNextIntervalTime()
+  if(!runFullSpeed)  // when in full speed mode, don't update the real time, let it advance it as fast as we can with getNextIntervalTime()
   {
     cal = Calendar.getInstance();
   }
@@ -41,7 +41,7 @@ void getNextIntervalTime()
 {
   cal.add(Calendar.MINUTE,1);
   intervalTime = cal.get(Calendar.MINUTE);
-  println("Next interval @ " + intervalTime + " minutes");
+//  println("Next interval @ " + intervalTime + " minutes");
 }
 
 int minuteOfDay()

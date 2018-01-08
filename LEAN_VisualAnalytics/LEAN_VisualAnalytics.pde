@@ -2,13 +2,14 @@ import java.util.*;        //used for calendar time functions
 import processing.io.*;    //Hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = false;
-boolean inEmulatorMode      = true;
+boolean runningOnPi         = true;
+boolean runFullSpeed        = true;
+boolean useMouseInputMode   = false;
 boolean useRandomData       = false;
   
 //System-wide global variables:
-int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24
-int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25
+int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24 = input "2" on PCB
+int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25 = input "1" on PCB
 float overheadRatePerHour   =  75.00;
 float profitRatePerHour     = 150.00;
 int startMinute             = 0;
@@ -51,7 +52,7 @@ void draw()
   
   if(intervalTimeExpired())
   {
-    rawEvents.setEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
+    rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
     clearActivityFlag();
     clearCycleCounter();
     updateDashboard();
@@ -59,6 +60,8 @@ void draw()
   if(newDay())
   {
    rawEvents.initializeEventTable("Komatsu");
+   dashTable.resetData();
+   resetCalculations();
   }
 }
 

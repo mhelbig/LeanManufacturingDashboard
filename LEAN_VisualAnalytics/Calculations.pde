@@ -1,18 +1,21 @@
+RollingAverage utilizationAverage = new RollingAverage();
+float netProfit = 0;
+
 void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
 {
-  RollingAverage utilizationAverage = new RollingAverage();
   int state = 0;
   int active = 0;
   int cycles = 0;
   
-  float netProfit = 0;
   float netProfitMax = 0;
   float netProfitMin = 0;
-
-  for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
+  netProfit = 0;
+  utilizationAverage.reset();
+  
+  for (int i = 0; i < rawEvents.getRowCount(); i ++)
   {
-    TableRow dashboardRow = dashTable.dashboardData.getRow(minuteOfDay);
-    TableRow rawDataRow   = rawEvents.machineCycles.getRow(minuteOfDay);
+    TableRow dashboardRow = dashTable.dashboardData.getRow(i);
+    TableRow rawDataRow   = rawEvents.machineCycles.getRow(i);
     
     cycles = rawDataRow.getInt("cycles");
 
@@ -37,6 +40,12 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
     if(netProfit < netProfitMin) netProfitMin = netProfit;
     dashboard.netProfit.adjustGraphVerticalRange(netProfitMax,netProfitMin);
   }
+}
+
+void resetCalculations()
+{
+  netProfit = 0;
+  utilizationAverage.reset();
 }
 
 

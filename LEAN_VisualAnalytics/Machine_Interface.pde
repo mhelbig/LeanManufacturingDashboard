@@ -33,11 +33,12 @@ void clearCycleCounter()
 
 void checkActivityInput()  // call this often
 {
-  if(!inEmulatorMode && runningOnPi)
+  if(!useMouseInputMode && runningOnPi)
   {
     if(GPIO.digitalRead(pinActiveInput) == GPIO.LOW)  //machine is active, set the flag
     {
       activityFlag = 1;
+      println("input is low");
     }
   }
 }
@@ -54,7 +55,7 @@ void clearActivityFlag()
 
 void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating & sets activity flag
 {
-  if(inEmulatorMode)
+  if(useMouseInputMode)
   {
     // Update the counter value, bounds check to keep from going negative
     cycleCounter+= abs(event.getCount());

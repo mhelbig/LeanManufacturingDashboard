@@ -31,6 +31,16 @@ class DashboardTable
     newRow.setFloat("netprofit",netProfit);
   }
 
+  void resetData()
+  {
+    dashboardData.clearRows();
+  }
+  
+  int getRowCount()
+  {
+    return(dashboardData.getRowCount());
+  }
+  
   void loadWithRandomData()
   {
     for (int minuteOfDay = startMinute; minuteOfDay < endMinute; minuteOfDay ++)
