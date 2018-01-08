@@ -10,7 +10,7 @@ void initializeTimer()
       cal.set(Calendar.MINUTE, 0); 
       cal.set(Calendar.HOUR_OF_DAY, 0); 
       cal.set(Calendar.DATE, 1);
-      cal.set(Calendar.MONTH, 1);
+      cal.set(Calendar.MONTH, 0);
       cal.set(Calendar.YEAR, 2000);
     }
     else

@@ -2,7 +2,7 @@ import java.util.*;        //used for calendar time functions
 import processing.io.*;    //Hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = true;
+boolean runningOnPi         = false;
 boolean runFullSpeed        = true;
 boolean useMouseInputMode   = false;
 boolean useRandomData       = false;

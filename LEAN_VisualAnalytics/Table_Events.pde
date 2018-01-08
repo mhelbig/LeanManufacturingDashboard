@@ -12,7 +12,7 @@ class EventDataTable
     machineCyclesFilename ="data/"
     + machineName + "-" 
     + cal.get(Calendar.YEAR) + "-"
-    + nf(cal.get(Calendar.MONTH),2)
+    + nf(cal.get(Calendar.MONTH) + 1,2)
     + "-" + nf(cal.get(Calendar.DATE),2)
     + ".csv";
     

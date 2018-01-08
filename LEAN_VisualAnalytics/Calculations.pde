@@ -12,7 +12,7 @@ void calculateDashboard(EventDataTable rawEvents, DashboardTable dashTable)
   netProfit = 0;
   utilizationAverage.reset();
   
-  for (int i = 0; i < rawEvents.getRowCount(); i ++)
+  for (int i = dashTable.getLastDataPoint(); i < rawEvents.getRowCount(); i ++)
   {
     TableRow dashboardRow = dashTable.dashboardData.getRow(i);
     TableRow rawDataRow   = rawEvents.machineCycles.getRow(i);

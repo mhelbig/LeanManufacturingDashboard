@@ -76,7 +76,7 @@ class DayDashboard
   
   void drawDashboardData()
   {
-    for (int i=0; i<dashTable.getRowCount(); i++)
+    for (int i=dashTable.getLastDataPoint(); i<dashTable.getRowCount(); i++)
     {      
       TableRow tableRow = dashTable.dashboardData.getRow(i);
       

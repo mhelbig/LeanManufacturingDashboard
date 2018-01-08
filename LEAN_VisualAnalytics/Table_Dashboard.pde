@@ -1,6 +1,7 @@
 class DashboardTable
 {
   Table dashboardData;
+  int lastGraphedDataPoint = 0;
 
   DashboardTable()
   {
@@ -12,18 +13,20 @@ class DashboardTable
     dashboardData.addColumn("netprofit");
     
     // initialize it with zeros
-    for (int i = startMinute; i < endMinute; i++)
+/*    for (int i = startMinute; i < endMinute; i++)
     {
       TableRow newRow = dashboardData.addRow();
       newRow.setInt("time",0);
       newRow.setInt("state",0);
       newRow.setInt("uptime",0);
       newRow.setFloat("netprofit",0.0);
-    }
+    } */
   }
 
   void addDashboardData(int time, int state, int uptime, float netProfit)
   {
+    lastGraphedDataPoint = time;
+    
     TableRow newRow = dashboardData.addRow();
     newRow.setInt("time",time);
     newRow.setInt("state",state);
@@ -34,11 +37,17 @@ class DashboardTable
   void resetData()
   {
     dashboardData.clearRows();
+    lastGraphedDataPoint = 0;
   }
   
   int getRowCount()
   {
     return(dashboardData.getRowCount());
+  }
+  
+  int getLastDataPoint()
+  {
+    return(lastGraphedDataPoint);
   }
   
   void loadWithRandomData()
