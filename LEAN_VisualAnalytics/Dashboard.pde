@@ -74,10 +74,10 @@ class DayDashboard
     netProfit.drawHorizontalGridlines();  
   }
   
-  void drawDashboardData()
+  void drawDashboardData(int time)
   {
-    for (int i=dashTable.getLastDataPoint(); i<dashTable.getRowCount(); i++)
-    {      
+    for(int i = startMinute; i < time; i++)
+    {
       TableRow tableRow = dashTable.dashboardData.getRow(i);
       
       int graphStatus = tableRow.getInt("state");

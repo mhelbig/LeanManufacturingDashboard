@@ -7,7 +7,7 @@ class EventDataTable
   {
   }
   
-  void initializeEventTable(String machineName)
+  void initializeEventTable()
   {
     machineCyclesFilename ="data/"
     + machineName + "-" 
@@ -25,15 +25,6 @@ class EventDataTable
       machineCycles.addColumn("cycles");
       machineCycles.addColumn("active");
       machineCycles.addColumn("state");
-      
-/*     for (int i=startMinute; i<endMinute; i++)
-     {
-        TableRow newRow = machineCycles.addRow();
-        newRow.setInt("time",i);
-        newRow.setInt("cycles",0);
-        newRow.setInt("active",0);
-        newRow.setInt("state",0);
-     } */
       saveEventTable();
     }
   }
@@ -46,28 +37,10 @@ class EventDataTable
   void addEventData(int time, int cycles, int active, int state)
   {
     TableRow row = machineCycles.getRow(time);
-    row.setInt("cycles",cycles);
-    row.setInt("active",active);
-    row.setInt("state",state);
-  }
-  
-  void loadWithRandomData()
-  {
-    int j = 0;
-    int s = 0;
-    
-    machineCycles.clearRows();
-    for (int i=startMinute; i<endMinute; i++)
-      {
-        
-        if (j < i)
-        {
-          j = int(random(i + 10,i + 60));
-          s = int(random(0,4));
-        }
-        addEventData(i,int(random(0,200)),0,s);
-      }
-      
+    row.setInt("time",   time);
+    row.setInt("cycles", cycles);
+    row.setInt("active", active);
+    row.setInt("state",  state);
   }
   
   void saveEventTable()

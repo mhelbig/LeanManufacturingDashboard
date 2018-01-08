@@ -5,11 +5,11 @@ import processing.io.*;    //Hardware IO
 boolean runningOnPi         = false;
 boolean runFullSpeed        = true;
 boolean useMouseInputMode   = false;
-boolean useRandomData       = false;
   
 //System-wide global variables:
-int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24 = input "2" on PCB
-int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25 = input "1" on PCB
+String machineName          = "Komatsu";
+int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24 = input "2" on SimpleIO PCB
+int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25 = input "1" on SimpleIO PCB
 float overheadRatePerHour   =  75.00;
 float profitRatePerHour     = 150.00;
 int startMinute             = 0;
@@ -40,7 +40,7 @@ void setup()
   }
 
   initializeTimer();
-  rawEvents.initializeEventTable("Komatsu");
+  rawEvents.initializeEventTable();
   SetupHardwareIO();
   getNextIntervalTime();
   dashboard.drawDashboardArea();
@@ -55,30 +55,17 @@ void draw()
     rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
     clearActivityFlag();
     clearCycleCounter();
-    updateDashboard();
+    
+    background(0);
+    calculateDashboard(minuteOfDay(), rawEvents, dashTable);
+    dashboard.drawDashboardArea();
+    dashboard.drawDashboardData(minuteOfDay());
+    rawEvents.saveEventTable();
   }
   if(newDay())
   {
-   rawEvents.initializeEventTable("Komatsu");
+   rawEvents.initializeEventTable();
    dashTable.resetData();
    resetCalculations();
   }
-}
-
-void mouseClicked()
-{
-  if(useRandomData)
-  {
-    rawEvents.loadWithRandomData();
-    updateDashboard();
-  }
-}
-
-void updateDashboard()
-{
-  background(0);
-  calculateDashboard(rawEvents, dashTable);
-  dashboard.drawDashboardArea();
-  dashboard.drawDashboardData();
-  rawEvents.saveEventTable();
 }

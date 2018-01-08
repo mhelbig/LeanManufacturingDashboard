@@ -41,7 +41,6 @@ void getNextIntervalTime()
 {
   cal.add(Calendar.MINUTE,1);
   intervalTime = cal.get(Calendar.MINUTE);
-//  println("Next interval @ " + intervalTime + " minutes");
 }
 
 int minuteOfDay()
