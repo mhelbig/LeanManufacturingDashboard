@@ -19,6 +19,10 @@ class DayDashboard
   float netProfitYellowLimit  = 75;
   float netProfitGreenLimit   = 150;
   
+  Table dashboardData;
+  float currentNetProfit      = 0;
+  RollingAverage utilizationAverage = new RollingAverage();
+
   Graph status    = new Graph();
   Graph uptime    = new Graph();
   Graph netProfit = new Graph();
@@ -32,9 +36,59 @@ class DayDashboard
                                    startMinute, endMinute, uptimeMinUptime, uptimeMaxUptime);
     netProfit.initializeGraphFrame(0, uptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
                                    startMinute, endMinute, netProfitMin, netProfitMax);
+    // create the dashboard data table
+    dashboardData = new Table();
+    dashboardData.addColumn("time");
+    dashboardData.addColumn("state");
+    dashboardData.addColumn("uptime");
+    dashboardData.addColumn("netprofit");
   }
   
-  void drawDashboardArea()
+  void calculate(int time, EventDataTable rawEvents)
+  {
+    int state = 0;
+    int active = 0;
+    int cycles = 0;
+    
+    float netProfitMax = 0;
+    float netProfitMin = 0;
+  //  netProfit = 0;
+  //  utilizationAverage.reset();
+    
+    TableRow rawDataRow   = rawEvents.machineCycles.getRow(time);
+    
+    cycles = rawDataRow.getInt("cycles");
+    active = rawDataRow.getInt("active");
+    state = rawDataRow.getInt("state");
+    
+    utilizationAverage.add( float(active == 1 ? 1 : 0));
+    utilizationAverage.calculate();
+    
+    currentNetProfit -= (overheadRatePerHour / 60);
+    if(state >= 2)
+    {
+      currentNetProfit += (profitRatePerHour / 60);
+    }
+    
+    TableRow row = dashboardData.getRow(time);
+    row.setInt("time",time);
+    row.setInt("state",state);
+    row.setInt("uptime",int(utilizationAverage.currentValue()*100));
+    row.setFloat("netprofit",currentNetProfit);
+    
+    //autorange the graph to fit the min and max netprofit:
+    if(currentNetProfit > netProfitMax) netProfitMax = currentNetProfit;
+    if(currentNetProfit < netProfitMin) netProfitMin = currentNetProfit;
+    dashboard.netProfit.adjustGraphVerticalRange(netProfitMax,netProfitMin);
+  }
+  
+  void reset()
+  {
+    currentNetProfit = 0;
+    utilizationAverage.reset();
+    dashboardData.clearRows();
+  }
+  void drawGraph()
   {
     status.drawGraphPlotArea();
     uptime.drawGraphPlotArea();
@@ -74,11 +128,11 @@ class DayDashboard
     netProfit.drawHorizontalGridlines();  
   }
   
-  void drawDashboardData(int time)
+  void drawData(int time)
   {
     for(int i = startMinute; i < time; i++)
     {
-      TableRow tableRow = dashTable.dashboardData.getRow(i);
+      TableRow tableRow = dashboardData.getRow(i);
       
       int graphStatus = tableRow.getInt("state");
       switch(graphStatus)

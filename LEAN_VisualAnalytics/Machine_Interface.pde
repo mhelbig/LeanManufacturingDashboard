@@ -52,6 +52,13 @@ void clearActivityFlag()
   activityFlag = 0;
 }
 
+void resetInputFlags()
+{
+  clearActivityFlag();
+  clearCycleCounter();
+}
+
+
 void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating & sets activity flag
 {
   if(useMouseInputMode || !runningOnPi)

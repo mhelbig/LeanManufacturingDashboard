@@ -17,7 +17,6 @@ int endMinute               = 24 * 60;
 int intervalTime            = 0;
 
 EventDataTable rawEvents    = new EventDataTable();
-DashboardTable dashTable    = new DashboardTable();
 DayDashboard dashboard      = new DayDashboard();
 
 void settings()
@@ -43,7 +42,7 @@ void setup()
   rawEvents.initializeEventTable();
   SetupHardwareIO();
   getNextIntervalTime();
-  dashboard.drawDashboardArea();
+  dashboard.drawGraph();
 }
 
 void draw()
@@ -53,19 +52,17 @@ void draw()
   if(intervalTimeExpired())
   {
     rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
-    clearActivityFlag();
-    clearCycleCounter();
+    resetInputFlags();
     
     background(0);
-    calculateDashboard(minuteOfDay(), rawEvents, dashTable);
-    dashboard.drawDashboardArea();
-    dashboard.drawDashboardData(minuteOfDay());
+    dashboard.calculate(minuteOfDay(), rawEvents);
+    dashboard.drawGraph();
+    dashboard.drawData(minuteOfDay());
     rawEvents.saveEventTable();
   }
   if(newDay())
   {
    rawEvents.initializeEventTable();
-   dashTable.resetData();
-   resetCalculations();
+   dashboard.reset();
   }
 }
