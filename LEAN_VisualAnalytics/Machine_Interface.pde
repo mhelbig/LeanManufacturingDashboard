@@ -15,10 +15,9 @@ void SetupHardwareIO()
   }
 }
 
-void countEvent(int pin)
+void countEvent(int pin)    // pin is required by the attachInterrupt method, though it's not used here
 {
   cycleCounter++;
-  // pin is required by the attachInterrupt method, though it's not used here
 }
 
 int readCycleCounter()

@@ -1,22 +1,14 @@
 class Graph
 {
-// Global graph appearance attributes:
-color graphBackgroundColor        = 40;
-color graphFrameColor             = 255;
-color graphTextColor              = color(255,255,255);
-color graphGridlineColor          = color(128,128,128);
-int   graphBarTransparency        = 100;
-int   graphFrameLineWeight        = 2;
-int   graphGridLineWeight         = 1;
-int   graphVerticalGridlines      = 5;
-float graphTitleTextSize          = 18;
-float graphGridlineTextSize       = 18;
-int   graphLeftMargin             = 4;
-int   graphTopMargin              = 4;
-int   graphRightMargin            = 4;
-int   graphBottomMargin           = 0;
-int   graphRightAxisLabelsMargin  = 65;
-int   graphBottomAxisLabelsMargin = 60;
+  // Global graph specific appearance attributes:
+  color graphGridlineColor          = color(128,128,128);
+  int   graphBarTransparency        = 100;
+  int   graphGridLineWeight         = 1;
+  int   graphVerticalGridlines      = 5;
+  float graphTitleTextSize          = 18;
+  float graphGridlineTextSize       = 18;
+  int   graphRightAxisLabelsMargin  = 65;
+  int   graphBottomAxisLabelsMargin = 60;
 
 // Graph overall size
   int graphX;
@@ -51,10 +43,10 @@ int   graphBottomAxisLabelsMargin = 60;
     graphWidth  = w;
     graphHeight = h;
     
-    graphPlotAreaX      = graphX + graphLeftMargin + graphFrameLineWeight;
-    graphPlotAreaY      = graphY + graphTopMargin  + graphFrameLineWeight;
-    graphPlotAreaWidth  = graphWidth  - graphLeftMargin - graphRightMargin  - (graphFrameLineWeight * 2);
-    graphPlotAreaHeight = graphHeight - graphTopMargin  - graphBottomMargin - (graphFrameLineWeight * 2);
+    graphPlotAreaX      = graphX + leftMargin + frameLineWeight;
+    graphPlotAreaY      = graphY + topMargin  + frameLineWeight;
+    graphPlotAreaWidth  = graphWidth  - leftMargin - rightMargin  - (frameLineWeight * 2);
+    graphPlotAreaHeight = graphHeight - topMargin  - bottomMargin - (frameLineWeight * 2);
     
 //adjust plot area if there are Axis Labels:    
     if(rightAxisLabels)
@@ -77,20 +69,20 @@ int   graphBottomAxisLabelsMargin = 60;
   {
     lastPositionX = 0;
     
-    stroke(graphFrameColor);
-    fill(graphBackgroundColor);
-    strokeWeight(graphFrameLineWeight);
+    stroke(frameColor);
+    fill(backgroundColor);
+    strokeWeight(frameLineWeight);
     pushMatrix();
     {
       translate(graphPlotAreaX, graphPlotAreaY);
-      rect(0 - (graphFrameLineWeight/2), 0 - (graphFrameLineWeight/2), graphPlotAreaWidth  + graphFrameLineWeight, graphPlotAreaHeight + graphFrameLineWeight);
+      rect(0 - (frameLineWeight/2), 0 - (frameLineWeight/2), graphPlotAreaWidth  + frameLineWeight, graphPlotAreaHeight + frameLineWeight);
     }     
     popMatrix();
   }
 
   void drawDebugReferenceFrame() // draws a rectangle representing the defined size of the graph area
   {
-    stroke(graphFrameColor);
+    stroke(frameColor);
     noFill();
     strokeWeight(1);
     rect(graphX, graphY, graphWidth, graphHeight);  //reference frame
@@ -131,10 +123,10 @@ int   graphBottomAxisLabelsMargin = 60;
   {
     for (float i = graphRangeBottom; i <=graphRangeTop; i = i + ((graphRangeTop - graphRangeBottom) / graphVerticalGridlines))
     {
-      if(i >= dashboard.netProfitGreenLimit)  dashboard.netProfit.setGridLineColor(color(0,255,0));
-      if(i <= dashboard.netProfitYellowLimit) dashboard.netProfit.setGridLineColor(color(255,255,0));
-      if(i <  dashboard.netProfitRedLimit)    dashboard.netProfit.setGridLineColor(color(255,0,0));
-      if(i ==  0)                           dashboard.netProfit.setGridLineColor(color(80));
+      if(i >= dashboard.netProfitGreenLimit)  dashboard.netProfitGraph.setGridLineColor(color(0,255,0));
+      if(i <= dashboard.netProfitYellowLimit) dashboard.netProfitGraph.setGridLineColor(color(255,255,0));
+      if(i <  dashboard.netProfitRedLimit)    dashboard.netProfitGraph.setGridLineColor(color(255,0,0));
+      if(i ==  0)                           dashboard.netProfitGraph.setGridLineColor(color(80));
       addGridlineHorizontal(i, "$" + nf(i) );
     }
   }
@@ -155,7 +147,7 @@ int   graphBottomAxisLabelsMargin = 60;
       }
       textSize(graphGridlineTextSize);
       fill(graphGridlineColor);
-      translate(x, graphPlotAreaHeight  + graphFrameLineWeight + 8);
+      translate(x, graphPlotAreaHeight  + frameLineWeight + 8);
       rotate(-PI/2);
       textAlign(RIGHT, CENTER);
       text(text, 0, 0);
@@ -180,7 +172,7 @@ int   graphBottomAxisLabelsMargin = 60;
       textSize(graphGridlineTextSize);
       textAlign(LEFT, CENTER);
       fill(graphGridlineColor);
-      translate(graphPlotAreaWidth + graphFrameLineWeight + 8, y);
+      translate(graphPlotAreaWidth + frameLineWeight + 8, y);
       text(text, 0, 0);
     }
     popMatrix();
@@ -196,7 +188,7 @@ int   graphBottomAxisLabelsMargin = 60;
       translate(graphPlotAreaX, graphPlotAreaY);
       textSize(graphTitleTextSize);
       textAlign(alignH, alignV);
-      fill(graphTextColor);
+      fill(textColor);
       text(title, xPos, yPos);
     }
     popMatrix();

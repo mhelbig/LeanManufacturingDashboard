@@ -16,6 +16,16 @@ int startMinute             = 0;
 int endMinute               = 24 * 60;
 int intervalTime            = 0;
 
+// Global dashboard appearance attributes:
+color backgroundColor        = 40;
+color frameColor             = 255;
+int   frameLineWeight        = 2;
+color textColor              = color(255,255,255);
+int   leftMargin             = 4;
+int   topMargin              = 4;
+int   rightMargin            = 4;
+int   bottomMargin           = 0;
+
 EventDataTable rawEvents    = new EventDataTable();
 DayDashboard dashboard      = new DayDashboard();
 

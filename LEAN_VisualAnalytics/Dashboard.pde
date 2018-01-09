@@ -1,9 +1,11 @@
 class DayDashboard
 {
-  int   graphWidths           = 720;
+  int   graphWidths           = 700;
   int   statusGraphHeight     = 40;
-  
   int   uptimeGraphHeight     = 150;
+
+  int   readoutWidths         = 100;
+
   float uptimeMinUptime       = 0;
   float uptimeMaxUptime       = 100;
   int   uptimeGrid            = 20;
@@ -23,19 +25,33 @@ class DayDashboard
   float currentNetProfit      = 0;
   RollingAverage utilizationAverage = new RollingAverage();
 
-  Graph status    = new Graph();
-  Graph uptime    = new Graph();
-  Graph netProfit = new Graph();
+  Graph statusGraph    = new Graph();
+  Graph uptimeGraph    = new Graph();
+  Graph netProfitGraph = new Graph();
+
+  Readout statusReadout     = new Readout();
+  Readout uptimeReadout     = new Readout();
+  Readout netProfitReadout  = new Readout();
   
   DayDashboard()  //constructor
   {
-    //build all the graphs
-    status.initializeGraphFrame(0, 0,  graphWidths, statusGraphHeight, true, false,
+    //build all the graphs & readouts
+    statusGraph.initializeGraphFrame(0, 0,  graphWidths, statusGraphHeight, true, false,
                                        startMinute, endMinute, 0, 1);
-    uptime.initializeGraphFrame(0, status.graphPositionBottom(),  graphWidths, uptimeGraphHeight, true, false,
+    statusReadout.initialize("Status",statusGraph.graphPositionRight(),0,readoutWidths,statusGraphHeight);
+                                       
+    
+    uptimeGraph.initializeGraphFrame(0, statusGraph.graphPositionBottom(),  graphWidths, uptimeGraphHeight, true, false,
                                    startMinute, endMinute, uptimeMinUptime, uptimeMaxUptime);
-    netProfit.initializeGraphFrame(0, uptime.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
+    uptimeReadout.initialize("Uptime",uptimeGraph.graphPositionRight(),statusGraph.graphPositionBottom(),readoutWidths,uptimeGraphHeight);
+                                       
+
+    netProfitGraph.initializeGraphFrame(0, uptimeGraph.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
                                    startMinute, endMinute, netProfitMin, netProfitMax);
+    netProfitReadout.initialize("Uptime",netProfitGraph.graphPositionRight(),uptimeGraph.graphPositionBottom(),readoutWidths,netProfitGraphHeight-60);
+                                   
+    //create the readouts
+    
     // create the dashboard data table
     dashboardData = new Table();
     dashboardData.addColumn("time");
@@ -44,6 +60,87 @@ class DayDashboard
     dashboardData.addColumn("netprofit");
   }
   
+  void drawGraph()
+  {
+    //Readouts
+    statusReadout.drawReadout();
+    uptimeReadout.drawReadout();
+    netProfitReadout.drawReadout();
+
+    //Graphs
+    statusGraph.drawGraphPlotArea();    //status.drawDebugReferenceFrame();
+    uptimeGraph.drawGraphPlotArea();    //uptime.drawDebugReferenceFrame();
+    netProfitGraph.drawGraphPlotArea(); //netProfit.drawDebugReferenceFrame();
+  
+    // Vertical time gridlines - all graphs
+    statusGraph.setGridLineColor(color(80));
+    uptimeGraph.setGridLineColor(color(80));
+    netProfitGraph.setGridLineColor(color(80));
+    for (float minuteOfDay = startMinute; minuteOfDay <= endMinute; minuteOfDay += 60)
+    {
+      statusGraph.addGridlineVertical(minuteOfDay, "");
+      uptimeGraph.addGridlineVertical(minuteOfDay, "");
+      int t = int ((minuteOfDay/60) % 12);
+      if (t == 0) t=12;
+      netProfitGraph.addGridlineVertical(minuteOfDay, nf(t)+ ((minuteOfDay < 12) ? "a" : "p"));
+    }
+  
+  // Status graph
+    statusGraph.drawTitle(10, 6, LEFT, TOP, "Status");
+  
+  
+  // Machine uptime
+    uptimeGraph.drawTitle(10, 6, LEFT, TOP, "Uptime");
+    uptimeGraph.setGridLineColor(color(80));
+    for (int i = uptimeGrid; i <= (100 - uptimeGrid); i = i + uptimeGrid)
+    {
+      uptimeGraph.addGridlineHorizontal(i, nf(i) + "%");
+    }
+  
+  // Net profit
+    netProfitGraph.drawTitle(10, 6, LEFT, TOP, "Net Profit");
+    netProfitGraph.drawHorizontalGridlines();  
+  }
+  
+  void drawData(int time)
+  {
+    for(int i = startMinute; i < time; i++)
+    {
+      TableRow tableRow = dashboardData.getRow(i);
+      
+      int graphStatus = tableRow.getInt("state");
+      switch(graphStatus)
+      {
+        case 0:
+          statusGraph.setBarColor(color(127,127,127));
+          break;
+        case 1:
+          statusGraph.setBarColor(color(255,0,0));
+          break;
+        case 2:
+          statusGraph.setBarColor(color(255,127,0));
+          break;
+        case 3:
+          statusGraph.setBarColor(color(0,255,0));
+          break;
+      }
+      statusGraph.drawBar(i, 0, statusGraphHeight);
+      
+      float uptimePercentage = tableRow.getFloat("uptime");
+      
+      if      (uptimePercentage > uptimeGreenLimit)  uptimeGraph.setBarColor(color(0,255,0));
+      else if (uptimePercentage > uptimeYellowLimit) uptimeGraph.setBarColor(color(255,255,0));
+      else                                           uptimeGraph.setBarColor(color(255,0,0));
+      uptimeGraph.drawBar(i, 0, uptimePercentage);
+  
+      float netProfitDollars = tableRow.getFloat("netprofit");
+      if      (netProfitDollars > netProfitGreenLimit)  netProfitGraph.setBarColor(color(0,255,0));
+      else if (netProfitDollars > netProfitYellowLimit) netProfitGraph.setBarColor(color(255,255,0));
+      else                                              netProfitGraph.setBarColor(color(255,0,0));
+      netProfitGraph.drawBar(i, 0, netProfitDollars );
+    }
+  }
+
   void calculate(int time, EventDataTable rawEvents)
   {
     int state;
@@ -74,7 +171,7 @@ class DayDashboard
     //autorange the graph to fit the min and max netprofit:
     if(currentNetProfit > netProfitMax) netProfitMax = currentNetProfit;
     if(currentNetProfit < netProfitMin) netProfitMin = currentNetProfit;
-    dashboard.netProfit.adjustGraphVerticalRange(netProfitMax,netProfitMin);
+    dashboard.netProfitGraph.adjustGraphVerticalRange(netProfitMax,netProfitMin);
   }
   
   void reset()
@@ -85,82 +182,5 @@ class DayDashboard
     utilizationAverage.reset();
     dashboardData.clearRows();
   }
-  void drawGraph()
-  {
-    status.drawGraphPlotArea();
-    uptime.drawGraphPlotArea();
-    netProfit.drawGraphPlotArea();
-    
-  //  status.drawDebugReferenceFrame();
-  //  uptime.drawDebugReferenceFrame();
-  //  netProfit.drawDebugReferenceFrame();
-  
-  // Vertical time gridlines - all graphs
-    status.setGridLineColor(color(80));
-    uptime.setGridLineColor(color(80));
-    netProfit.setGridLineColor(color(80));
-    for (float minuteOfDay = startMinute; minuteOfDay <= endMinute; minuteOfDay += 60)
-    {
-      status.addGridlineVertical(minuteOfDay, "");
-      uptime.addGridlineVertical(minuteOfDay, "");
-      int t = int ((minuteOfDay/60) % 12);
-      if (t == 0) t=12;
-      netProfit.addGridlineVertical(minuteOfDay, nf(t)+ ((minuteOfDay < 12) ? "a" : "p"));
-    }
-  
-  // Status graph
-    status.drawTitle(10, 6, LEFT, TOP, "Status");
-  
-  
-  // Machine uptime
-    uptime.drawTitle(10, 6, LEFT, TOP, "Uptime");
-    uptime.setGridLineColor(color(80));
-    for (int i = uptimeGrid; i <= (100 - uptimeGrid); i = i + uptimeGrid)
-    {
-      uptime.addGridlineHorizontal(i, nf(i) + "%");
-    }
-  
-  // Net profit
-    netProfit.drawTitle(10, 6, LEFT, TOP, "Net Profit");
-    netProfit.drawHorizontalGridlines();  
-  }
-  
-  void drawData(int time)
-  {
-    for(int i = startMinute; i < time; i++)
-    {
-      TableRow tableRow = dashboardData.getRow(i);
-      
-      int graphStatus = tableRow.getInt("state");
-      switch(graphStatus)
-      {
-        case 0:
-          status.setBarColor(color(127,127,127));
-          break;
-        case 1:
-          status.setBarColor(color(255,0,0));
-          break;
-        case 2:
-          status.setBarColor(color(255,127,0));
-          break;
-        case 3:
-          status.setBarColor(color(0,255,0));
-          break;
-      }
-      status.drawBar(i, 0, statusGraphHeight);
-      
-      float uptimePercentage = tableRow.getFloat("uptime");
-      
-      if      (uptimePercentage > uptimeGreenLimit)  uptime.setBarColor(color(0,255,0));
-      else if (uptimePercentage > uptimeYellowLimit) uptime.setBarColor(color(255,255,0));
-      else                                           uptime.setBarColor(color(255,0,0));
-      uptime.drawBar(i, 0, uptimePercentage);
-  
-      float netProfitDollars = tableRow.getFloat("netprofit");
-      if      (netProfitDollars > netProfitGreenLimit)  netProfit.setBarColor(color(0,255,0));
-      else if (netProfitDollars > netProfitYellowLimit) netProfit.setBarColor(color(255,255,0));
-      else                                              netProfit.setBarColor(color(255,0,0));
-      netProfit.drawBar(i, 0, netProfitDollars );
-    }
-  }
+
 }  
