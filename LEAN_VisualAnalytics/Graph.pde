@@ -107,18 +107,18 @@ int   graphBottomAxisLabelsMargin = 60;
   void adjustGraphVerticalRange(float topMax, float bottomMax)
   {
     float[] graphIncrements = {10, 20, 50, 75, 100, 200, 500, 750, 1000, 2000, 5000};
-    float verticalGraphRange = topMax - bottomMax;
+    float verticalGraphRange = (topMax - bottomMax) * 1.0;
     
     for(float increment : graphIncrements)
     {
       if((increment * graphVerticalGridlines) > verticalGraphRange)
       {
-        for(float top = 0; top < graphVerticalGridlines; top++)
+        for(float bottom = 0; bottom > -graphVerticalGridlines; bottom--)
         {
-          if(top * increment > topMax)
+          if(bottom * increment < bottomMax)
           {
-            graphRangeTop = top * increment;
-            graphRangeBottom = graphRangeTop - (increment * graphVerticalGridlines); 
+            graphRangeBottom = bottom * increment;
+            graphRangeTop = graphRangeBottom + (increment * graphVerticalGridlines); 
             break;
           }
         }

@@ -1,9 +1,9 @@
-import java.util.*;        //used for calendar time functions 
-import processing.io.*;    //Hardware IO
+import java.util.*;        //calendar time functions 
+import processing.io.*;    //hardware IO
 
 // Target device compile flags:
 boolean runningOnPi         = false;
-boolean runFullSpeed        = true;
+boolean ludicrousSpeed      = true;
 boolean useMouseInputMode   = false;
   
 //System-wide global variables:
@@ -47,14 +47,15 @@ void setup()
 
 void draw()
 {
+  background(0);
   checkActivityInput();
   
+  delay(50);
   if(intervalTimeExpired())
   {
     rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
-    resetInputFlags();
+    resetActivityInputs();
     
-    background(0);
     dashboard.calculate(minuteOfDay(), rawEvents);
     dashboard.drawGraph();
     dashboard.drawData(minuteOfDay());

@@ -26,11 +26,6 @@ int readCycleCounter()
   return(cycleCounter);
 }
 
-void clearCycleCounter()
-{
-  cycleCounter = 0;
-}
-
 void checkActivityInput()  // call this often
 {
   if(!useMouseInputMode && runningOnPi)
@@ -47,30 +42,17 @@ int readActivityState()
   return(activityFlag);
 }
 
-void clearActivityFlag()
+void resetActivityInputs()
 {
   activityFlag = 0;
+  cycleCounter = 0;
 }
-
-void resetInputFlags()
-{
-  clearActivityFlag();
-  clearCycleCounter();
-}
-
 
 void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating & sets activity flag
 {
   if(useMouseInputMode || !runningOnPi)
   {
-    // Update the counter value, bounds check to keep from going negative
     cycleCounter+= abs(event.getCount());
-    if(cycleCounter < 0)
-    {
-      cycleCounter = 0;
-    }
-    
-    // Set the activity flag as well
     activityFlag = 1;
   }
 }

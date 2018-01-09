@@ -12,8 +12,8 @@ class DayDashboard
   float uptimeGreenLimit      = 75;
   
   int   netProfitGraphHeight  = 250;
-  float netProfitMin          = -100;
-  float netProfitMax          =  300;
+  float netProfitMin          =  10;
+  float netProfitMax          = -10;
   float netProfitGridLines    =  6;
   float netProfitRedLimit     = -1;
   float netProfitYellowLimit  = 75;
@@ -46,14 +46,9 @@ class DayDashboard
   
   void calculate(int time, EventDataTable rawEvents)
   {
-    int state = 0;
-    int active = 0;
-    int cycles = 0;
-    
-    float netProfitMax = 0;
-    float netProfitMin = 0;
-  //  netProfit = 0;
-  //  utilizationAverage.reset();
+    int state;
+    int active;
+    int cycles;
     
     TableRow rawDataRow   = rawEvents.machineCycles.getRow(time);
     
@@ -84,7 +79,9 @@ class DayDashboard
   
   void reset()
   {
-    currentNetProfit = 0;
+    currentNetProfit      = 0;
+    netProfitMin          =  10;
+    netProfitMax          = -10;
     utilizationAverage.reset();
     dashboardData.clearRows();
   }
