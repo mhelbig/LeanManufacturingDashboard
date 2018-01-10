@@ -2,8 +2,8 @@ import java.util.*;        //calendar time functions
 import processing.io.*;    //hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = false;
-boolean ludicrousSpeed      = true;
+boolean runningOnPi         = true;
+boolean ludicrousSpeed      = false;
 boolean useMouseInputMode   = false;
   
 //System-wide global variables:
@@ -53,20 +53,20 @@ void setup()
   SetupHardwareIO();
   getNextIntervalTime();
   dashboard.drawGraph();
+  background(0);
 }
 
 void draw()
 {
-  background(0);
   checkActivityInput();
   
-  delay(50);
   if(intervalTimeExpired())
   {
     rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
     resetActivityInputs();
     
     dashboard.calculate(minuteOfDay(), rawEvents);
+    background(0);
     dashboard.drawGraph();
     dashboard.drawData(minuteOfDay());
     rawEvents.saveEventTable();

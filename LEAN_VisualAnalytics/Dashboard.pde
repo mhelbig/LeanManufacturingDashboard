@@ -38,34 +38,41 @@ class DayDashboard
     //build all the graphs & readouts
     statusGraph.initializeGraphFrame(0, 0,  graphWidths, statusGraphHeight, true, false,
                                        startMinute, endMinute, 0, 1);
-    statusReadout.initialize("Status",statusGraph.graphPositionRight(),0,readoutWidths,statusGraphHeight);
+    //statusReadout.initialize("Status",statusGraph.graphPositionRight(),0,readoutWidths,statusGraphHeight);
                                        
     
     uptimeGraph.initializeGraphFrame(0, statusGraph.graphPositionBottom(),  graphWidths, uptimeGraphHeight, true, false,
                                    startMinute, endMinute, uptimeMinUptime, uptimeMaxUptime);
-    uptimeReadout.initialize("Uptime",uptimeGraph.graphPositionRight(),statusGraph.graphPositionBottom(),readoutWidths,uptimeGraphHeight);
+    //uptimeReadout.initialize("Uptime",uptimeGraph.graphPositionRight(),statusGraph.graphPositionBottom(),readoutWidths,uptimeGraphHeight);
                                        
 
     netProfitGraph.initializeGraphFrame(0, uptimeGraph.graphPositionBottom(), graphWidths, netProfitGraphHeight, true, true,
                                    startMinute, endMinute, netProfitMin, netProfitMax);
-    netProfitReadout.initialize("Uptime",netProfitGraph.graphPositionRight(),uptimeGraph.graphPositionBottom(),readoutWidths,netProfitGraphHeight-60);
+    //netProfitReadout.initialize("Uptime",netProfitGraph.graphPositionRight(),uptimeGraph.graphPositionBottom(),readoutWidths,netProfitGraphHeight-60);
                                    
-    //create the readouts
-    
     // create the dashboard data table
     dashboardData = new Table();
     dashboardData.addColumn("time");
     dashboardData.addColumn("state");
     dashboardData.addColumn("uptime");
     dashboardData.addColumn("netprofit");
+    
+    for(int i = startMinute; i < endMinute; i++)
+    {
+      TableRow row = dashboardData.getRow(i);
+      row.setInt("time",i);
+      row.setInt("state",0);
+      row.setInt("uptime",0);
+      row.setFloat("netprofit",0.0);
+    }
   }
   
   void drawGraph()
   {
     //Readouts
-    statusReadout.drawReadout();
-    uptimeReadout.drawReadout();
-    netProfitReadout.drawReadout();
+//    statusReadout.drawReadout();
+//    uptimeReadout.drawReadout();
+//    netProfitReadout.drawReadout();
 
     //Graphs
     statusGraph.drawGraphPlotArea();    //status.drawDebugReferenceFrame();
@@ -104,7 +111,7 @@ class DayDashboard
   
   void drawData(int time)
   {
-    for(int i = startMinute; i < time; i++)
+    for(int i = startMinute; i < endMinute; i++)
     {
       TableRow tableRow = dashboardData.getRow(i);
       
@@ -124,6 +131,7 @@ class DayDashboard
           statusGraph.setBarColor(color(0,255,0));
           break;
       }
+//      println("statusGraph");
       statusGraph.drawBar(i, 0, statusGraphHeight);
       
       float uptimePercentage = tableRow.getFloat("uptime");
@@ -131,6 +139,7 @@ class DayDashboard
       if      (uptimePercentage > uptimeGreenLimit)  uptimeGraph.setBarColor(color(0,255,0));
       else if (uptimePercentage > uptimeYellowLimit) uptimeGraph.setBarColor(color(255,255,0));
       else                                           uptimeGraph.setBarColor(color(255,0,0));
+//      println("uptimeGraph");
       uptimeGraph.drawBar(i, 0, uptimePercentage);
   
       float netProfitDollars = tableRow.getFloat("netprofit");
@@ -157,7 +166,7 @@ class DayDashboard
     utilizationAverage.calculate();
     
     currentNetProfit -= (overheadRatePerHour / 60);
-    if(state >= 2)
+    if(state >= 2 || cycles > 0)
     {
       currentNetProfit += (profitRatePerHour / 60);
     }
@@ -167,6 +176,7 @@ class DayDashboard
     row.setInt("state",state);
     row.setInt("uptime",int(utilizationAverage.currentValue()*100));
     row.setFloat("netprofit",currentNetProfit);
+    println(time + " " + row.getFloat("netprofit"));
     
     //autorange the graph to fit the min and max netprofit:
     if(currentNetProfit > netProfitMax) netProfitMax = currentNetProfit;
