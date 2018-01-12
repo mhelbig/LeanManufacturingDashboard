@@ -48,12 +48,12 @@ void setup()
     noCursor();
   }
 
+  background(0);
   initializeTimer();
   rawEvents.initializeEventTable();
   SetupHardwareIO();
   getNextIntervalTime();
   dashboard.drawGraph();
-  background(0);
 }
 
 void draw()

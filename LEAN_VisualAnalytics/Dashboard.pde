@@ -56,15 +56,7 @@ class DayDashboard
     dashboardData.addColumn("state");
     dashboardData.addColumn("uptime");
     dashboardData.addColumn("netprofit");
-    
-    for(int i = startMinute; i < endMinute; i++)
-    {
-      TableRow row = dashboardData.getRow(i);
-      row.setInt("time",i);
-      row.setInt("state",0);
-      row.setInt("uptime",0);
-      row.setFloat("netprofit",0.0);
-    }
+    fillTable();
   }
   
   void drawGraph()
@@ -191,6 +183,18 @@ class DayDashboard
     netProfitMax          = -10;
     utilizationAverage.reset();
     dashboardData.clearRows();
+    fillTable();
   }
-
+  
+  void fillTable()
+  {
+    for(int i = startMinute; i < endMinute; i++)
+    {
+      TableRow row = dashboardData.getRow(i);
+      row.setInt("time",i);
+      row.setInt("state",0);
+      row.setInt("uptime",0);
+      row.setFloat("netprofit",0.0);
+    }
+  }
 }  

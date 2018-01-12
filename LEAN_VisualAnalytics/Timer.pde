@@ -26,7 +26,7 @@ boolean intervalTimeExpired()
   {
     cal = Calendar.getInstance();
   }
-  if(intervalTime == cal.get(Calendar.MINUTE))
+  if(cal.get(Calendar.MINUTE) >= intervalTime)
   {
     getNextIntervalTime();
     return(true);

@@ -25,6 +25,12 @@ class EventDataTable
       machineCycles.addColumn("cycles");
       machineCycles.addColumn("active");
       machineCycles.addColumn("state");
+      
+      for(int i = startMinute; i < endMinute; i++)
+      {
+        TableRow row = machineCycles.getRow(i);
+        row.setInt("time",i);
+      }
       saveEventTable();
     }
   }

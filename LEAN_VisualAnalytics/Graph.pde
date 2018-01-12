@@ -99,11 +99,12 @@ class Graph
   void adjustGraphVerticalRange(float topMax, float bottomMax)
   {
     float[] graphIncrements = {10, 20, 50, 75, 100, 200, 500, 750, 1000, 2000, 5000};
-    float verticalGraphRange = (topMax - bottomMax) * 1.0;
+    float verticalGraphRange;
     
     for(float increment : graphIncrements)
     {
-      if((increment * graphVerticalGridlines) > verticalGraphRange)
+       verticalGraphRange = (topMax - bottomMax) + increment;
+       if((increment * graphVerticalGridlines) > verticalGraphRange)
       {
         for(float bottom = 0; bottom > -graphVerticalGridlines; bottom--)
         {
