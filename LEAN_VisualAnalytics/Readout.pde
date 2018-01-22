@@ -1,5 +1,8 @@
 class Readout
 {
+  // Global readout specific appearance attributes:
+  float readoutTitleTextSize          = 18;
+
   // Graph overall size
   int readoutX;
   int readoutY;
@@ -32,7 +35,7 @@ class Readout
     
   }
 
-  void drawReadout()
+  void drawReadout(String t)
   {
     stroke(frameColor);
     fill(backgroundColor);
@@ -41,6 +44,10 @@ class Readout
     {
       translate(readoutPlotAreaX, readoutPlotAreaY);
       rect(0 - (frameLineWeight/2), 0 - (frameLineWeight/2), readoutPlotAreaWidth  + frameLineWeight, readoutPlotAreaHeight + frameLineWeight);
+      textSize(readoutTitleTextSize);
+      textAlign(CENTER, CENTER);
+      fill(textColor);
+      text(t, readoutPlotAreaWidth/2, readoutPlotAreaHeight/2);
     }     
     popMatrix();
   }

@@ -10,11 +10,10 @@ boolean useMouseInputMode   = false;
 String machineName          = "Komatsu";
 int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24 = input "2" on SimpleIO PCB
 int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25 = input "1" on SimpleIO PCB
-float overheadRatePerHour   =  75.00;
-float profitRatePerHour     = 150.00;
+float overheadRatePerHour   =  15.00;
+float profitRatePerHour     =  75.00; // $60/hour netprofit per hour when active
 int startMinute             = 0;
 int endMinute               = 24 * 60;
-int intervalTime            = 0;
 
 // Global dashboard appearance attributes:
 color backgroundColor        = 40;
@@ -53,12 +52,13 @@ void setup()
   rawEvents.initializeEventTable();
   SetupHardwareIO();
   getNextIntervalTime();
-  dashboard.drawGraph();
+  dashboard.drawGraphedData();
 }
 
 void draw()
 {
   checkActivityInput();
+  dashboard.drawRealtimeData();
   
   if(intervalTimeExpired())
   {
@@ -67,8 +67,7 @@ void draw()
     
     dashboard.calculate(minuteOfDay(), rawEvents);
     background(0);
-    dashboard.drawGraph();
-    dashboard.drawData(minuteOfDay());
+    dashboard.drawGraphedData();
     rawEvents.saveEventTable();
   }
   if(newDay())

@@ -1,4 +1,5 @@
 Calendar cal = Calendar.getInstance(); 
+int intervalTime            = 0;
 int newDayFlag;
 
 void initializeTimer()
@@ -26,7 +27,7 @@ boolean intervalTimeExpired()
   {
     cal = Calendar.getInstance();
   }
-  if(cal.get(Calendar.MINUTE) >= intervalTime)
+  if(intervalTime < minuteOfDay())
   {
     getNextIntervalTime();
     return(true);
@@ -40,7 +41,7 @@ boolean intervalTimeExpired()
 void getNextIntervalTime()
 {
   cal.add(Calendar.MINUTE,1);
-  intervalTime = cal.get(Calendar.MINUTE);
+  intervalTime = minuteOfDay(); //cal.get(Calendar.MINUTE);
 }
 
 int minuteOfDay()
