@@ -40,7 +40,7 @@ boolean intervalTimeExpired()
 
 void getNextIntervalTime()
 {
-  cal.add(Calendar.MINUTE,1);
+//  cal.add(Calendar.MINUTE,1);
   intervalTime = minuteOfDay(); //cal.get(Calendar.MINUTE);
 }
 

@@ -2,9 +2,9 @@ import java.util.*;        //calendar time functions
 import processing.io.*;    //hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = true;
+boolean runningOnPi         = false;
 boolean ludicrousSpeed      = false;
-boolean useMouseInputMode   = false;
+boolean useMouseInputMode   = true;
   
 //System-wide global variables:
 String machineName          = "Komatsu";
@@ -13,7 +13,7 @@ int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25 = input "1" on SimpleIO PC
 float overheadRatePerHour   =  15.00;
 float profitRatePerHour     =  75.00; // $60/hour netprofit per hour when active
 int startMinute             = 0;
-int endMinute               = 24 * 60;
+int endMinute               = (24 * 60) -1;
 
 // Global dashboard appearance attributes:
 color backgroundColor        = 40;

@@ -82,11 +82,6 @@ class DayDashboard
     uptimeGraph.drawGraphPlotArea();    //uptime.drawDebugReferenceFrame();
     netProfitGraph.drawGraphPlotArea(); //netProfit.drawDebugReferenceFrame();
   
-   // Draw the graph titles:
-    statusGraph.drawTitle(10, 6, LEFT, TOP, "Status");
-    uptimeGraph.drawTitle(10, 6, LEFT, TOP, "Uptime");
-    netProfitGraph.drawTitle(10, 6, LEFT, TOP, "Net Profit");
-  
     //Draw the vertical time gridlines:
     statusGraph.setGridLineColor(color(80));
     uptimeGraph.setGridLineColor(color(80));
@@ -108,6 +103,11 @@ class DayDashboard
     }
     netProfitGraph.drawHorizontalGridlines();  
 
+   // Draw the graph titles:
+    statusGraph.drawTitle(10, 6, LEFT, TOP, "Status");
+    uptimeGraph.drawTitle(10, 6, LEFT, TOP, "Uptime");
+    netProfitGraph.drawTitle(10, 6, LEFT, TOP, "Net Profit");
+  
 //Loop through and draw all the calculated data:
     for(int i = startMinute; i < endMinute; i++)
     {
