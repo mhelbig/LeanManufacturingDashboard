@@ -66,7 +66,7 @@ class DayDashboard
   void drawRealtimeData()
   {
     statusReadout.drawReadout( (readActivityState() == 0 ? "Inactive" : "Active") );
-    timeOfDayReadout.drawReadout(nf(hour() % 12,2) + ":" +
+    timeOfDayReadout.drawReadout(nf(hour(),2) + ":" +
                                  nf(minute(),2) + ":" +
                                  nf(second(),2));
   }
@@ -74,7 +74,8 @@ class DayDashboard
   void drawGraphedData()
   {
     //Draw the readouts:
-    uptimeReadout.drawReadout(nf(uptimeMinutes) + " min");
+    uptimeReadout.drawReadout(int(utilizationAverage.currentValue()*100) + "%\n\nActive:\n" + 
+                              nf(int(uptimeMinutes/60),2) + ":" + nf(int(uptimeMinutes % 60),2));
     netProfitReadout.drawReadout("$" + nf(currentNetProfit,0,2));
 
     //Draw the graph frames:
