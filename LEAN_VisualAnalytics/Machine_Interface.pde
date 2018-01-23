@@ -1,5 +1,5 @@
-int pinActiveInput = 25;
-int pinCounInput = 24;
+int machineActiveInputBCM = 25;
+int machineCycleInputBCM = 24;
 int activityFlag;
 int cycleCounter = 0;
 
@@ -9,9 +9,9 @@ void SetupHardwareIO()
 {
   if(runningOnPi)
   {
-    GPIO.pinMode(pinActiveInput, GPIO.INPUT);
-    GPIO.pinMode(pinCounInput, GPIO.INPUT);
-    GPIO.attachInterrupt(pinCounInput, this, "countEvent", GPIO.FALLING);
+    GPIO.pinMode(machineActiveInputBCM, GPIO.INPUT);
+    GPIO.pinMode(machineCycleInputBCM, GPIO.INPUT);
+    GPIO.attachInterrupt(machineCycleInputBCM, this, "countEvent", GPIO.FALLING);
   }
 }
 
@@ -29,7 +29,7 @@ void checkActivityInput()  // call this often
 {
   if(!useMouseInputMode && runningOnPi)
   {
-    if(GPIO.digitalRead(pinActiveInput) == GPIO.LOW)  //machine is active, set the flag
+    if(GPIO.digitalRead(machineActiveInputBCM) == GPIO.LOW)  //machine is active, set the flag
     {
       activityFlag = 1;
     }
