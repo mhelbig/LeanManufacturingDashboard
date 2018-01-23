@@ -1,6 +1,33 @@
 Calendar cal = Calendar.getInstance(); 
 int intervalTime            = 0;
 int newDayFlag;
+int clockSetCutoffYear = 2018;
+boolean timeOfDaySet = false;
+
+boolean timeOfDayJustGotSet()
+{
+  if(year() >= clockSetCutoffYear && timeOfDaySet == false)
+  {
+     timeOfDaySet = true;
+     println("timeOfDayJustGotSet");
+     return(true);
+  }
+  else
+  {
+    return(false);
+  }
+}
+
+boolean timeOfDayIsSet()
+{
+  if(!timeOfDaySet)
+  {
+     Readout settingTimeOfDay     = new Readout();
+     settingTimeOfDay.initialize("TOD Set",250,100,300,55);
+     settingTimeOfDay.drawReadout("Waiting for Clock to Set");
+  }
+  return(timeOfDaySet);
+}
 
 void initializeTimer()
 {

@@ -44,32 +44,39 @@ void setup()
   }
 
   loadPreferences();
-  initializeTimer();
-  rawEvents.initializeEventTable();
   SetupHardwareIO();
-  getNextIntervalTime();
   background(0);
-  dashboard.drawGraphedData();
 }
 
 void draw()
 {
-  checkActivityInput();
-  dashboard.drawRealtimeData();
-  
-  if(intervalTimeExpired())
+  if(timeOfDayJustGotSet())
   {
-    rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
-    resetActivityInputs();
-    
-    dashboard.calculate(minuteOfDay(), rawEvents);
-    background(0);
+    initializeTimer();
+    rawEvents.initializeEventTable();
+    getNextIntervalTime();
     dashboard.drawGraphedData();
-    rawEvents.saveEventTable();
   }
-  if(newDay())
-  {
-   rawEvents.initializeEventTable();
-   dashboard.reset();
+
+  if(timeOfDayIsSet())
+  {  
+    println("time of day is set");
+    checkActivityInput();
+    dashboard.drawRealtimeData();
+    
+    if(intervalTimeExpired())
+    {
+      background(0);
+      rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
+      resetActivityInputs();
+      dashboard.calculate(minuteOfDay(), rawEvents);
+      dashboard.drawGraphedData();
+      rawEvents.saveEventTable();
+    }
+    if(newDay())
+    {
+     rawEvents.initializeEventTable();
+     dashboard.reset();
+    }
   }
 }
