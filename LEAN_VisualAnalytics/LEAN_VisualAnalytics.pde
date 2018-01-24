@@ -3,7 +3,7 @@ import processing.io.*;    //hardware IO
 
 // Target device compile flags:
 boolean runningOnPi         = true;
-boolean ludicrousSpeed      = true;
+boolean ludicrousSpeed      = false;
 boolean useMouseInputMode   = true;
   
 //Global constants:
@@ -50,7 +50,6 @@ void setup()
 
 void draw()
 {
-  background(0);
   if(timeOfDayJustGotSet())
   {
     initializeTimer();
@@ -66,12 +65,15 @@ void draw()
     
     if(intervalTimeExpired())
     {
+      background(0);
       rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);
       dashboard.drawGraphedData();
       rawEvents.saveEventTable();
     }
+    
+
     if(newDay())
     {
      rawEvents.initializeEventTable();
