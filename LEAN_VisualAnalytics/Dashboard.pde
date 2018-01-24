@@ -76,7 +76,7 @@ class DayDashboard
     //Draw the readouts:
     uptimeReadout.drawReadout(int(utilizationAverage.currentValue()*100) + "%\n\nActive:\n" + 
                               nf(int(uptimeMinutes/60),2) + ":" + nf(int(uptimeMinutes % 60),2));
-    netProfitReadout.drawReadout("$" + nf(currentNetProfit,0,2));
+    netProfitReadout.drawReadout("Profit:\n$" + nf(currentNetProfit,0,2));
 
     //Draw the graph frames:
     statusGraph.drawGraphPlotArea();    //status.drawDebugReferenceFrame();
