@@ -6,12 +6,7 @@ boolean runningOnPi         = false;
 boolean ludicrousSpeed      = true;
 boolean useMouseInputMode   = true;
   
-//System-wide global variables:
-String machineName          = "Komatsu";
-int machineCycleInputBCM    = 24;  // Pin 18 = BCM 24 = input "2" on SimpleIO PCB
-int machineActiveInputBCM   = 25;  // Pin 22 = BCM 25 = input "1" on SimpleIO PCB
-float overheadRatePerHour   =  15.00;
-float profitRatePerHour     =  75.00; // $60/hour netprofit per hour when active
+//Global constants:
 int startMinute             = 0;
 int endMinute               = (24 * 60) -1;
 
@@ -25,8 +20,9 @@ int   topMargin              = 4;
 int   rightMargin            = 4;
 int   bottomMargin           = 0;
 
-EventDataTable rawEvents    = new EventDataTable();
-DayDashboard dashboard      = new DayDashboard();
+Preference programPreferences  = new Preference();
+EventDataTable rawEvents       = new EventDataTable();
+DayDashboard dashboard         = new DayDashboard();
 
 void settings()
 {
@@ -47,20 +43,14 @@ void setup()
     noCursor();
   }
 
-  background(0);
-  initializeTimer();
-  rawEvents.initializeEventTable();
+  loadPreferences();
   SetupHardwareIO();
-  getNextIntervalTime();
-  dashboard.drawGraphedData();
+  background(0);
 }
 
 void draw()
 {
-  checkActivityInput();
-  dashboard.drawRealtimeData();
-  
-  if(intervalTimeExpired())
+  if(timeOfDayJustGotSet())
   {
     rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
     println(minuteOfDay());
@@ -68,12 +58,31 @@ void draw()
     
     dashboard.calculate(minuteOfDay(), rawEvents);
     background(0);
+    initializeTimer();
+    rawEvents.initializeEventTable();
+    getNextIntervalTime();
     dashboard.drawGraphedData();
-    rawEvents.saveEventTable();
   }
-  if(newDay())
-  {
-   rawEvents.initializeEventTable();
-   dashboard.reset();
+
+  if(timeOfDayIsSet())
+  {  
+    println("time of day is set");
+    checkActivityInput();
+    dashboard.drawRealtimeData();
+    
+    if(intervalTimeExpired())
+    {
+      background(0);
+      rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
+      resetActivityInputs();
+      dashboard.calculate(minuteOfDay(), rawEvents);
+      dashboard.drawGraphedData();
+      rawEvents.saveEventTable();
+    }
+    if(newDay())
+    {
+     rawEvents.initializeEventTable();
+     dashboard.reset();
+    }
   }
 }

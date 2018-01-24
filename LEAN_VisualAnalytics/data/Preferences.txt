@@ -1,0 +1,4 @@
+Preferences:
+machineName=Komatsu
+overheadRatePerHour=15.0
+profitRatePerHour=75.0
