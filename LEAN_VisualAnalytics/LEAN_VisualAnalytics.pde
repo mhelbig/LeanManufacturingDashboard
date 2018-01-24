@@ -2,7 +2,7 @@ import java.util.*;        //calendar time functions
 import processing.io.*;    //hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = false;
+boolean runningOnPi         = true;
 boolean ludicrousSpeed      = true;
 boolean useMouseInputMode   = true;
   
@@ -50,14 +50,9 @@ void setup()
 
 void draw()
 {
+  background(0);
   if(timeOfDayJustGotSet())
   {
-    rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
-    println(minuteOfDay());
-    resetActivityInputs();
-    
-    dashboard.calculate(minuteOfDay(), rawEvents);
-    background(0);
     initializeTimer();
     rawEvents.initializeEventTable();
     getNextIntervalTime();
@@ -66,13 +61,11 @@ void draw()
 
   if(timeOfDayIsSet())
   {  
-    println("time of day is set");
     checkActivityInput();
     dashboard.drawRealtimeData();
     
     if(intervalTimeExpired())
     {
-      background(0);
       rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);

@@ -9,7 +9,6 @@ boolean timeOfDayJustGotSet()
   if(year() >= clockSetCutoffYear && timeOfDaySet == false)
   {
      timeOfDaySet = true;
-     println("timeOfDayJustGotSet");
      return(true);
   }
   else

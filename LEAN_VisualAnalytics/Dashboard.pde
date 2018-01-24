@@ -180,7 +180,6 @@ class DayDashboard
     row.setInt("state",state);
     row.setInt("uptime",int(utilizationAverage.currentValue()*100));
     row.setFloat("netprofit",currentNetProfit);
-    println(time + " " + row.getFloat("netprofit"));
     
     //autorange the graph to fit the min and max netprofit:
     if(currentNetProfit > netProfitMax) netProfitMax = currentNetProfit;
