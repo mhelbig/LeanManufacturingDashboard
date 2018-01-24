@@ -3,7 +3,7 @@ import processing.io.*;    //hardware IO
 
 // Target device compile flags:
 boolean runningOnPi         = false;
-boolean ludicrousSpeed      = false;
+boolean ludicrousSpeed      = true;
 boolean useMouseInputMode   = true;
   
 //System-wide global variables:
@@ -63,6 +63,7 @@ void draw()
   if(intervalTimeExpired())
   {
     rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
+    println(minuteOfDay());
     resetActivityInputs();
     
     dashboard.calculate(minuteOfDay(), rawEvents);

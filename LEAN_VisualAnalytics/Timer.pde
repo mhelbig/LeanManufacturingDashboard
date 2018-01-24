@@ -12,7 +12,7 @@ void initializeTimer()
       cal.set(Calendar.HOUR_OF_DAY, 0); 
       cal.set(Calendar.DATE, 1);
       cal.set(Calendar.MONTH, 0);
-      cal.set(Calendar.YEAR, 2000);
+      cal.set(Calendar.YEAR, 2018);
     }
     else
     {
@@ -23,9 +23,13 @@ void initializeTimer()
 
 boolean intervalTimeExpired()
 {
-  if(!ludicrousSpeed)  // when in full speed mode, don't update the real time, let it advance it as fast as we can with getNextIntervalTime()
+  if(!ludicrousSpeed)  // when in full speed mode, don't update the real time, let it advance it as fast as we can
   {
     cal = Calendar.getInstance();
+  }
+  else
+  {
+    cal.add(Calendar.MINUTE,1);
   }
   if(intervalTime < minuteOfDay())
   {
@@ -40,8 +44,7 @@ boolean intervalTimeExpired()
 
 void getNextIntervalTime()
 {
-//  cal.add(Calendar.MINUTE,1);
-  intervalTime = minuteOfDay(); //cal.get(Calendar.MINUTE);
+  intervalTime = minuteOfDay() % endMinute;
 }
 
 int minuteOfDay()

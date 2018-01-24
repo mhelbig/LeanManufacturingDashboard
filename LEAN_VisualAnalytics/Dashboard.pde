@@ -66,9 +66,9 @@ class DayDashboard
   void drawRealtimeData()
   {
     statusReadout.drawReadout( (readActivityState() == 0 ? "Inactive" : "Active") );
-    timeOfDayReadout.drawReadout(nf(hour() % 12,2) + ":" +
-                                 nf(minute(),2) + ":" +
-                                 nf(second(),2));
+    timeOfDayReadout.drawReadout(nf(cal.get(Calendar.HOUR_OF_DAY),2) + ":" +
+                                 nf(cal.get(Calendar.MINUTE),2) + ":" +
+                                 nf(cal.get(Calendar.SECOND),2));
   }
   
   void drawGraphedData()
