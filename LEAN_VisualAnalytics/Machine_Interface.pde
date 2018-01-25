@@ -1,10 +1,9 @@
-int machineActiveInputBCM = 25;
-int machineCycleInputBCM = 24;
+int machineActiveInputBCM = 25; // Pin 22 = BCM 25 = input "1" on SimpleIO PCB
+int machineCycleInputBCM = 24;  // Pin 18 = BCM 24 = input "2" on SimpleIO PCB
 int activityFlag;
 int cycleCounter = 0;
 
 // Machine Cycle counting:
-
 void SetupHardwareIO()
 {
   if(runningOnPi)
