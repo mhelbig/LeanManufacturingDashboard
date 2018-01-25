@@ -189,6 +189,7 @@ class DayDashboard
   
   void reset()
   {
+    uptimeMinutes         =   0;
     currentNetProfit      =   0;
     netProfitMin          =  10;
     netProfitMax          = -10;
