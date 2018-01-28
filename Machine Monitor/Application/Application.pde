@@ -2,9 +2,9 @@ import java.util.*;        //calendar time functions
 import processing.io.*;    //hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = false;
-boolean ludicrousSpeed      = true;
-boolean useMouseInputMode   = true;
+boolean runningOnPi         = true;
+boolean ludicrousSpeed      = false;
+boolean useMouseInputMode   = false;
   
 //Global constants:
 int startMinute             = 0;
