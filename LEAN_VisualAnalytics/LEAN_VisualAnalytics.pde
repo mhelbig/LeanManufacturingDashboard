@@ -2,8 +2,8 @@ import java.util.*;        //calendar time functions
 import processing.io.*;    //hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = true;
-boolean ludicrousSpeed      = false;
+boolean runningOnPi         = false;
+boolean ludicrousSpeed      = true;
 boolean useMouseInputMode   = true;
   
 //Global constants:
@@ -66,6 +66,7 @@ void draw()
     if(intervalTimeExpired())
     {
       background(0);
+      dashboard.drawRealtimeData();
       rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);
@@ -78,6 +79,7 @@ void draw()
     {
      rawEvents.initializeEventTable();
      dashboard.reset();
+     println("New Day: " + nf(cal.get(Calendar.DATE),2));
     }
   }
 }

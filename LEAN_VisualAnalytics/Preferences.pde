@@ -51,7 +51,7 @@ class Preference
 {
   
   StringDict PreferencesDict = new StringDict();      //Make an String Dictionary
-  String preferencesFileName = "data/Preferences.txt";
+  String preferencesFileName = "../MachineData/Preferences.txt";
   
   Preference() 
   {

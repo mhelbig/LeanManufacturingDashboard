@@ -9,7 +9,7 @@ class EventDataTable
   
   void initializeEventTable()
   {
-    machineCyclesFilename ="data/"
+    machineCyclesFilename ="../MachineData/"
     + machineName + "-" 
     + cal.get(Calendar.YEAR) + "-"
     + nf(cal.get(Calendar.MONTH) + 1,2)

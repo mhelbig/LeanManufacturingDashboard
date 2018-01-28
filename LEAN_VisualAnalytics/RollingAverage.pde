@@ -1,12 +1,13 @@
 class RollingAverage
 {
-  int bufferSize = 50;
+  int bufferSize = 60;
   int bufferPointer = 0;
   float totalActivity = 0;
   float[] buffer = new float[bufferSize];
   
-  RollingAverage()
+  RollingAverage(int size)
   {
+    bufferSize = size;
   }
   
   void reset()

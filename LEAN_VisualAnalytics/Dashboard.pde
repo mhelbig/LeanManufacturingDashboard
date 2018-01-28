@@ -24,7 +24,7 @@ class DayDashboard
   Table dashboardData;
   float uptimeMinutes         = 0;
   float currentNetProfit      = 0;
-  RollingAverage utilizationAverage = new RollingAverage();
+  RollingAverage utilizationAverage = new RollingAverage(60);
 
   Graph statusGraph    = new Graph();
   Graph uptimeGraph    = new Graph();
