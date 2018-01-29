@@ -72,7 +72,7 @@ void draw()
     {
       background(0);
       dashboard.drawRealtimeData();
-      rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()*2);
+      rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()+1); // simulating a state by adding one to activity
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);
       dashboard.drawGraphedData();
