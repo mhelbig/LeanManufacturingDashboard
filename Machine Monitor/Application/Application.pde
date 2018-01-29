@@ -79,7 +79,6 @@ void draw()
       if(minuteOfDay() % 5 ==0)  // save the data at the interval
       {
         rawEvents.saveEventTable();
-        println("Saving Data to File");
       }
     }
     

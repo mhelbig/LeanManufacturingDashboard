@@ -119,16 +119,16 @@ class DayDashboard
       switch(graphStatus)
       {
         case 0:
-          statusGraph.setBarColor(color(0,0,0));  //Black if no data
+          statusGraph.setBarColor(color(backgroundColor));  //Gray if no data, just like the backgrounds of the other graphs
           break;
         case 1:
-          statusGraph.setBarColor(color(127,127,127)); // Gray if inactive
+          statusGraph.setBarColor(color(255,0,0)); // Red if inactive
           break;
         case 2:
-          statusGraph.setBarColor(color(255,127,0)); // Orange if active
+          statusGraph.setBarColor(color(0,255,0)); // Green if active
           break;
         case 3:
-          statusGraph.setBarColor(color(0,255,0)); // Green for something in the future
+          statusGraph.setBarColor(color(255,127,0)); // Orange for something in the future
           break;
       }
 
