@@ -54,6 +54,11 @@ void draw()
   {
     initializeTimer();
     rawEvents.initializeEventTable();
+    
+    for(int i = 0; i < minuteOfDay(); i++)
+    {
+      dashboard.calculate(i, rawEvents);
+    }
     getNextIntervalTime();
     dashboard.drawGraphedData();
   }
@@ -71,15 +76,20 @@ void draw()
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);
       dashboard.drawGraphedData();
-      rawEvents.saveEventTable();
+      if(minuteOfDay() % 5 ==0)  // save the data at the interval
+      {
+        rawEvents.saveEventTable();
+        println("Saving Data to File");
+      }
     }
     
 
     if(newDay())
     {
-     rawEvents.initializeEventTable();
-     dashboard.reset();
-     println("New Day: " + nf(cal.get(Calendar.DATE),2));
+      rawEvents.saveEventTable();
+      rawEvents.initializeEventTable();
+      dashboard.reset();
+      println("New Day: " + nf(cal.get(Calendar.DATE),2));
     }
   }
 }

@@ -2,12 +2,14 @@
 String machineName;
 float overheadRatePerHour;
 float profitRatePerHour;
+int   fileSaveInterval;
 
 void ResetSystemDefaultParameters()
 {
   machineName          = "Komatsu";
   overheadRatePerHour   =  15.00;
   profitRatePerHour     =  75.00; // $60/hour netprofit per hour when active
+  fileSaveInterval      =   5;
 
   saveSystemParameters();
 }
@@ -24,6 +26,7 @@ void loadPreferences()
     machineName         = programPreferences.getText("machineName"); 
     overheadRatePerHour = programPreferences.getFloat("overheadRatePerHour");
     profitRatePerHour   = programPreferences.getFloat("profitRatePerHour");
+    fileSaveInterval    = programPreferences.getInt("fileSaveInterval");
   }
 }
 
@@ -32,6 +35,7 @@ void saveSystemParameters()
   programPreferences.setText("machineName",                  machineName,                false);
   programPreferences.setNumber("overheadRatePerHour",        overheadRatePerHour,        false);
   programPreferences.setNumber("profitRatePerHour",          profitRatePerHour,          false);
+  programPreferences.setNumber("fileSaveInterval",           fileSaveInterval,           false);
 
   programPreferences.savePref();
 }

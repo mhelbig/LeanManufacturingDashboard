@@ -2,3 +2,4 @@ Preferences:
 machineName=lvadev
 overheadRatePerHour=15.0
 profitRatePerHour=75.0
+fileSaveInterval=5

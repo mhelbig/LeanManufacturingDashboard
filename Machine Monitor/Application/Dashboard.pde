@@ -165,26 +165,29 @@ class DayDashboard
     active = rawDataRow.getInt("active");
     state = rawDataRow.getInt("state");
     
-    uptimeMinutes += active;
-    utilizationAverage.add( float(active == 1 ? 1 : 0));
-    utilizationAverage.calculate();
-    
-    currentNetProfit -= (overheadRatePerHour / 60);
-    if(state >= 2 || cycles > 0)
+    if(state != 0)
     {
-      currentNetProfit += (profitRatePerHour / 60);
+      uptimeMinutes += active;
+      utilizationAverage.add( float(active == 1 ? 1 : 0));
+      utilizationAverage.calculate();
+      
+      currentNetProfit -= (overheadRatePerHour / 60);
+      if(state >= 2 || cycles > 0)
+      {
+        currentNetProfit += (profitRatePerHour / 60);
+      }
+      
+      TableRow row = dashboardData.getRow(time);
+      row.setInt("time",time);
+      row.setInt("state",state);
+      row.setInt("uptime",int(utilizationAverage.currentValue()*100));
+      row.setFloat("netprofit",currentNetProfit);
+      
+      //autorange the graph to fit the min and max netprofit:
+      if(currentNetProfit > netProfitMax) netProfitMax = currentNetProfit;
+      if(currentNetProfit < netProfitMin) netProfitMin = currentNetProfit;
+      dashboard.netProfitGraph.adjustGraphVerticalRange(netProfitMax,netProfitMin);
     }
-    
-    TableRow row = dashboardData.getRow(time);
-    row.setInt("time",time);
-    row.setInt("state",state);
-    row.setInt("uptime",int(utilizationAverage.currentValue()*100));
-    row.setFloat("netprofit",currentNetProfit);
-    
-    //autorange the graph to fit the min and max netprofit:
-    if(currentNetProfit > netProfitMax) netProfitMax = currentNetProfit;
-    if(currentNetProfit < netProfitMin) netProfitMin = currentNetProfit;
-    dashboard.netProfitGraph.adjustGraphVerticalRange(netProfitMax,netProfitMin);
   }
   
   void reset()
