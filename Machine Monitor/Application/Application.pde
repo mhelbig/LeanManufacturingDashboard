@@ -88,7 +88,11 @@ void draw()
       rawEvents.saveEventTable();
       rawEvents.initializeEventTable();
       dashboard.reset();
-      println("New Day: " + nf(cal.get(Calendar.DATE),2));
+      saveFrame("../MachineData/" + 
+                nf(cal.get(Calendar.DAY_OF_YEAR)-1,3)  + "," + 
+                nf(cal.get(Calendar.MONTH)+1,2)        + "-" +
+                nf(cal.get(Calendar.DATE)-1,2)         + "-" +
+                nf(cal.get(Calendar.YEAR),2)           + ".png");
     }
   }
 }
