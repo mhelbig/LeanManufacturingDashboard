@@ -1,22 +1,21 @@
 class EventDataTable
 {
   Table machineCycles;
-  String machineCyclesFilename;
+  String filename;
   
   EventDataTable()
   {
   }
   
-  void initializeEventTable()
+  void initialize()
   {
-    machineCyclesFilename ="../MachineData/"
-    + machineName + "-" 
+    filename ="../MachineData/"
     + cal.get(Calendar.YEAR) + "-"
     + nf(cal.get(Calendar.MONTH) + 1,2)
     + "-" + nf(cal.get(Calendar.DATE),2)
     + ".csv";
     
-    machineCycles = loadTable(machineCyclesFilename, "header");
+    machineCycles = loadTable(filename, "header");
     
     if (machineCycles == null)
     {
@@ -31,7 +30,7 @@ class EventDataTable
         TableRow row = machineCycles.getRow(i);
         row.setInt("time",i);
       }
-      saveEventTable();
+      save();
     }
   }
   
@@ -40,7 +39,7 @@ class EventDataTable
     return(machineCycles.getRowCount());
   }
   
-  void addEventData(int time, int cycles, int active, int state)
+  void addData(int time, int cycles, int active, int state)
   {
     TableRow row = machineCycles.getRow(time);
     row.setInt("time",   time);
@@ -49,8 +48,8 @@ class EventDataTable
     row.setInt("state",  state);
   }
   
-  void saveEventTable()
+  void save()
   {
-    saveTable(machineCycles, machineCyclesFilename);
+    saveTable(machineCycles, filename);
   }
 }

@@ -2,9 +2,9 @@ import java.util.*;        //calendar time functions
 import processing.io.*;    //hardware IO
 
 // Target device compile flags:
-boolean runningOnPi         = false;
-boolean ludicrousSpeed      = true;
-boolean useMouseInputMode   = true;
+boolean runningOnPi         = true;
+boolean ludicrousSpeed      = false;
+boolean useMouseInputMode   = false;
   
 //Global constants:
 int startMinute             = 0;
@@ -22,6 +22,7 @@ int   bottomMargin           = 0;
 
 Preference programPreferences  = new Preference();
 EventDataTable rawEvents       = new EventDataTable();
+SummaryDataTable summaryData   = new SummaryDataTable();
 DayDashboard dashboard         = new DayDashboard();
 
 void settings()
@@ -53,7 +54,8 @@ void draw()
   if(timeOfDayJustGotSet())
   {
     initializeTimer();
-    rawEvents.initializeEventTable();
+    rawEvents.initialize();
+    summaryData.initialize();
     
     for(int i = 0; i < minuteOfDay(); i++)
     {
@@ -72,21 +74,24 @@ void draw()
     {
       background(0);
       dashboard.drawRealtimeData();
-      rawEvents.addEventData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()+1); // simulating a state by adding one to activity
+      rawEvents.addData(minuteOfDay(), readCycleCounter(), readActivityState(), readActivityState()+1); // simulating a state by adding one to activity
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);
       dashboard.drawGraphedData();
       if(minuteOfDay() % 5 ==0)  // save the data at the interval
       {
-        rawEvents.saveEventTable();
+        rawEvents.save();
       }
     }
     
 
     if(newDay())
     {
-      rawEvents.saveEventTable();
-      rawEvents.initializeEventTable();
+      summaryData.addData(cal.get(Calendar.DAY_OF_YEAR)-1,dashboard.numberOfEvents,int(dashboard.uptimeMinutes));
+      summaryData.save();
+
+      rawEvents.save();
+      rawEvents.initialize();
       dashboard.reset();
       saveFrame("../MachineData/" + 
                 nf(cal.get(Calendar.DAY_OF_YEAR)-1,3)  + "," + 
