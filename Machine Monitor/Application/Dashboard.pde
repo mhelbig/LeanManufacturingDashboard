@@ -22,6 +22,7 @@ class DayDashboard
   float netProfitGreenLimit   = 150;
   
   Table dashboardData;
+  int   numberOfEvents        = 0;
   float uptimeMinutes         = 0;
   float currentNetProfit      = 0;
   RollingAverage utilizationAverage = new RollingAverage(60);
@@ -74,7 +75,7 @@ class DayDashboard
   void drawGraphedData()
   {
     //Draw the readouts:
-    uptimeReadout.drawReadout(int(utilizationAverage.currentValue()*100) + "%\n\nActive:\n" + 
+    uptimeReadout.drawReadout("Overall\nUptime\n\n" + int(uptimeMinutes/numberOfEvents*100) + "%\n" + 
                               nf(int(uptimeMinutes/60),2) + ":" + nf(int(uptimeMinutes % 60),2));
     netProfitReadout.drawReadout("Profit:\n$" + nf(currentNetProfit,0,2));
 
@@ -167,6 +168,7 @@ class DayDashboard
     
     if(state != 0)
     {
+      numberOfEvents++;
       uptimeMinutes += active;
       utilizationAverage.add( float(active == 1 ? 1 : 0));
       utilizationAverage.calculate();
@@ -192,6 +194,7 @@ class DayDashboard
   
   void reset()
   {
+    numberOfEvents        =   0;
     uptimeMinutes         =   0;
     currentNetProfit      =   0;
     netProfitMin          =  10;
