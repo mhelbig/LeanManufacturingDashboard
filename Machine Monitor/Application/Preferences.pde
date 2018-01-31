@@ -1,4 +1,10 @@
 //Preferences-based settings variables:
+
+// Target device compile flags:
+int runningOnPi         = 0;
+int ludicrousSpeed      = 1;
+int useMouseInputMode   = 1;
+ 
 String machineName;
 float overheadRatePerHour;
 float profitRatePerHour;
@@ -6,7 +12,10 @@ int   fileSaveInterval;
 
 void ResetSystemDefaultParameters()
 {
-  machineName          = "Komatsu";
+  runningOnPi           = 0;
+  ludicrousSpeed        = 1;
+  useMouseInputMode     = 1;
+  machineName           = "Komatsu";
   overheadRatePerHour   =  15.00;
   profitRatePerHour     =  75.00; // $60/hour netprofit per hour when active
   fileSaveInterval      =   5;
@@ -23,6 +32,9 @@ void loadPreferences()
   }
   else
   {
+    runningOnPi         = programPreferences.getInt("runningOnPi");
+    ludicrousSpeed      = programPreferences.getInt("ludicrousSpeed");
+    useMouseInputMode   = programPreferences.getInt("useMouseInputMode");
     machineName         = programPreferences.getText("machineName"); 
     overheadRatePerHour = programPreferences.getFloat("overheadRatePerHour");
     profitRatePerHour   = programPreferences.getFloat("profitRatePerHour");
@@ -32,10 +44,13 @@ void loadPreferences()
 
 void saveSystemParameters()
 {
-  programPreferences.setText("machineName",                  machineName,                false);
-  programPreferences.setNumber("overheadRatePerHour",        overheadRatePerHour,        false);
-  programPreferences.setNumber("profitRatePerHour",          profitRatePerHour,          false);
-  programPreferences.setNumber("fileSaveInterval",           fileSaveInterval,           false);
+  programPreferences.setNumber("runningOnPi",          runningOnPi,         false);
+  programPreferences.setNumber("ludicrousSpeed",       ludicrousSpeed,      false);
+  programPreferences.setNumber("useMouseInputMode",    useMouseInputMode,   false);
+  programPreferences.setText  ("machineName",          machineName,         false);
+  programPreferences.setNumber("overheadRatePerHour",  overheadRatePerHour, false);
+  programPreferences.setNumber("profitRatePerHour",    profitRatePerHour,   false);
+  programPreferences.setNumber("fileSaveInterval",     fileSaveInterval,    false);
 
   programPreferences.savePref();
 }

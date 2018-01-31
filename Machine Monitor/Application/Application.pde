@@ -1,11 +1,6 @@
 import java.util.*;        //calendar time functions 
 import processing.io.*;    //hardware IO
 
-// Target device compile flags:
-boolean runningOnPi         = true;
-boolean ludicrousSpeed      = false;
-boolean useMouseInputMode   = false;
-  
 //Global constants:
 int startMinute             = 0;
 int endMinute               = (24 * 60) -1;
@@ -27,7 +22,8 @@ DayDashboard dashboard         = new DayDashboard();
 
 void settings()
 {
-  if(runningOnPi)
+  loadPreferences();
+  if(runningOnPi == 1)
   {
     fullScreen();
   }
@@ -39,12 +35,11 @@ void settings()
 
 void setup() 
 {
-  if(runningOnPi)
+  if(runningOnPi ==1)
   {
     noCursor();
   }
 
-  loadPreferences();
   SetupHardwareIO();
   background(0);
 }

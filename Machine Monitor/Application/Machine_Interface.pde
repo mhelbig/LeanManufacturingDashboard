@@ -6,7 +6,7 @@ int cycleCounter = 0;
 // Machine Cycle counting:
 void SetupHardwareIO()
 {
-  if(runningOnPi)
+  if(runningOnPi == 1)
   {
     GPIO.pinMode(machineActiveInputBCM, GPIO.INPUT);
     GPIO.pinMode(machineCycleInputBCM, GPIO.INPUT);
@@ -26,7 +26,7 @@ int readCycleCounter()
 
 void checkActivityInput()  // call this often
 {
-  if(!useMouseInputMode && runningOnPi)
+  if(useMouseInputMode ==0 && runningOnPi == 1)
   {
     if(GPIO.digitalRead(machineActiveInputBCM) == GPIO.LOW)  //machine is active, set the flag
     {
@@ -48,7 +48,7 @@ void resetActivityInputs()
 
 void mouseWheel(MouseEvent event) // mouse wheel drives counts when emulating & sets activity flag
 {
-  if(useMouseInputMode || !runningOnPi)
+  if(useMouseInputMode == 1 || runningOnPi == 0)
   {
     cycleCounter+= abs(event.getCount());
     activityFlag = 1;

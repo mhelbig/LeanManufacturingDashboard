@@ -30,7 +30,7 @@ boolean timeOfDayIsSet()
 
 void initializeTimer()
 {
-    if(ludicrousSpeed)              // set the time and date to a point in the past
+    if(ludicrousSpeed == 1)              // set the time and date to a point in the past
     {
       cal.set(Calendar.MILLISECOND, 0); 
       cal.set(Calendar.SECOND, 0); 
@@ -49,7 +49,7 @@ void initializeTimer()
 
 boolean intervalTimeExpired()
 {
-  if(!ludicrousSpeed)  // when in full speed mode, don't update the real time, let it advance it as fast as we can
+  if(ludicrousSpeed == 0)  // when in full speed mode, don't update the real time, let it advance it as fast as we can
   {
     cal = Calendar.getInstance();
   }

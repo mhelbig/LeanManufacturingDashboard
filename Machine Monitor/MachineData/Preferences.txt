@@ -1,4 +1,7 @@
 Preferences:
+runningOnPi=0
+ludicrousSpeed=0
+useMouseInputMode=1
 machineName=lvadev
 overheadRatePerHour=15.0
 profitRatePerHour=75.0
