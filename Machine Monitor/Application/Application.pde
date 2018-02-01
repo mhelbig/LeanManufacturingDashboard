@@ -74,7 +74,7 @@ void draw()
       dashboard.calculate(minuteOfDay(), rawEvents);
       dashboard.drawGraphedData();
       
-      if(minuteOfDay() % 5 ==0)  // save the data at the interval
+      if(minuteOfDay() % fileSaveInterval ==0)  // save the data at the interval
       {
         rawEvents.save();
       }
