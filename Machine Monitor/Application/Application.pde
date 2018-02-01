@@ -73,26 +73,26 @@ void draw()
       resetActivityInputs();
       dashboard.calculate(minuteOfDay(), rawEvents);
       dashboard.drawGraphedData();
+      
       if(minuteOfDay() % 5 ==0)  // save the data at the interval
       {
         rawEvents.save();
       }
+
+      if(minuteOfDay() == endMinute)
+      {
+        saveFrame("../MachineData/" + year_Month_Day() + ".png");
+      }        
     }
     
-
     if(newDay())
     {
-      summaryData.addData(cal.get(Calendar.DAY_OF_YEAR)-1,dashboard.numberOfEvents,int(dashboard.uptimeMinutes));
+      summaryData.addData(cal.get(Calendar.DATE),dashboard.numberOfEvents,int(dashboard.uptimeMinutes));
       summaryData.save();
 
       rawEvents.save();
       rawEvents.initialize();
       dashboard.reset();
-      saveFrame("../MachineData/" + 
-                nf(cal.get(Calendar.DAY_OF_YEAR)-1,3)  + "," + 
-                nf(cal.get(Calendar.MONTH)+1,2)        + "-" +
-                nf(cal.get(Calendar.DATE)-1,2)         + "-" +
-                nf(cal.get(Calendar.YEAR),2)           + ".png");
     }
   }
 }

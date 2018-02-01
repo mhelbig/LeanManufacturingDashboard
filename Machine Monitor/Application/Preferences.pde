@@ -16,9 +16,9 @@ void ResetSystemDefaultParameters()
   ludicrousSpeed        = 1;
   useMouseInputMode     = 1;
   machineName           = "Komatsu";
-  overheadRatePerHour   =  15.00;
-  profitRatePerHour     =  75.00; // $60/hour netprofit per hour when active
-  fileSaveInterval      =   5;
+  overheadRatePerHour   = 15.00;
+  profitRatePerHour     = 75.00; // $60/hour netprofit per hour when active
+  fileSaveInterval      = 60;
 
   saveSystemParameters();
 }

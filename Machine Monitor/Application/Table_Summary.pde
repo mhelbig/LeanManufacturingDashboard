@@ -9,8 +9,7 @@ class SummaryDataTable
   
   void initialize()
   {
-    filename ="../MachineData/Summary,"
-    + cal.get(Calendar.YEAR) + ".csv";
+    filename ="../MachineData/" + cal.get(Calendar.YEAR) + "-summary.csv";
     
     summaryData = loadTable(filename, "header");
     
@@ -35,9 +34,7 @@ class SummaryDataTable
   {
     TableRow row = summaryData.addRow();
     row.setInt("day",   day);
-    row.setString("date", nf(cal.get(Calendar.MONTH)+1,2) + "-" +
-                          nf(cal.get(Calendar.DATE),2) + "-" +
-                          nf(cal.get(Calendar.YEAR),4));
+    row.setString("date", year_Month_Day());
     row.setInt("total", total);
     row.setInt("active", active);
   }

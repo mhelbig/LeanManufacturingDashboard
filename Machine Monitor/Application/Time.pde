@@ -78,6 +78,13 @@ int minuteOfDay()
   return(cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE));
 }
 
+String year_Month_Day()
+{
+  return(nf(cal.get(Calendar.MONTH)+1,2) + "-" +
+         nf(cal.get(Calendar.DATE),2) + "-" +
+         nf(cal.get(Calendar.YEAR),4));
+}
+
 boolean newDay()
 {
   if(newDayFlag == cal.get(Calendar.DATE))

@@ -9,11 +9,7 @@ class EventDataTable
   
   void initialize()
   {
-    filename ="../MachineData/"
-    + cal.get(Calendar.YEAR) + "-"
-    + nf(cal.get(Calendar.MONTH) + 1,2)
-    + "-" + nf(cal.get(Calendar.DATE),2)
-    + ".csv";
+    filename ="../MachineData/" + year_Month_Day() + ".csv";
     
     machineCycles = loadTable(filename, "header");
     
